@@ -377,3 +377,34 @@ html.reveal-ready [data-reveal]:not(.is-revealed){
  .arcade-reset{order:3}
 }
 @media(prefers-reduced-motion:reduce){.arcade-game-option{transition:none}}
+
+
+/* BEHIND THE BUILD */
+.build-log{padding-top:clamp(48px,7vw,82px);padding-bottom:clamp(48px,7vw,82px)}
+.build-log-intro{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 22px;padding:15px 0;border-top:2px solid #b987d1;border-bottom:2px solid #b987d1}
+.build-log-intro>span{font-size:9px;font-weight:700;letter-spacing:.08em;color:#694b7d}
+.build-log-intro p{margin:0;color:#51445f;font-size:12px}
+.build-log-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
+.build-note{display:flex;flex-direction:column;min-width:0;padding:20px;border:3px solid var(--ink);border-radius:18px;background:#fffdf8;box-shadow:6px 6px 0 var(--ink)}
+.build-note-meta{display:flex;justify-content:space-between;gap:8px;padding-bottom:13px;border-bottom:2px solid #e6dfe9;color:#786c82;font-size:8px;font-weight:700;letter-spacing:.04em}
+.build-note h3{margin:20px 0 10px;font-size:clamp(19px,2vw,25px);line-height:1.2;letter-spacing:-.055em}
+.build-note>p{margin:0 0 20px;color:#51475b;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.75}
+.build-note details{margin-top:auto;border-top:2px solid #e6dfe9}
+.build-note summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:14px;cursor:pointer;list-style:none;font-size:9px;font-weight:700;letter-spacing:.03em}
+.build-note summary::-webkit-details-marker{display:none}
+.build-note summary span{font-size:15px}
+.build-note details[open] summary span{transform:rotate(45deg)}
+.build-note pre{max-width:100%;overflow:auto;margin:14px 0 0;padding:13px;border:2px solid var(--ink);border-radius:8px;background:#f3eaff;color:#21182c;font:10px/1.7 var(--mono);tab-size:2}
+.build-note code{font-family:var(--mono)}
+.build-log-footnote{margin:20px 0 0;color:#786c82;font-size:9px;letter-spacing:.04em}
+.build-note summary:focus-visible{outline:3px solid #6656ff;outline-offset:4px}
+@media(max-width:800px){
+ .build-log-grid{grid-template-columns:1fr;gap:16px}
+ .build-note{padding:17px;border-width:2px;border-radius:14px;box-shadow:4px 4px 0 var(--ink)}
+ .build-note h3{font-size:24px}
+}
+@media(max-width:520px){
+ .build-log-intro{align-items:flex-start;flex-direction:column;gap:5px}
+ .build-log-intro p{font-size:12px}
+ .build-note pre{font-size:9px;padding:10px}
+}
