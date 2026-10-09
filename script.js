@@ -248,15 +248,17 @@ const discordPresence = (() => {
       try {
         const term = [track.title, track.artist].filter(Boolean).join(" ");
         const endpoint = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=15&country=IN`;
-        const controller = new AbortController();
-        const timeout = window.setTimeout(() => controller.abort(), 9000);
+        const controller = typeof AbortController === "function" ? new AbortController() : null;
+        const timeout = controller ? window.setTimeout(() => controller.abort(), 9000) : null;
         let payload;
         try {
-          const response = await fetch(endpoint, { headers: { Accept: "application/json" }, signal: controller.signal, cache: "force-cache" });
+          const requestOptions = { headers: { Accept: "application/json" }, cache: "force-cache" };
+          if (controller) requestOptions.signal = controller.signal;
+          const response = await fetch(endpoint, requestOptions);
           if (!response.ok) throw new Error(`Music catalogue returned ${response.status}`);
           payload = await response.json();
         } finally {
-          window.clearTimeout(timeout);
+          if (timeout !== null) window.clearTimeout(timeout);
         }
         const winner = findBestItunesMatch(Array.isArray(payload.results) ? payload.results : [], track.title, track.artist);
         const metadata = winner ? {
