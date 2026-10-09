@@ -620,7 +620,7 @@ const discordPresence = (() => {
     ctx.fillStyle=colors.muted;ctx.font="700 12px monospace";ctx.textAlign="right";ctx.fillText("PAUZE / RUNNER",W-18,24);
   };
   const collides=(a,b)=>a.x<b.x+b.w-4&&a.x+a.w-4>b.x+3&&a.y<b.y+b.h-3&&a.y+a.h-3>b.y+3;
-  const spawn=()=>{if(score>220&&Math.random()<.26)obstacles.push({type:"bird",x:W+20,y:groundY-(Math.random()<.5?72:95),w:38,h:24,phase:Math.random()*6});else{const tall=Math.random()<.35;obstacles.push({type:"cactus",x:W+20,y:groundY-(tall?51:36),w:tall?24:18,h:tall?51:36});}spawnIn=Math.max(.58,1.1+Math.random()*.8-(speed-300)/650);};
+  const spawn=()=>{if(score>220&&Math.random()<.26)obstacles.push({type:"bird",x:W+20,y:groundY-(Math.random()<.5?53:60),w:38,h:24,phase:Math.random()*6});else{const tall=Math.random()<.35;obstacles.push({type:"cactus",x:W+20,y:groundY-(tall?51:36),w:tall?24:18,h:tall?51:36});}spawnIn=Math.max(.58,1.1+Math.random()*.8-(speed-300)/650);};
   const finish=()=>{running=false;gameOver=true;stateLabel.textContent="RUN ENDED";if(score>best){best=score;try{localStorage.setItem(bestKey,String(best));}catch{}}refresh();show("OOPS. RUN OVER.","Score "+fmt(score)+" · Best "+fmt(best)+". One more run?","PLAY AGAIN");};
   const update=dt=>{
     elapsed+=dt;speed=Math.min(650,300+elapsed*7+score*.035);score+=dt*10;spawnIn-=dt;if(spawnIn<=0)spawn();
@@ -637,6 +637,7 @@ const discordPresence = (() => {
   const duck=down=>{dino.ducking=!!down&&running&&!paused&&!gameOver&&dino.onGround;};
   const pause=()=>{if(!running||gameOver)return;paused=!paused;stateLabel.textContent=paused?"PAUSED":"RUNNING";if(paused)show("TAKE A BREATHER.","Press P or tap resume when you’re ready.","RESUME");else{hide();lastTime=0;raf=requestAnimationFrame(loop);}};
   const onKey=e=>{if(["Space","ArrowUp","ArrowDown","KeyP"].includes(e.code))e.preventDefault();if(e.repeat&&["Space","ArrowUp","KeyP"].includes(e.code))return;if(e.code==="Space"||e.code==="ArrowUp")jump();else if(e.code==="ArrowDown")duck(true);else if(e.code==="KeyP")pause();};
+  document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!paused)pause();});
   stage.addEventListener("keydown",onKey);
   window.addEventListener("keydown",e=>{if(stage.contains(document.activeElement))return;if(["Space","ArrowUp","ArrowDown","KeyP"].includes(e.code)&&!e.target.closest("input,textarea,button,a,select"))onKey(e);});
   window.addEventListener("keyup",e=>{if(e.code==="ArrowDown")duck(false);});
