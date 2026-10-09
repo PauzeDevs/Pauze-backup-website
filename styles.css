@@ -357,3 +357,23 @@ html.reveal-ready [data-reveal]:not(.is-revealed){
  .arcade-footnote{padding:0 12px 13px;font-size:9px}
 }
 @media(prefers-reduced-motion:reduce){.dino-start,.arcade-touch-controls button{transition:none}}
+
+/* PAUZE ARCADE — selector and touch controls */
+.arcade-game-picker{display:flex;gap:8px;overflow-x:auto;padding:13px 19px;border-bottom:2px solid #e6dfe9;background:#faf6ff;scrollbar-width:thin;scrollbar-color:#b8a8cd transparent}
+.arcade-game-option{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;padding:10px 12px;border:2px solid #c8bbd5;border-radius:7px;background:#fffdf8;color:var(--ink);font:700 9px/1.2 var(--mono);letter-spacing:.02em;cursor:pointer;transition:background .12s ease,transform .12s ease,border-color .12s ease}
+.arcade-game-option span{color:#8b7c9b;font-size:8px}
+.arcade-game-option:hover{border-color:var(--ink);transform:translateY(-1px)}
+.arcade-game-option.is-active{border-color:var(--ink);background:var(--yellow);box-shadow:3px 3px 0 var(--ink)}
+.arcade-game-option.is-active span{color:var(--ink)}
+.arcade-game-option:focus-visible,.arcade-touch-controls button:focus-visible,.arcade-reset:focus-visible{outline:3px solid #6656ff;outline-offset:3px}
+.arcade-touch-controls{display:none;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}
+.arcade-touch-controls button{min-width:54px;touch-action:none;user-select:none;-webkit-user-select:none}
+.arcade-touch-controls button:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+@media(max-width:700px){
+ .arcade-game-picker{padding:11px 12px;gap:7px}
+ .arcade-game-option{font-size:9px;padding:10px}
+ .arcade-touch-controls{display:flex;flex:1 0 100%;order:2;justify-content:flex-start}
+ .arcade-touch-controls button{flex:1 1 22%;padding:10px 7px;font-size:9px}
+ .arcade-reset{order:3}
+}
+@media(prefers-reduced-motion:reduce){.arcade-game-option{transition:none}}
