@@ -178,3 +178,55 @@ a,button{-webkit-tap-highlight-color:transparent}
 @media(prefers-reduced-motion:reduce){
  .tech-card,.stack-filter{transition:none}
 }
+
+
+/* GitHub activity and Discord live presence */
+.live-presence{padding-top:110px;padding-bottom:105px}
+.presence-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.8fr);gap:16px;margin-top:40px}
+.presence-card{min-width:0;padding:24px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(145deg,rgba(125,92,255,.08),transparent 45%),rgba(18,19,38,.68)}
+.presence-card-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.presence-eyebrow{display:inline-flex;align-items:center;gap:9px;font:9px var(--mono);letter-spacing:.07em;color:#bfc0d6}
+.presence-card-top>a,.discord-status-label{font:9px var(--mono);letter-spacing:.05em;color:#a7a4c5}
+.presence-card-top>a:hover{color:#62e8d5}
+.presence-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#62e8d5;box-shadow:0 0 12px #62e8d555}
+.github-dot{background:#62e8d5}
+.discord-dot[data-status="online"]{background:#3ba55c;box-shadow:0 0 12px #3ba55c66}
+.discord-dot[data-status="idle"]{background:#f0b232;box-shadow:0 0 12px #f0b23266}
+.discord-dot[data-status="dnd"]{background:#ed4245;box-shadow:0 0 12px #ed424566}
+.discord-dot[data-status="offline"]{background:#777b8b;box-shadow:none}
+.presence-card h3{font-size:24px;letter-spacing:-.04em;margin:23px 0 8px}
+.presence-card>p{font-size:12px;line-height:1.7;color:var(--muted);margin:0}
+.contribution-graph-link{display:block;margin-top:24px;padding:14px 10px;border:1px solid rgba(174,153,255,.13);border-radius:8px;background:rgba(4,5,12,.56);overflow:hidden}
+.contribution-graph{display:block;width:100%;height:auto;min-height:70px;object-fit:contain;image-rendering:auto}
+.activity-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px}
+.activity-foot span,.activity-foot a{font:8px var(--mono);letter-spacing:.06em;color:var(--muted)}
+.activity-foot a{color:#a7f2e8}
+.discord-profile{display:flex;align-items:center;gap:15px;margin:25px 0 22px;min-width:0}
+.discord-avatar-wrap{position:relative;flex:0 0 62px;width:62px;height:62px}
+.discord-avatar-wrap>img{display:block;width:62px;height:62px;border-radius:50%;object-fit:cover;border:1px solid rgba(174,153,255,.32);background:#10111d}
+.avatar-status-indicator{position:absolute;right:0;bottom:0;width:16px;height:16px;border-radius:50%;border:3px solid #141522;background:#777b8b}
+.avatar-status-indicator[data-status="online"]{background:#3ba55c}
+.avatar-status-indicator[data-status="idle"]{background:#f0b232}
+.avatar-status-indicator[data-status="dnd"]{background:#ed4245}
+.discord-profile-copy{min-width:0}
+.discord-profile-copy h3{margin:0 0 6px;font-size:23px;overflow-wrap:anywhere}
+.discord-profile-copy p{margin:0 0 7px;font-size:11px;color:var(--muted);line-height:1.5}
+.discord-user-id{font:8px var(--mono);letter-spacing:.04em;color:#8c8ea9;overflow-wrap:anywhere}
+.discord-activity-box{padding:14px;border:1px solid rgba(174,153,255,.15);border-radius:8px;background:rgba(5,6,14,.42)}
+.activity-mini-label{font:8px var(--mono);letter-spacing:.1em;color:#a7a4c5}
+.discord-activity-box p{margin:9px 0 0;font-size:12px;line-height:1.6;color:#ecebff;overflow-wrap:anywhere}
+.discord-cta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:17px;padding:13px 14px;border:1px solid rgba(98,232,213,.28);border-radius:7px;background:rgba(98,232,213,.06);font:9px var(--mono);letter-spacing:.06em;color:#c7fff6}
+.discord-cta:hover{border-color:#62e8d5;background:rgba(98,232,213,.11)}
+.discord-footnote{font-size:10px!important;margin-top:12px!important;color:#888ba6!important}
+@media(max-width:760px){
+ .live-presence{padding-top:85px;padding-bottom:80px}
+ .presence-grid{grid-template-columns:minmax(0,1fr);margin-top:28px}
+ .presence-card{padding:18px}
+ .contribution-graph-link{padding:10px 6px}
+}
+@media(max-width:380px){
+ .presence-card{padding:14px}
+ .presence-card h3{font-size:21px}
+ .presence-card-top{align-items:flex-start}
+ .activity-foot span,.activity-foot a{font-size:7px}
+}
