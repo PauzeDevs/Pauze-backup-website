@@ -9,14 +9,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261009-5">
+  <link rel="stylesheet" href="styles.css?v=20261009-6">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="Pauze home">PAUZE<span>®</span></a>
     <nav class="desktop-nav" aria-label="Main navigation">
-      <a href="#about">About</a><a href="#skills">Skills</a><a href="#work">Projects</a><a href="#arcade">Arcade</a><a href="#activity">Activity</a>
+      <a href="#about">About</a><a href="#skills">Skills</a><a href="#work">Projects</a><a href="#arcade">Arcade</a><a href="#build-log">Build Log</a><a href="#activity">Activity</a>
     </nav>
     <a class="availability" href="#contact"><span class="status-dot"></span> OPEN TO IDEAS</a>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
@@ -124,6 +124,67 @@
         </div>
         <p class="arcade-footnote">Six tiny games, one arcade. Personal bests are saved locally on this device.</p>
       </div>
+    </section>
+
+    <section class="build-log section-wrap" id="build-log" data-reveal="up">
+      <div class="section-heading" data-reveal="up">
+        <div><p class="kicker">BUILD NOTES / 01</p><h2>BEHIND THE<br><span class="muted">BUILD.</span></h2></div>
+        <p class="section-note">Short notes on the decisions, mechanics, and details behind things I ship. First up: the Arcade.</p>
+      </div>
+      <div class="build-log-intro" data-reveal="up">
+        <span>PAUZE / ENGINEERING NOTES</span>
+        <p>Not a tutorial series. Just the implementation choices worth documenting.</p>
+      </div>
+      <div class="build-log-grid">
+        <article class="build-note" data-reveal="up">
+          <div class="build-note-meta"><span>01 / RENDERING</span><span>CANVAS 2D</span></div>
+          <h3>Six games. One canvas.</h3>
+          <p>Each game keeps its own state and update rules, while sharing one canvas and a requestAnimationFrame loop. Switching modes resets the session and draws the selected game.</p>
+          <details>
+            <summary>VIEW IMPLEMENTATION <span>＋</span></summary>
+            <pre><code>const loop = t => {
+  if (!running || paused) return;
+  const dt = Math.min(0.032, (t - last) / 1000 || 0);
+  last = t;
+  update(dt);
+  draw();
+  if (running && !paused) {
+    raf = requestAnimationFrame(loop);
+  }
+};</code></pre>
+          </details>
+        </article>
+        <article class="build-note" data-reveal="up">
+          <div class="build-note-meta"><span>02 / INPUT</span><span>KEYBOARD + TOUCH</span></div>
+          <h3>Controls that fit the game.</h3>
+          <p>Each mode gets its own controls: keyboard movement, pointer actions, or on-screen touch buttons. The game also pauses when the browser tab becomes hidden, rather than carrying on unseen.</p>
+          <details>
+            <summary>VIEW IMPLEMENTATION <span>＋</span></summary>
+            <pre><code>document.addEventListener("visibilitychange", () => {
+  if (document.hidden && running && !paused) pause();
+});</code></pre>
+          </details>
+        </article>
+        <article class="build-note" data-reveal="up">
+          <div class="build-note-meta"><span>03 / PERSISTENCE</span><span>LOCAL STORAGE</span></div>
+          <h3>Personal bests, device-local.</h3>
+          <p>Each game has its own personal-best key in localStorage. Scores persist on the same browser without an account, external service, or leaderboard backend.</p>
+          <details>
+            <summary>VIEW IMPLEMENTATION <span>＋</span></summary>
+            <pre><code>const storage = () =>
+  "pauze-arcade-" + game + "-best-v1";
+
+const bestRead = () => {
+  try {
+    return Math.max(0, Number(localStorage.getItem(storage())) || 0);
+  } catch {
+    return 0;
+  }
+};</code></pre>
+          </details>
+        </article>
+      </div>
+      <p class="build-log-footnote">SOURCE NOTE / These examples are taken from the Arcade implementation on this site.</p>
     </section>
 
     <section class="live-presence section-wrap" id="activity">
