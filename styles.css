@@ -352,3 +352,8 @@ body{
  .project{padding-bottom:38px}
  .visual{height:280px}
 }
+
+
+/* Project 03 is text-led; no empty second visual column */
+.project-last .project-main{grid-template-columns:minmax(0,1fr)}
+.project-last .project-copy{max-width:760px}
