@@ -230,3 +230,19 @@ a,button{-webkit-tap-highlight-color:transparent}
  .presence-card-top{align-items:flex-start}
  .activity-foot span,.activity-foot a{font-size:7px}
 }
+
+
+/* Consistent scroll-to-reveal motion */
+[data-reveal="up"]{--reveal-distance:22px}
+[data-reveal="left"]{--reveal-distance:-22px}
+[data-reveal="right"]{--reveal-distance:22px}
+html.reveal-ready [data-reveal]{opacity:0;transform:translate3d(0,var(--reveal-distance,22px),0);transition:opacity .65s cubic-bezier(.2,.7,.2,1),transform .65s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms);will-change:opacity,transform}
+html.reveal-ready [data-reveal="left"]{transform:translate3d(-22px,0,0)}
+html.reveal-ready [data-reveal="right"]{transform:translate3d(22px,0,0)}
+html.reveal-ready [data-reveal].is-revealed{opacity:1;transform:translate3d(0,0,0);will-change:auto}
+@media(max-width:760px){
+ html.reveal-ready [data-reveal]{transition-duration:.48s}
+}
+@media(prefers-reduced-motion:reduce){
+ html.reveal-ready [data-reveal],html.reveal-ready [data-reveal="left"],html.reveal-ready [data-reveal="right"]{opacity:1;transform:none;transition:none;will-change:auto}
+}
