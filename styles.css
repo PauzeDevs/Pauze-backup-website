@@ -276,3 +276,79 @@ html.reveal-ready [data-reveal].is-revealed{opacity:1;transform:translate3d(0,0,
  .recent-activity-heading{grid-template-columns:minmax(0,1fr);gap:5px}
  #github-feed-state{justify-self:start;text-align:left}
 }
+
+
+/* Developer-focused visual pass: restrained graphite, terminal green, technical grids */
+:root{
+ --bg:#080b10;
+ --panel:#0d131b;
+ --line:rgba(119,153,177,.22);
+ --text:#edf5fb;
+ --muted:#8797a8;
+ --accent:#70f0b0;
+ --mono:"IBM Plex Mono",monospace;
+ --sans:"Manrope",sans-serif;
+}
+body{
+ background-color:var(--bg);
+ background-image:linear-gradient(rgba(90,128,151,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(90,128,151,.045) 1px,transparent 1px),radial-gradient(ellipse at 50% -15%,rgba(47,104,130,.18),transparent 60%);
+ background-size:32px 32px,32px 32px,auto;
+}
+.noise{opacity:.018}
+.site-header{background:rgba(8,11,16,.9);border-bottom-color:rgba(112,240,176,.18)}
+.wordmark{font-family:var(--mono);letter-spacing:-1.5px}
+.wordmark span{color:var(--accent)}
+.desktop-nav{color:#9babb9}
+.availability{color:#b8c8d4}
+.status-dot,.project-state i{background:var(--accent);box-shadow:0 0 12px rgba(112,240,176,.24)}
+.hero h1,.contact h2{letter-spacing:-.095em}
+.outline{-webkit-text-stroke:1px #c2d0dc}
+.period,.text-link span,.project-index{color:var(--accent)}
+.muted{color:#516273}
+.section-heading h2,.about h2,.sound h2{letter-spacing:-.065em}
+.project-list{border-top-color:rgba(112,240,176,.25)}
+.project{padding:30px 0 52px;border-bottom-color:rgba(119,153,177,.2)}
+.project-topline,.project-index,.project-state,.tags span,.text-link{font-family:var(--mono)}
+.project h3{font-weight:600;letter-spacing:-.065em}
+.project h3 span{color:#7f91a2}
+.tags span{border-color:#283744;background:rgba(12,22,30,.62);color:#a9bbc9}
+.text-link{border-color:#3b5360}
+.visual{border-color:#253743;border-radius:8px;background-color:#0b1118}
+.weather-visual{background:radial-gradient(ellipse at 48% 52%,#16382f 0,#0d1b1a 35%,#091016 76%)}
+.radar-grid{background-image:linear-gradient(#70f0b010 1px,transparent 1px),linear-gradient(90deg,#70f0b010 1px,transparent 1px)}
+.radar-ring{border-color:#70f0b03d}
+.radar-sweep{background:conic-gradient(from 0deg,transparent 0 75%,#70f0b018 94%,#70f0b078 100%)}
+.radar-label,.radar-coords,.orbit-caption{color:#8ab6a4}
+.control-visual{background:radial-gradient(ellipse at 50% 50%,#13212a,#080d12 72%)}
+.control-window{border-color:#2a414d;background:#0a1016;border-radius:7px;transform:none}
+.window-bar{border-color:#20333d}
+.window-bar b:first-child{background:#ff737d}.window-bar b:nth-child(2){background:#f4c76a}.window-bar b:nth-child(3){background:#70f0b0}
+.window-side{border-color:#20333d}
+.window-side i{border-color:#45616d;border-radius:2px}
+.fake-line{background:#293f49}
+.fake-stats b{color:var(--accent)}
+.experiments-visual{background:radial-gradient(circle at center,#11231f,#080d12 70%)}
+.orbit{border-color:#34544e}
+.orbit-three{border-color:#243a39}
+.orbit-core{background:var(--accent);box-shadow:0 0 45px #70f0b022}
+.presence-card{border-color:#263b46;border-radius:8px;background:linear-gradient(135deg,rgba(112,240,176,.045),transparent 55%),rgba(10,17,24,.94)}
+.presence-card-top{border-bottom-color:#263b46}
+.presence-card h3{letter-spacing:-.045em}
+.presence-card-top>a,.discord-status-label{font-family:var(--mono)}
+.presence-dot{background:var(--accent);box-shadow:0 0 12px #70f0b033}
+.github-dot{background:var(--accent)}
+#github-feed-state{color:var(--accent)}
+#github-event-list li{border-color:#20323c;background:rgba(4,10,14,.55)}
+#github-event-list li a,.activity-foot a{color:#8df4c0}
+.activity-event-icon{color:var(--accent)}
+.discord-cta{border-color:#315a4b;background:rgba(112,240,176,.05);color:#b8ffda}
+.discord-cta:hover{border-color:var(--accent);background:rgba(112,240,176,.1)}
+.discord-activity-box{border-color:#263b46;background:rgba(4,10,14,.55)}
+.contact-button{border-color:var(--accent);background:var(--accent);color:#07110d}
+.contact-button:hover{background:#a3ffd0;border-color:#a3ffd0}
+.site-footer{border-color:#263b46}
+@media(max-width:760px){
+ body{background-size:26px 26px,26px 26px,auto}
+ .project{padding-bottom:38px}
+ .visual{height:280px}
+}
