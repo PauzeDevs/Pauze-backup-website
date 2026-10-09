@@ -284,3 +284,16 @@ html.reveal-ready [data-reveal].is-revealed{opacity:1;transform:translate3d(0,0,
 .terminal-shortcuts button:hover,.terminal-shortcuts button:focus-visible{border-color:#62e8d5;color:#c7fff6}
 @media(max-width:760px){.terminal-section{padding-top:70px;padding-bottom:75px}.terminal-output{padding:14px 12px 4px;min-height:130px}.terminal-form{padding:10px 12px}.terminal-shortcuts{padding:0 12px 13px}}
 @media(prefers-reduced-motion:reduce){.activity-pulse{animation:none}}
+
+
+/* Tighten recent activity typography and prevent heading collisions */
+.recent-activity-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:18px;row-gap:6px;line-height:1.5}
+.recent-activity-heading>span:first-child{min-width:0}
+#github-feed-state{justify-self:end;text-align:right;white-space:nowrap;font-size:8px;line-height:1.5}
+#github-event-list li{font-size:11px;line-height:1.55}
+#github-event-list .activity-loading{align-items:center;font-size:11px;line-height:1.55;color:var(--muted)!important}
+.activity-loading .activity-pulse{margin-top:0}
+@media(max-width:480px){
+ .recent-activity-heading{grid-template-columns:minmax(0,1fr);gap:5px}
+ #github-feed-state{justify-self:start;text-align:left}
+}
