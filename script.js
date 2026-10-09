@@ -129,30 +129,52 @@ const discordPresence = (() => {
   return { refresh: loadPresence };
 })();
 
-/* Consistent scroll reveal: progressive enhancement, reduced-motion aware */
+/* Reliable scroll reveal: fail open, animate once when entering view */
 (() => {
   const targets = Array.from(document.querySelectorAll("[data-reveal]"));
   if (!targets.length) return;
+
+  const revealAll = () => {
+    targets.forEach((element) => element.classList.add("is-revealed"));
+    document.documentElement.classList.remove("reveal-ready");
+  };
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion || !("IntersectionObserver" in window)) {
-    targets.forEach((element) => element.classList.add("is-revealed"));
+    revealAll();
     return;
   }
-  document.documentElement.classList.add("reveal-ready");
-  const observer = new IntersectionObserver((entries, currentObserver) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-revealed");
-      currentObserver.unobserve(entry.target);
+
+  try {
+    const observer = new IntersectionObserver((entries, currentObserver) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-revealed");
+        currentObserver.unobserve(entry.target);
+      });
+    }, {
+      threshold: 0,
+      rootMargin: "0px 0px -6% 0px"
     });
-  }, {
-    threshold: 0.12,
-    rootMargin: "0px 0px -48px 0px"
-  });
-  targets.forEach((element, index) => {
-    element.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 65}ms`);
-    observer.observe(element);
-  });
+
+    targets.forEach((element, index) => {
+      element.style.setProperty("--reveal-delay", `${index % 3 * 55}ms`);
+      observer.observe(element);
+    });
+    document.documentElement.classList.add("reveal-ready");
+
+    // Fail open if observation does not fire (e.g. browser/webview quirks).
+    window.setTimeout(() => {
+      targets.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          element.classList.add("is-revealed");
+          observer.unobserve(element);
+        }
+      });
+    }, 900);
+  } catch (error) {
+    revealAll();
+  }
 })();
 
 /* Real public GitHub events with loading, empty, and error states */
