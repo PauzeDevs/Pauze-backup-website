@@ -93,12 +93,13 @@ const discordPresence = (() => {
   const musicElapsed = document.querySelector("#discord-music-elapsed");
   const musicDuration = document.querySelector("#discord-music-duration");
   let spotifyTrack = null;
+  let externalTrack = false;
   const formatTrackTime = (milliseconds) => {
     const seconds = Math.max(0, Math.floor(milliseconds / 1000));
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
   };
   const updateMusicProgress = () => {
-    if (!spotifyTrack || !musicProgress) return;
+    if (!spotifyTrack || !musicProgress || externalTrack) return;
     const now = Date.now();
     const start = Number(spotifyTrack.timestamps?.start || now);
     const end = Number(spotifyTrack.timestamps?.end || now);
@@ -112,9 +113,9 @@ const discordPresence = (() => {
     if (!musicCard) return;
     if (!spotify || !spotify.song) {
       spotifyTrack = null;
-      musicCard.hidden = true;
       return;
     }
+    externalTrack = false;
     spotifyTrack = spotify;
     musicCard.hidden = false;
     if (musicTitle) musicTitle.textContent = spotify.song || "Unknown track";
@@ -148,6 +149,35 @@ const discordPresence = (() => {
       if (!payload.success || !payload.data) throw new Error("No public presence data");
       const data = payload.data;
       renderSpotify(data.spotify || null);
+      if (!data.spotify) {
+        const activities = Array.isArray(data.activities) ? data.activities : [];
+        const musicActivity = activities.find((item) =>
+          String(item.name || "").toLowerCase().includes("amazon music") ||
+          [item.details, item.state].filter(Boolean).join(" ").toLowerCase().includes("amazon music")
+        );
+        if (musicActivity && musicCard) {
+          externalTrack = true;
+          musicCard.hidden = false;
+          if (musicHeading) musicHeading.textContent = "Listening to Amazon Music";
+          const details = String(musicActivity.details || "").trim();
+          const state = String(musicActivity.state || "").trim();
+          if (musicTitle) musicTitle.textContent = details || "Now playing";
+          if (musicArtist) musicArtist.textContent = state || "Amazon Music";
+          if (musicAlbum) musicAlbum.textContent = "Amazon Music";
+          if (musicArt) {
+            musicArt.removeAttribute("src");
+            musicArt.style.visibility = "hidden";
+            musicArt.alt = "Album artwork is not shared by Discord presence";
+          }
+          if (musicProgress) musicProgress.style.width = "0%";
+          if (musicElapsed) musicElapsed.textContent = "LIVE";
+          if (musicDuration) musicDuration.textContent = "AMAZON MUSIC";
+        } else if (musicCard) {
+          externalTrack = false;
+          musicCard.hidden = true;
+          if (musicArt) musicArt.style.visibility = "visible";
+        }
+      }
       const status = data.discord_status || "offline";
       statusLabel.textContent = statusNames[status] || "UNKNOWN";
       statusDot.dataset.status = status;
