@@ -70,3 +70,61 @@ if (stackRoot) {
   selectStackCard(stackCards.find((card) => card.classList.contains("is-selected")) || stackCards[0]);
   filterStack("all");
 }
+
+/* Live Discord presence via Lanyard; gracefully handles unavailable API/opt-in */
+const discordPresence = (() => {
+  const userId = "1547264515182432398";
+  const statusLabel = document.querySelector("#discord-status-label");
+  const statusDot = document.querySelector("#discord-status-dot");
+  const avatarStatus = document.querySelector("#discord-avatar-status");
+  const displayName = document.querySelector("#discord-display-name");
+  const activityText = document.querySelector("#discord-activity-text");
+  const currentActivity = document.querySelector("#discord-current-activity");
+  const avatar = document.querySelector("#discord-avatar");
+  const note = document.querySelector("#discord-status-note");
+  if (!statusLabel || !statusDot || !displayName || !activityText || !currentActivity) return;
+  const statusNames = { online: "ONLINE", idle: "IDLE", dnd: "DO NOT DISTURB", offline: "OFFLINE" };
+  const setUnavailable = (message) => {
+    statusLabel.textContent = "STATUS UNAVAILABLE";
+    statusDot.dataset.status = "offline";
+    if (avatarStatus) avatarStatus.dataset.status = "offline";
+    activityText.textContent = "Live status isn't available right now.";
+    currentActivity.textContent = "Discord presence could not be loaded.";
+    if (note) note.textContent = message || "Live status needs the user to be available through Lanyard. The profile link still works.";
+  };
+  const loadPresence = async () => {
+    try {
+      const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`, { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (!response.ok) throw new Error("Presence service unavailable");
+      const payload = await response.json();
+      if (!payload.success || !payload.data) throw new Error("No public presence data");
+      const data = payload.data;
+      const status = data.discord_status || "offline";
+      statusLabel.textContent = statusNames[status] || "UNKNOWN";
+      statusDot.dataset.status = status;
+      if (avatarStatus) avatarStatus.dataset.status = status;
+      const user = data.discord_user || {};
+      displayName.textContent = user.global_name || user.display_name || user.username || "Pauze";
+      activityText.textContent = status === "offline" ? "Currently offline" : status === "dnd" ? "Busy on Discord" : status === "idle" ? "Away on Discord" : "Active on Discord";
+      if (avatar && user.id && user.avatar) {
+        const extension = user.avatar.startsWith("a_") ? "gif" : "png";
+        avatar.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=128`;
+      }
+      const activity = Array.isArray(data.activities) ? data.activities.find((item) => item.type !== 4) : null;
+      if (activity) {
+        const details = [activity.name, activity.details, activity.state].filter(Boolean);
+        currentActivity.textContent = details.join(" — ") || "Activity detected";
+      } else if (status === "offline") {
+        currentActivity.textContent = "No current activity";
+      } else {
+        currentActivity.textContent = "Online — no activity shared";
+      }
+      if (note) note.textContent = "Status is provided by Lanyard and updates when Discord presence is available.";
+    } catch (error) {
+      setUnavailable("For live status, join the Lanyard Discord community and enable presence sharing for this account. The profile link remains available.");
+    }
+  };
+  loadPresence();
+  window.setInterval(loadPresence, 60000);
+  return { refresh: loadPresence };
+})();
