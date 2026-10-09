@@ -71,7 +71,7 @@ if (stackRoot) {
   filterStack("all");
 }
 
-/* Live Discord presence via Lanyard; gracefully handles unavailable API/opt-in */
+/* Live Discord presence and now-playing metadata. Amazon timing is approximate unless timestamps are exposed by Discord. */
 const discordPresence = (() => {
   const userId = "1547264515182432398";
   const statusLabel = document.querySelector("#discord-status-label");
@@ -84,6 +84,7 @@ const discordPresence = (() => {
   const note = document.querySelector("#discord-status-note");
   const musicCard = document.querySelector("#discord-music-card");
   const musicArt = document.querySelector("#discord-music-art");
+  const musicArtFallback = document.querySelector("#discord-music-art-fallback");
   const musicTitle = document.querySelector("#discord-music-title");
   const musicArtist = document.querySelector("#discord-music-artist");
   const musicAlbum = document.querySelector("#discord-music-album");
@@ -91,47 +92,253 @@ const discordPresence = (() => {
   const musicProgress = document.querySelector("#discord-music-progress");
   const musicElapsed = document.querySelector("#discord-music-elapsed");
   const musicDuration = document.querySelector("#discord-music-duration");
-  let spotifyTrack = null;
-  let externalTrack = false;
+  const musicTimingNote = document.querySelector("#discord-music-timing-note");
+
+  let activeTrack = null;
+  let activeTrackKey = "";
+  let presenceLoading = false;
+  const metadataCache = new Map();
+  const metadataRequests = new Map();
+
+  const normalize = (value) => String(value || "").toLowerCase()
+    .normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/\b(feat|ft)\.?\b/g, " ")
+    .replace(/[^a-z0-9]+/g, " ").trim();
   const formatTrackTime = (milliseconds) => {
     const seconds = Math.max(0, Math.floor(milliseconds / 1000));
-    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+    return \`${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}\`;
   };
-  const updateMusicProgress = () => {
-    if (!spotifyTrack || !musicProgress || externalTrack) return;
-    const now = Date.now();
-    const start = Number(spotifyTrack.timestamps?.start || now);
-    const end = Number(spotifyTrack.timestamps?.end || now);
-    const duration = Math.max(0, end - start);
-    const elapsed = Math.max(0, Math.min(duration, now - start));
-    musicProgress.style.width = `${duration ? (elapsed / duration) * 100 : 0}%`;
-    if (musicElapsed) musicElapsed.textContent = formatTrackTime(elapsed);
-    if (musicDuration) musicDuration.textContent = formatTrackTime(duration);
+  const validTimestamp = (value) => {
+    const number = Number(value);
+    return Number.isFinite(number) && number > 0 && number < Date.now() + 5000 ? number : 0;
   };
-  const renderSpotify = (spotify) => {
-    if (!musicCard) return;
-    if (!spotify || !spotify.song) {
-      spotifyTrack = null;
+  const setFallbackArtwork = (title, artist, key) => {
+    if (musicArt) {
+      musicArt.hidden = true;
+      musicArt.removeAttribute("src");
+      musicArt.dataset.trackKey = key || "";
+    }
+    if (!musicArtFallback) return;
+    const words = String(title || "Music").trim().split(/\s+/).filter(Boolean);
+    const initials = (words.slice(0, 2).map((word) => word[0]).join("") || "♪").toUpperCase();
+    const palettes = [
+      ["#645bff", "#29d6d2"], ["#ff8abe", "#ffd65e"],
+      ["#99e3fa", "#a98cff"], ["#ffd49b", "#ff8a72"],
+      ["#b5f28c", "#5ad6c8"]
+    ];
+    const hashText = \`${title || ""} ${artist || ""}\`;
+    const hash = Array.from(hashText).reduce((sum, char) => (sum * 31 + char.charCodeAt(0)) >>> 0, 7);
+    const palette = palettes[hash % palettes.length];
+    musicArtFallback.style.setProperty("--cover-a", palette[0]);
+    musicArtFallback.style.setProperty("--cover-b", palette[1]);
+    musicArtFallback.textContent = initials;
+    musicArtFallback.hidden = false;
+  };
+  const setArtwork = (url, alt, title, artist, key) => {
+    if (!url || !musicArt) {
+      setFallbackArtwork(title, artist, key);
       return;
     }
-    externalTrack = false;
-    spotifyTrack = spotify;
-    musicCard.hidden = false;
-    if (musicTitle) musicTitle.textContent = spotify.song || "Unknown track";
-    if (musicArtist) musicArtist.textContent = spotify.artist || "Unknown artist";
-    if (musicAlbum) musicAlbum.textContent = spotify.album || "Spotify";
-    if (musicHeading) musicHeading.textContent = "Listening to Spotify";
-    if (musicArt) musicArt.style.visibility = "visible";
-    if (musicArt && spotify.album_art_url) musicArt.src = spotify.album_art_url;
-    if (musicArt) musicArt.alt = `Album artwork for ${spotify.song}`;
+    musicArt.dataset.trackKey = key;
+    musicArt.alt = alt;
+    if (musicArtFallback) musicArtFallback.hidden = true;
+    musicArt.hidden = false;
+    if (musicArt.getAttribute("src") !== url) musicArt.setAttribute("src", url);
+  };
+  if (musicArt) {
+    musicArt.addEventListener("error", () => {
+      if (!activeTrack || musicArt.dataset.trackKey !== activeTrack.key) return;
+      setFallbackArtwork(activeTrack.title, activeTrack.artist, activeTrack.key);
+    });
+  }
+  const setTrackCopy = (mode, title, artist, album) => {
+    if (musicHeading) musicHeading.textContent = mode === "spotify" ? "Listening to Spotify" : "Listening to Amazon Music";
+    if (musicTitle) musicTitle.textContent = title || "Unknown track";
+    if (musicArtist) musicArtist.textContent = artist || "Unknown artist";
+    if (musicAlbum) musicAlbum.textContent = album || (mode === "spotify" ? "Spotify" : "Amazon Music");
+  };
+  const updateMusicProgress = () => {
+    if (!activeTrack || !musicCard || musicCard.hidden) return;
+    const now = Date.now();
+    const duration = Math.max(0, Number(activeTrack.durationMs) || 0);
+    let elapsed = 0;
+    let available = false;
+    let estimated = false;
+
+    if (activeTrack.mode === "spotify") {
+      const start = validTimestamp(activeTrack.timestamps?.start);
+      const end = validTimestamp(activeTrack.timestamps?.end);
+      if (start && end && end > start) {
+        elapsed = Math.max(0, Math.min(end - start, now - start));
+        activeTrack.durationMs = end - start;
+        available = true;
+      }
+    } else {
+      const start = validTimestamp(activeTrack.sourceStartMs) || activeTrack.observedStartMs;
+      if (start) {
+        elapsed = Math.max(0, now - start);
+        available = true;
+        estimated = !validTimestamp(activeTrack.sourceStartMs);
+      }
+    }
+
+    const currentDuration = Math.max(0, Number(activeTrack.durationMs) || duration);
+    const clampedElapsed = currentDuration ? Math.min(currentDuration, elapsed) : elapsed;
+    if (musicProgress) musicProgress.style.width = currentDuration ? \`${Math.min(100, (clampedElapsed / currentDuration) * 100)}%\` : "0%";
+    if (musicElapsed) {
+      if (!available) musicElapsed.textContent = "—:—";
+      else musicElapsed.textContent = \`${estimated ? "~" : ""}${formatTrackTime(clampedElapsed)}\`;
+    }
+    if (musicDuration) musicDuration.textContent = currentDuration ? formatTrackTime(currentDuration) : "LENGTH UNKNOWN";
+    if (musicTimingNote) {
+      if (estimated) {
+        musicTimingNote.textContent = "Approximate elapsed time, measured from when Discord first detected this track.";
+        musicTimingNote.hidden = false;
+      } else if (activeTrack.mode === "amazon" && !available) {
+        musicTimingNote.textContent = "Amazon Music playback timing is not shared by Discord for this activity.";
+        musicTimingNote.hidden = false;
+      } else if (activeTrack.mode === "spotify" && !available) {
+        musicTimingNote.textContent = "Spotify timing is not available in the current Discord activity.";
+        musicTimingNote.hidden = false;
+      } else {
+        musicTimingNote.textContent = "";
+        musicTimingNote.hidden = true;
+      }
+    }
+  };
+
+  const artworkFromItunes = (item) => {
+    const source = item?.artworkUrl600 || item?.artworkUrl100 || item?.artworkUrl60;
+    if (!source) return "";
+    return source.replace(/\/\d+x\d+bb\./, "/600x600bb.");
+  };
+  const findBestItunesMatch = (results, title, artist) => {
+    const wantedTitle = normalize(title);
+    const artists = String(artist || "").split(/[,/&+]+/).map(normalize).filter(Boolean);
+    let winner = null;
+    let winnerScore = -1;
+    for (const item of results) {
+      if (!item || !item.trackName) continue;
+      const foundTitle = normalize(item.trackName);
+      let score = 0;
+      if (foundTitle === wantedTitle) score += 100;
+      else if (foundTitle.includes(wantedTitle) || wantedTitle.includes(foundTitle)) score += 45;
+      else continue;
+      const foundArtist = normalize(item.artistName);
+      if (foundArtist && artists.some((name) => name === foundArtist)) score += 35;
+      else if (foundArtist && artists.some((name) => name.length > 3 && (foundArtist.includes(name) || name.includes(foundArtist)))) score += 24;
+      else if (foundArtist && artists.some((name) => name.split(" ").some((token) => token.length > 3 && foundArtist.includes(token)))) score += 8;
+      if (item.trackTimeMillis) score += 2;
+      if (item.artworkUrl100) score += 2;
+      if (score > winnerScore) {
+        winner = item;
+        winnerScore = score;
+      }
+    }
+    return winner;
+  };
+  const resolveAmazonMetadata = async (track) => {
+    if (metadataCache.has(track.key)) {
+      const cached = metadataCache.get(track.key);
+      if (activeTrack?.key === track.key && cached) applyAmazonMetadata(track.key, cached);
+      return;
+    }
+    if (metadataRequests.has(track.key)) return metadataRequests.get(track.key);
+    const request = (async () => {
+      try {
+        const term = [track.title, track.artist].filter(Boolean).join(" ");
+        const endpoint = \`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=15&country=IN\`;
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 9000);
+        let payload;
+        try {
+          const response = await fetch(endpoint, { headers: { Accept: "application/json" }, signal: controller.signal, cache: "force-cache" });
+          if (!response.ok) throw new Error(\`Music catalogue returned ${response.status}\`);
+          payload = await response.json();
+        } finally {
+          window.clearTimeout(timeout);
+        }
+        const winner = findBestItunesMatch(Array.isArray(payload.results) ? payload.results : [], track.title, track.artist);
+        const metadata = winner ? {
+          album: winner.collectionName || "Amazon Music",
+          durationMs: Number(winner.trackTimeMillis) || 0,
+          artwork: artworkFromItunes(winner),
+          matchedTitle: winner.trackName || track.title,
+          matchedArtist: winner.artistName || track.artist
+        } : null;
+        metadataCache.set(track.key, metadata);
+        if (activeTrack?.key === track.key && activeTrack.mode === "amazon" && metadata) applyAmazonMetadata(track.key, metadata);
+        else if (activeTrack?.key === track.key && activeTrack.mode === "amazon") updateMusicProgress();
+      } catch (error) {
+        // Keep the track card usable when the catalogue is unavailable; next track will retry.
+        if (activeTrack?.key === track.key && activeTrack.mode === "amazon") updateMusicProgress();
+      } finally {
+        metadataRequests.delete(track.key);
+      }
+    })();
+    metadataRequests.set(track.key, request);
+    return request;
+  };
+  function applyAmazonMetadata(key, metadata) {
+    if (!activeTrack || activeTrack.key !== key || activeTrack.mode !== "amazon") return;
+    if (metadata.durationMs) activeTrack.durationMs = metadata.durationMs;
+    if (musicAlbum && metadata.album) musicAlbum.textContent = metadata.album;
+    setArtwork(metadata.artwork, \`Cover art for ${activeTrack.title} by ${activeTrack.artist}\`, activeTrack.title, activeTrack.artist, activeTrack.key);
+    updateMusicProgress();
+  }
+
+  const renderSpotify = (spotify) => {
+    const title = String(spotify.song || "Unknown track").trim();
+    const artist = String(spotify.artist || "Unknown artist").trim();
+    const key = \`spotify:${normalize(title)}:${normalize(artist)}\`;
+    const changed = key !== activeTrackKey;
+    activeTrackKey = key;
+    activeTrack = {
+      key, mode: "spotify", title, artist,
+      durationMs: 0, timestamps: spotify.timestamps || null
+    };
+    if (musicCard) musicCard.hidden = false;
+    setTrackCopy("spotify", title, artist, spotify.album || "Spotify");
+    setArtwork(spotify.album_art_url || "", \`Album artwork for ${title} by ${artist}\`, title, artist, key);
+    updateMusicProgress();
+    return changed;
+  };
+
+  const renderAmazon = (activity) => {
+    const rawTitle = String(activity.details || "").trim();
+    const rawArtist = String(activity.state || "").trim();
+    const title = rawTitle.replace(/^Amazon Music\s*[-—:]\s*/i, "").trim() || "Now playing";
+    const artist = rawArtist.replace(/^Amazon Music\s*[-—:]\s*/i, "").trim() || "Amazon Music";
+    const key = \`amazon:${normalize(title)}:${normalize(artist)}\`;
+    const changed = key !== activeTrackKey;
+    const sourceStartMs = validTimestamp(activity.timestamps?.start);
+    if (changed) {
+      activeTrackKey = key;
+      activeTrack = {
+        key, mode: "amazon", title, artist,
+        album: "Amazon Music", durationMs: 0,
+        sourceStartMs, observedStartMs: Date.now()
+      };
+      if (musicProgress) musicProgress.style.width = "0%";
+      if (musicElapsed) musicElapsed.textContent = "~0:00";
+      if (musicDuration) musicDuration.textContent = "LOOKING UP…";
+      if (musicAlbum) musicAlbum.textContent = "Finding album details…";
+      setFallbackArtwork(title, artist, key);
+      void resolveAmazonMetadata(activeTrack);
+    } else if (sourceStartMs) {
+      activeTrack.sourceStartMs = sourceStartMs;
+    }
+    if (musicCard) musicCard.hidden = false;
+    setTrackCopy("amazon", title, artist, activeTrack?.album || "Amazon Music");
+    if (changed && !metadataCache.has(key)) {
+      // Artwork resolution can complete asynchronously; never block live presence updates on it.
+    } else if (metadataCache.has(key)) {
+      const cached = metadataCache.get(key);
+      if (cached) applyAmazonMetadata(key, cached);
+    }
     updateMusicProgress();
   };
-  if (musicArt) musicArt.addEventListener("error", () => {
-    musicArt.src = "https://cdn.discordapp.com/embed/avatars/0.png";
-    musicArt.style.visibility = "visible";
-    musicArt.alt = "Default music artwork";
-  });
-  window.setInterval(updateMusicProgress, 1000);
+
   if (!statusLabel || !statusDot || !displayName || !activityText || !currentActivity) return;
   const statusNames = { online: "ONLINE", idle: "IDLE", dnd: "DO NOT DISTURB", offline: "OFFLINE" };
   const setUnavailable = (message) => {
@@ -143,42 +350,22 @@ const discordPresence = (() => {
     if (note) note.textContent = message || "Live status needs the user to be available through Lanyard. The profile link still works.";
   };
   const loadPresence = async () => {
+    if (presenceLoading) return;
+    presenceLoading = true;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 10000);
     try {
-      const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`, { headers: { Accept: "application/json" }, cache: "no-store" });
-      if (!response.ok) throw new Error("Presence service unavailable");
+      const response = await fetch(\`https://api.lanyard.rest/v1/users/${userId}\`, {
+        headers: { Accept: "application/json" }, cache: "no-store", signal: controller.signal
+      });
+      if (!response.ok) throw new Error(\`Presence service returned ${response.status}\`);
       const payload = await response.json();
       if (!payload.success || !payload.data) throw new Error("No public presence data");
       const data = payload.data;
-      renderSpotify(data.spotify || null);
-      if (!data.spotify) {
-        const activities = Array.isArray(data.activities) ? data.activities : [];
-        const musicActivity = activities.find((item) =>
-          String(item.name || "").toLowerCase().includes("amazon music") ||
-          [item.details, item.state].filter(Boolean).join(" ").toLowerCase().includes("amazon music")
-        );
-        if (musicActivity && musicCard) {
-          externalTrack = true;
-          musicCard.hidden = false;
-          if (musicHeading) musicHeading.textContent = "Listening to Amazon Music";
-          const details = String(musicActivity.details || "").trim();
-          const state = String(musicActivity.state || "").trim();
-          if (musicTitle) musicTitle.textContent = details || "Now playing";
-          if (musicArtist) musicArtist.textContent = state || "Amazon Music";
-          if (musicAlbum) musicAlbum.textContent = "Amazon Music";
-          if (musicArt) {
-            musicArt.src = "https://cdn.discordapp.com/embed/avatars/0.png";
-            musicArt.style.visibility = "visible";
-            musicArt.alt = "Amazon Music activity artwork unavailable";
-          }
-          if (musicProgress) musicProgress.style.width = "0%";
-          if (musicElapsed) musicElapsed.textContent = "LIVE";
-          if (musicDuration) musicDuration.textContent = "NO TIMING DATA";
-        } else if (musicCard) {
-          externalTrack = false;
-          musicCard.hidden = true;
-          if (musicArt) musicArt.style.visibility = "visible";
-        }
-      }
+      const activities = Array.isArray(data.activities) ? data.activities : [];
+      const amazonActivity = activities.find((item) =>
+        /amazon music/i.test([item.name, item.details, item.state, item.platform].filter(Boolean).join(" "))
+      );
       const status = data.discord_status || "offline";
       statusLabel.textContent = statusNames[status] || "UNKNOWN";
       statusDot.dataset.status = status;
@@ -188,10 +375,26 @@ const discordPresence = (() => {
       activityText.textContent = status === "offline" ? "Currently offline" : status === "dnd" ? "Busy on Discord" : status === "idle" ? "Away on Discord" : "Active on Discord";
       if (avatar && user.id && user.avatar) {
         const extension = user.avatar.startsWith("a_") ? "gif" : "png";
-        avatar.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=128`;
+        const avatarUrl = \`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=128\`;
+        if (avatar.getAttribute("src") !== avatarUrl) avatar.src = avatarUrl;
+      } else if (avatar) {
+        avatar.src = "https://cdn.discordapp.com/embed/avatars/0.png";
       }
-      const allActivities = Array.isArray(data.activities) ? data.activities : [];
-      const activity = allActivities.find((item) => item.name && /amazon music/i.test(item.name)) || allActivities.find((item) => item.type !== 4) || allActivities.find((item) => item.type === 4);
+
+      if (data.spotify && data.spotify.song) {
+        renderSpotify(data.spotify);
+      } else if (amazonActivity && musicCard) {
+        renderAmazon(amazonActivity);
+      } else {
+        activeTrack = null;
+        activeTrackKey = "";
+        if (musicCard) musicCard.hidden = true;
+      }
+
+      const activity = amazonActivity ||
+        activities.find((item) => String(item.name || "").toLowerCase() === "spotify") ||
+        activities.find((item) => item.type !== 4) ||
+        activities.find((item) => item.type === 4);
       if (activity) {
         const details = [activity.name, activity.details, activity.state].filter(Boolean);
         currentActivity.textContent = details.join(" — ") || "Activity detected";
@@ -200,13 +403,18 @@ const discordPresence = (() => {
       } else {
         currentActivity.textContent = "Online — no activity shared";
       }
-      if (note) note.textContent = "Status is provided by Lanyard and updates when Discord presence is available.";
+      if (note) note.textContent = "Discord presence refreshes every 20 seconds. Track artwork and duration are matched from a public music catalogue when available.";
     } catch (error) {
-      setUnavailable("For live status, join the Lanyard Discord community and enable presence sharing for this account. The profile link remains available.");
+      setUnavailable("Live presence is temporarily unavailable. The page will retry automatically.");
+    } finally {
+      window.clearTimeout(timeout);
+      presenceLoading = false;
     }
   };
-  loadPresence();
-  window.setInterval(loadPresence, 60000);
+
+  void loadPresence();
+  window.setInterval(() => { void loadPresence(); }, 20000);
+  window.setInterval(updateMusicProgress, 1000);
   return { refresh: loadPresence };
 })();
 
@@ -253,6 +461,14 @@ const discordPresence = (() => {
         }
       });
     }, 900);
+    // Fail open for unusually constrained webviews if an observer notification is lost.
+    window.setTimeout(() => {
+      if (targets.some((element) => !element.classList.contains("is-revealed"))) {
+        targets.forEach((element) => element.classList.add("is-revealed"));
+        document.documentElement.classList.remove("reveal-ready");
+        observer.disconnect();
+      }
+    }, 8000);
   } catch (error) {
     revealAll();
   }

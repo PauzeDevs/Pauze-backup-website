@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261009-2">
+  <link rel="stylesheet" href="styles.css?v=20261009-3">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -35,15 +35,15 @@
       <div class="hero-actions"><a class="hero-primary" href="#work">View My Work <span>↘</span></a><a class="hero-secondary" href="#contact">Get in touch <span>↗</span></a></div><div class="hero-index"><span>INDEPENDENT DEVELOPER</span><span>PAUZE / 2026</span><span>SCROLL TO EXPLORE ↘</span></div>
     </section>
     <section class="intro-section section-wrap" id="about">
-      <div class="section-title"><p class="kicker">A LITTLE ABOUT ME</p><h2>About Me</h2><p>Building useful things, learning in public, and turning random ideas into real projects.</p></div>
-      <article class="about-card"><span class="pixel-icon">✳</span><div><p class="kicker">INDEPENDENT DEVELOPER</p><h3>Curiosity → Code → Creation.</h3><p>I work across web development, developer utilities, weather tools, and Discord projects. I like clean interfaces, practical features, and shipping things people can actually use.</p></div></article>
+      <div class="section-title" data-reveal="up"><p class="kicker">A LITTLE ABOUT ME</p><h2>About Me</h2><p>Building useful things, learning in public, and turning random ideas into real projects.</p></div>
+      <article class="about-card" data-reveal="up"><span class="pixel-icon">✳</span><div><p class="kicker">INDEPENDENT DEVELOPER</p><h3>Curiosity → Code → Creation.</h3><p>I work across web development, developer utilities, weather tools, and Discord projects. I like clean interfaces, practical features, and shipping things people can actually use.</p></div></article>
     </section>
     <section class="skills-section section-wrap" id="skills">
-      <div class="section-title"><p class="kicker">TOOLS IN MY TOOLBOX</p><h2>Skills &amp; Expertise</h2><p>The languages, frameworks, and platforms I use to bring ideas to life.</p></div>
+      <div class="section-title" data-reveal="up"><p class="kicker">TOOLS IN MY TOOLBOX</p><h2>Skills &amp; Expertise</h2><p>The languages, frameworks, and platforms I use to bring ideas to life.</p></div>
       <div class="skill-panels">
-        <article class="skill-panel skill-yellow"><h3>Languages</h3><div class="skill-chips"><span>JavaScript</span><span>TypeScript</span><span>Python</span><span>Kotlin</span><span>C#</span><span>Swift</span></div></article>
-        <article class="skill-panel skill-blue"><h3>Frameworks &amp; Libraries</h3><div class="skill-chips"><span>React</span><span>Node.js</span><span>Discord.js</span><span>Tailwind CSS</span><span>Vite</span></div></article>
-        <article class="skill-panel skill-green"><h3>Tools &amp; Platforms</h3><div class="skill-chips"><span>GitHub</span><span>Docker</span><span>Linux</span><span>Firebase</span><span>MongoDB</span><span>Netlify</span></div></article>
+        <article class="skill-panel skill-yellow" data-reveal="up"><h3>Languages</h3><div class="skill-chips"><span>JavaScript</span><span>TypeScript</span><span>Python</span><span>Kotlin</span><span>C#</span><span>Swift</span></div></article>
+        <article class="skill-panel skill-blue" data-reveal="up"><h3>Frameworks &amp; Libraries</h3><div class="skill-chips"><span>React</span><span>Node.js</span><span>Discord.js</span><span>Tailwind CSS</span><span>Vite</span></div></article>
+        <article class="skill-panel skill-green" data-reveal="up"><h3>Tools &amp; Platforms</h3><div class="skill-chips"><span>GitHub</span><span>Docker</span><span>Linux</span><span>Firebase</span><span>MongoDB</span><span>Netlify</span></div></article>
       </div>
     </section>
     <section class="work section-wrap" id="work">
@@ -90,12 +90,12 @@
       </div>
     </section>
     <section class="live-presence section-wrap" id="activity">
-      <div class="section-heading">
+      <div class="section-heading" data-reveal="up">
         <div><p class="kicker">02 / AROUND THE CODE</p><h2>RECENT<br><span class="muted">ACTIVITY.</span></h2></div>
         <p class="section-note">Public GitHub events and live Discord presence. Real signals, no fabricated stats.</p>
       </div>
       <div class="presence-grid">
-        <article class="presence-card github-activity">
+        <article class="presence-card github-activity" data-reveal="up">
           <div class="presence-card-top"><span class="presence-eyebrow"><i class="presence-dot github-dot"></i> GITHUB / CONTRIBUTIONS</span><a href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">VIEW PROFILE ↗</a></div>
           <h3>GitHub / <span class="activity-handle">@PauzeDevs</span></h3>
           <p>Latest public events from the GitHub API.</p>
@@ -105,7 +105,7 @@
             <ul id="github-event-list" aria-live="polite"><li class="activity-loading"><span class="activity-pulse"></span>Fetching public GitHub events…</li></ul>
           </div>
         </article>
-        <article class="presence-card discord-presence">
+        <article class="presence-card discord-presence" data-reveal="up">
           <div class="presence-card-top"><span class="presence-eyebrow"><i class="presence-dot discord-dot" id="discord-status-dot"></i> DISCORD / PRESENCE</span><span class="discord-status-label" id="discord-status-label">CHECKING STATUS</span></div>
           <div class="discord-profile">
             <div class="discord-avatar-wrap"><img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord avatar" loading="lazy" decoding="async"><i id="discord-avatar-status" class="avatar-status-indicator"></i></div>
@@ -115,11 +115,13 @@
           <div class="discord-music-card" id="discord-music-card" hidden>
             <div class="discord-music-heading"><span id="discord-music-heading">Listening to Spotify</span><span class="music-badge" aria-label="Music service">♪</span></div>
             <div class="discord-music-track">
-              <img id="discord-music-art" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Album artwork" loading="lazy" decoding="async">
+              <div class="music-art-fallback" id="discord-music-art-fallback" hidden aria-hidden="true">♪</div>
+              <img id="discord-music-art" src="" alt="Album artwork" loading="lazy" decoding="async" hidden>
               <div class="discord-music-copy"><h4 id="discord-music-title">Track title</h4><p id="discord-music-artist">Artist</p><span id="discord-music-album">Album</span></div>
             </div>
             <div class="discord-music-progress"><span id="discord-music-progress"></span></div>
             <div class="discord-music-times"><span id="discord-music-elapsed">0:00</span><span id="discord-music-duration">0:00</span></div>
+            <p class="music-timing-note" id="discord-music-timing-note" hidden></p>
           </div>
           <a class="discord-cta" href="https://discord.com/users/1547264515182432398" target="_blank" rel="noreferrer">OPEN DISCORD PROFILE <span>↗</span></a>
           <p class="discord-footnote" id="discord-status-note">Live status requires your Discord presence to be available through Lanyard.</p>
@@ -137,6 +139,6 @@
     <div><a href="https://github.com/PauzeX-Developments" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div>
     <small>© <span id="year"></span> PAUZE. MADE WITH INTENTION.</small>
   </footer>
-  <script src="script.js"></script>
+  <script src="script.js?v=20261009-3" defer></script>
 </body>
 </html>
