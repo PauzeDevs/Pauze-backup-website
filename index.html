@@ -16,7 +16,7 @@
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="Pauze home">PAUZE<span>®</span></a>
     <nav class="desktop-nav" aria-label="Main navigation">
-      <a href="#work">Work</a><a href="#about">About</a><a href="#activity">Activity</a><a href="#contact">Contact</a>
+      <a href="#work">Work</a><a href="#about">About</a><a href="#activity">Activity</a><a href="#terminal">Terminal</a><a href="#contact">Contact</a>
     </nav>
     <a class="availability" href="#contact"><span class="status-dot"></span> OPEN TO IDEAS</a>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
@@ -154,6 +154,10 @@
             <img class="contribution-graph" src="https://ghchart.rshah.org/62e8d5/PauzeDevs" alt="GitHub contribution graph for PauzeDevs" loading="lazy" decoding="async">
           </a>
           <div class="activity-foot"><span>COMMITS / BUILDS / ITERATIONS</span><a href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer">EXPLORE REPOS ↗</a></div>
+          <div class="recent-activity">
+            <div class="recent-activity-heading"><span>RECENT PUBLIC ACTIVITY</span><span id="github-feed-state">CONNECTING…</span></div>
+            <ul id="github-event-list" aria-live="polite"><li class="activity-loading"><span class="activity-pulse"></span>Fetching public GitHub events…</li></ul>
+          </div>
         </article>
         <article class="presence-card discord-presence">
           <div class="presence-card-top"><span class="presence-eyebrow"><i class="presence-dot discord-dot" id="discord-status-dot"></i> DISCORD / PRESENCE</span><span class="discord-status-label" id="discord-status-label">CHECKING STATUS</span></div>
@@ -165,6 +169,28 @@
           <a class="discord-cta" href="https://discord.com/users/1547264515182432398" target="_blank" rel="noreferrer">OPEN DISCORD PROFILE <span>↗</span></a>
           <p class="discord-footnote" id="discord-status-note">Live status requires your Discord presence to be available through Lanyard.</p>
         </article>
+      </div>
+    </section>
+
+    <section class="terminal-section section-wrap" id="terminal" data-reveal="up">
+      <div class="section-heading">
+        <div><p class="kicker">04 / DIRECT ACCESS</p><h2>TAKE A<br><span class="muted">LOOK AROUND.</span></h2></div>
+        <p class="section-note">A tiny command line for the curious. Type a command or pick one from the list.</p>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-topbar"><div class="terminal-lights"><i></i><i></i><i></i></div><span>pauze@portfolio: ~</span><button type="button" id="terminal-clear" aria-label="Clear terminal output">CLEAR</button></div>
+        <div class="terminal-output" id="terminal-output" role="log" aria-live="polite" aria-relevant="additions">
+          <p class="terminal-system">PAUZE SHELL / INTERACTIVE PORTFOLIO</p>
+          <p>Type <code>help</code> to see available commands.</p>
+        </div>
+        <form class="terminal-form" id="terminal-form">
+          <label for="terminal-input"><span aria-hidden="true">➜</span><span class="terminal-prompt">~</span></label>
+          <input id="terminal-input" name="command" type="text" autocomplete="off" spellcheck="false" placeholder="try: projects" aria-label="Enter a terminal command">
+          <button type="submit">RUN ↵</button>
+        </form>
+        <div class="terminal-shortcuts" aria-label="Suggested terminal commands">
+          <button type="button" data-command="help">help</button><button type="button" data-command="projects">projects</button><button type="button" data-command="stack">stack</button><button type="button" data-command="github">github</button><button type="button" data-command="contact">contact</button>
+        </div>
       </div>
     </section>
     <section class="contact section-wrap" id="contact" data-reveal="up">
