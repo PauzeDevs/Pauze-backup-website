@@ -169,3 +169,110 @@ a{color:inherit;text-decoration:none}
 }
 .discord-music-track img{object-fit:cover}
 .discord-music-track img[style*="visibility: hidden"]{display:none}
+
+/* Visual refresh: enforce the intended pastel portfolio palette and improve mobile rhythm */
+:root{
+  --bg:#d9b7ff;
+  --ink:#17121f;
+  --muted:#51445f;
+  --yellow:#fff08b;
+  --pink:#ffc7e8;
+  --blue:#bdeaff;
+  --green:#d8f99d;
+  --orange:#ffd5a8;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-size:15px}
+.noise{opacity:.025;background-size:18px 18px}
+.site-header{background:#fffdf8;border-radius:13px;box-shadow:5px 5px 0 var(--ink)}
+.hero{padding-top:clamp(48px,8vw,92px);padding-bottom:54px}
+.hero h1{font-size:clamp(54px,12vw,110px);line-height:.98;letter-spacing:-.09em}
+.hero-copy{margin-top:clamp(26px,5vw,42px)}
+.hero-description{max-width:520px}
+.hero-actions{grid-template-columns:repeat(2,minmax(0,1fr));max-width:540px}
+.hero-actions a{min-height:58px;font-size:clamp(13px,1.8vw,17px);padding:13px 12px}
+.intro-section,.skills-section,.work,.live-presence{padding-top:clamp(42px,7vw,70px);padding-bottom:clamp(44px,7vw,72px)}
+.section-title{margin-bottom:28px}
+.section-title h2,.section-heading h2,.contact h2{line-height:1.02}
+.about-card,.project,.presence-card,.skill-panel{box-shadow:6px 6px 0 var(--ink)}
+.about-card{background:#fffdf8}
+.skill-panel{border-radius:18px}
+.skill-chips{gap:9px}
+.skill-chips span{border-width:2px;box-shadow:2px 2px 0 var(--ink);border-radius:7px}
+.project{border-radius:18px}
+.project-featured{background:var(--yellow)}
+.project-list>.project:nth-child(2){background:var(--pink)}
+.project-list>.project:nth-child(3){background:var(--blue)}
+.project-list>.project:nth-child(4){background:var(--orange)}
+.presence-card{background:#fffdf8;border-radius:18px}
+.discord-music-card{background:#4a2946!important;color:#fff!important;border-radius:18px!important}
+.discord-music-heading,.discord-music-copy h4,.discord-music-copy p{font-family:Arial,Helvetica,sans-serif}
+.contact{padding-top:clamp(52px,8vw,90px);padding-bottom:60px}
+.contact-button{box-shadow:4px 4px 0 var(--ink)}
+.site-footer{border-top:2px solid rgba(23,18,31,.24)}
+@media(max-width:700px){
+  .section-wrap{width:calc(100% - 32px)}
+  .site-header{width:calc(100% - 20px);top:6px;margin-top:6px;padding:8px 11px;min-height:54px;gap:8px;border-width:2px;box-shadow:3px 3px 0 var(--ink)}
+  .wordmark{font-size:19px}
+  .availability{font-size:8px;padding:6px 7px;gap:5px}
+  .hero{padding-top:42px;padding-bottom:34px;text-align:left}
+  .eyebrow{font-size:8px;gap:8px}
+  .eyebrow span:last-child{text-align:right}
+  .hero-copy{margin-top:35px}
+  .hero .kicker{font-size:9px}
+  .hero h1{font-size:clamp(54px,16vw,76px);line-height:.99}
+  .hero-description{font-size:15px;line-height:1.65}
+  .hero-bottom{justify-content:flex-start;margin-top:17px}
+  .hero-actions{grid-template-columns:1fr 1fr;gap:10px;margin-top:25px}
+  .hero-actions a{font-size:12px;padding:12px 8px;gap:7px;border-width:2px;border-radius:8px;box-shadow:3px 3px 0 var(--ink)}
+  .hero-index{margin-top:32px;font-size:7px;gap:8px}
+  .section-title{text-align:left;margin-bottom:24px}
+  .section-title h2,.section-heading h2,.contact h2{font-size:clamp(34px,10vw,46px)}
+  .section-title>p:last-child{font-size:14px;line-height:1.65;margin-top:11px}
+  .about-card{padding:18px;gap:13px;border-width:2px;border-radius:15px;box-shadow:4px 4px 0 var(--ink)}
+  .pixel-icon{flex-basis:42px;width:42px;height:42px;font-size:23px;border-width:2px;box-shadow:2px 2px 0 var(--ink)}
+  .about-card h3{font-size:22px}
+  .about-card p:last-child{font-size:13px;line-height:1.7}
+  .skill-panels{gap:14px}
+  .skill-panel{padding:18px;border-width:2px;border-radius:15px;box-shadow:4px 4px 0 var(--ink)}
+  .skill-panel h3{font-size:21px;margin-bottom:13px}
+  .skill-chips{gap:8px}
+  .skill-chips span{font-size:12px;padding:7px 9px}
+  .section-heading{align-items:flex-start;flex-direction:column;gap:10px;margin-bottom:23px}
+  .section-note{font-size:13px;max-width:100%}
+  .project-list{grid-template-columns:1fr;gap:18px}
+  .project-featured{grid-column:auto}
+  .project{padding:16px;border-width:2px;border-radius:15px;box-shadow:4px 4px 0 var(--ink)}
+  .project-topline{font-size:8px;align-items:flex-start}
+  .project-main,.project:not(.project-featured) .project-main{grid-template-columns:1fr;gap:18px;margin-top:19px}
+  .project h3{font-size:36px}
+  .project-copy>p:not(.project-index){font-size:13px}
+  .visual{height:205px;border-width:2px;border-radius:12px;box-shadow:3px 3px 0 var(--ink)}
+  .presence-grid{grid-template-columns:1fr;gap:18px}
+  .presence-card{padding:16px;border-width:2px;border-radius:15px;box-shadow:4px 4px 0 var(--ink)}
+  .presence-card-top{gap:8px;font-size:8px}
+  .discord-profile{gap:12px}
+  .discord-avatar-wrap img{width:52px;height:52px}
+  .discord-profile-copy h3{font-size:18px}
+  .discord-profile-copy p{font-size:12px}
+  .discord-user-id{font-size:8px}
+  .discord-activity-box{padding:12px}
+  .discord-music-card{padding:14px!important}
+  .discord-music-track img{width:76px;height:76px;flex-basis:76px}
+  .discord-music-copy h4{font-size:18px}
+  .discord-music-copy p{font-size:14px}
+  .discord-music-copy span{font-size:11px}
+  .contact-bottom{gap:18px}
+  .contact-bottom p{font-size:14px}
+  .contact-button{padding:13px 16px}
+  .site-footer{gap:10px;padding-top:18px;padding-bottom:18px}
+  .site-footer>span{font-size:8px}
+  .site-footer small{font-size:7px}
+}
+@media(max-width:390px){
+  .eyebrow span:last-child{display:none}
+  .hero h1{font-size:55px}
+  .hero-actions a{font-size:11px}
+  .project-topline{flex-direction:column}
+  .presence-card-top{flex-wrap:wrap}
+}
