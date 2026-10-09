@@ -87,7 +87,6 @@ const discordPresence = (() => {
   const musicTitle = document.querySelector("#discord-music-title");
   const musicArtist = document.querySelector("#discord-music-artist");
   const musicAlbum = document.querySelector("#discord-music-album");
-  const musicSource = document.querySelector("#discord-music-source");
   const musicHeading = document.querySelector("#discord-music-heading");
   const musicProgress = document.querySelector("#discord-music-progress");
   const musicElapsed = document.querySelector("#discord-music-elapsed");
@@ -121,7 +120,6 @@ const discordPresence = (() => {
     if (musicTitle) musicTitle.textContent = spotify.song || "Unknown track";
     if (musicArtist) musicArtist.textContent = spotify.artist || "Unknown artist";
     if (musicAlbum) musicAlbum.textContent = spotify.album || "Spotify";
-    if (musicSource) musicSource.textContent = "SPOTIFY";
     if (musicHeading) musicHeading.textContent = "Listening to Spotify";
     if (musicArt) musicArt.style.visibility = "visible";
     if (musicArt && spotify.album_art_url) musicArt.src = spotify.album_art_url;
@@ -129,7 +127,9 @@ const discordPresence = (() => {
     updateMusicProgress();
   };
   if (musicArt) musicArt.addEventListener("error", () => {
-    musicArt.style.visibility = "hidden";
+    musicArt.src = "https://cdn.discordapp.com/embed/avatars/0.png";
+    musicArt.style.visibility = "visible";
+    musicArt.alt = "Default music artwork";
   });
   window.setInterval(updateMusicProgress, 1000);
   if (!statusLabel || !statusDot || !displayName || !activityText || !currentActivity) return;
@@ -166,13 +166,13 @@ const discordPresence = (() => {
           if (musicArtist) musicArtist.textContent = state || "Amazon Music";
           if (musicAlbum) musicAlbum.textContent = "Amazon Music";
           if (musicArt) {
-            musicArt.removeAttribute("src");
-            musicArt.style.visibility = "hidden";
-            musicArt.alt = "Album artwork is not shared by Discord presence";
+            musicArt.src = "https://cdn.discordapp.com/embed/avatars/0.png";
+            musicArt.style.visibility = "visible";
+            musicArt.alt = "Amazon Music activity artwork unavailable";
           }
           if (musicProgress) musicProgress.style.width = "0%";
           if (musicElapsed) musicElapsed.textContent = "LIVE";
-          if (musicDuration) musicDuration.textContent = "AMAZON MUSIC";
+          if (musicDuration) musicDuration.textContent = "NO TIMING DATA";
         } else if (musicCard) {
           externalTrack = false;
           musicCard.hidden = true;
@@ -190,7 +190,8 @@ const discordPresence = (() => {
         const extension = user.avatar.startsWith("a_") ? "gif" : "png";
         avatar.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=128`;
       }
-      const activity = Array.isArray(data.activities) ? data.activities.find((item) => item.type !== 4) : null;
+      const allActivities = Array.isArray(data.activities) ? data.activities : [];
+      const activity = allActivities.find((item) => item.name && /amazon music/i.test(item.name)) || allActivities.find((item) => item.type !== 4) || allActivities.find((item) => item.type === 4);
       if (activity) {
         const details = [activity.name, activity.details, activity.state].filter(Boolean);
         currentActivity.textContent = details.join(" — ") || "Activity detected";
