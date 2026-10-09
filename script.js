@@ -154,3 +154,174 @@ const discordPresence = (() => {
     observer.observe(element);
   });
 })();
+
+/* Real public GitHub events with loading, empty, and error states */
+(() => {
+  const list = document.querySelector("#github-event-list");
+  const state = document.querySelector("#github-feed-state");
+  if (!list || !state) return;
+  const username = "PauzeDevs";
+  const eventLabels = {
+    PushEvent: "Pushed commits",
+    PullRequestEvent: "Updated a pull request",
+    IssuesEvent: "Opened or updated an issue",
+    IssueCommentEvent: "Commented on an issue",
+    CreateEvent: "Created a branch or repository",
+    ReleaseEvent: "Published a release",
+    WatchEvent: "Starred a repository",
+    ForkEvent: "Forked a repository",
+    PublicEvent: "Made a repository public"
+  };
+  const relativeTime = (dateString) => {
+    const seconds = Math.max(0, Math.floor((Date.now() - new Date(dateString).getTime()) / 1000));
+    if (seconds < 60) return "JUST NOW";
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}M AGO`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}H AGO`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}D AGO`;
+    return new Date(dateString).toLocaleDateString(undefined, { month: "short", day: "numeric" }).toUpperCase();
+  };
+  const makeLink = (url, label) => {
+    const link = document.createElement("a");
+    link.href = url;
+    link.textContent = label;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    return link;
+  };
+  const renderEvents = (events) => {
+    list.replaceChildren();
+    const useful = events.filter((event) => eventLabels[event.type] && event.repo?.name).slice(0, 5);
+    if (!useful.length) {
+      const item = document.createElement("li");
+      item.textContent = "No recent public events to show.";
+      list.append(item);
+      state.textContent = "NO RECENT EVENTS";
+      return;
+    }
+    useful.forEach((event) => {
+      const item = document.createElement("li");
+      const icon = document.createElement("span");
+      icon.className = "activity-event-icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = event.type === "PushEvent" ? "↥" : event.type === "PullRequestEvent" ? "⑂" : event.type === "ReleaseEvent" ? "◆" : "↗";
+      const copy = document.createElement("div");
+      copy.className = "activity-event-copy";
+      const description = document.createElement("span");
+      description.textContent = eventLabels[event.type] + " · ";
+      description.append(makeLink(`https://github.com/${event.repo.name}`, event.repo.name.split("/").pop()));
+      copy.append(description);
+      if (event.type === "PushEvent" && event.payload?.commits?.length) {
+        const commitCount = document.createElement("span");
+        commitCount.textContent = ` (${event.payload.commits.length} commit${event.payload.commits.length === 1 ? "" : "s"})`;
+        description.append(commitCount);
+      }
+      const meta = document.createElement("span");
+      meta.className = "activity-event-meta";
+      meta.textContent = relativeTime(event.created_at);
+      copy.append(meta);
+      item.append(icon, copy);
+      list.append(item);
+    });
+    state.textContent = "LIVE · PUBLIC API";
+  };
+  const loadEvents = async () => {
+    try {
+      const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=30`, {
+        headers: { Accept: "application/vnd.github+json" },
+        cache: "no-store"
+      });
+      if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
+      renderEvents(await response.json());
+    } catch (error) {
+      list.replaceChildren();
+      const item = document.createElement("li");
+      item.textContent = "Live activity couldn't load. Open the GitHub profile to see the latest updates.";
+      list.append(item);
+      state.textContent = "TEMPORARILY UNAVAILABLE";
+    }
+  };
+  loadEvents();
+  window.setInterval(loadEvents, 300000);
+  const graph = document.querySelector(".contribution-graph");
+  if (graph) graph.addEventListener("error", () => {
+    const link = graph.closest(".contribution-graph-link");
+    if (link) {
+      link.textContent = "Contribution graph unavailable — open the GitHub profile to view activity.";
+      link.classList.add("graph-unavailable");
+    }
+  }, { once: true });
+})();
+
+/* Small portfolio shell: local commands only, no simulated system access */
+(() => {
+  const form = document.querySelector("#terminal-form");
+  const input = document.querySelector("#terminal-input");
+  const output = document.querySelector("#terminal-output");
+  const clearButton = document.querySelector("#terminal-clear");
+  if (!form || !input || !output) return;
+  const addLine = (className, text) => {
+    const line = document.createElement("p");
+    if (className) line.className = className;
+    line.textContent = text;
+    output.append(line);
+    output.scrollTop = output.scrollHeight;
+    return line;
+  };
+  const addResultLink = (label, url) => {
+    const line = document.createElement("p");
+    line.className = "terminal-result";
+    const link = document.createElement("a");
+    link.href = url;
+    link.textContent = label;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    line.append(link);
+    output.append(line);
+  };
+  const commands = {
+    help: () => {
+      addLine("terminal-result", "Available commands:");
+      addLine("terminal-result", "about  — what this portfolio is");
+      addLine("terminal-result", "projects — selected work and repositories");
+      addLine("terminal-result", "stack  — tools and technologies");
+      addLine("terminal-result", "github — public GitHub profile");
+      addLine("terminal-result", "contact — email address");
+      addLine("terminal-result", "clear  — clear terminal output");
+    },
+    about: () => addLine("terminal-result", "Pauze is an independent digital studio exploring software, developer tools, and creative experiments."),
+    projects: () => {
+      addLine("terminal-result", "Selected projects:");
+      addResultLink("PauzeWeatherDeveloped ↗", "https://github.com/PauzeDevs/PauzeWeatherDeveloped");
+      addResultLink("PauzeControl ↗", "https://github.com/PauzeX-Developments/PauzeControl");
+      addResultLink("PauzeX-Developments ↗", "https://github.com/PauzeX-Developments");
+    },
+    stack: () => addLine("terminal-result", "TypeScript · Kotlin · C# · Swift · Python · React · HTML · CSS · Node.js · GitHub · REST APIs · Netlify"),
+    github: () => addResultLink("github.com/PauzeDevs ↗", "https://github.com/PauzeDevs"),
+    contact: () => addResultLink("githubpauze@gmail.com ↗", "mailto:githubpauze@gmail.com"),
+    clear: () => output.replaceChildren()
+  };
+  const runCommand = (rawCommand) => {
+    const command = rawCommand.trim().toLowerCase().replace(/\s+/g, " ");
+    if (!command) return;
+    addLine("terminal-command-line", `➜ ~ ${command}`);
+    if (commands[command]) commands[command]();
+    else addLine("terminal-error", `Command not found: ${command}. Type "help" to see the available commands.`);
+    output.scrollTop = output.scrollHeight;
+  };
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    runCommand(input.value);
+    input.value = "";
+    input.focus();
+  });
+  document.querySelectorAll("[data-command]").forEach((button) => {
+    button.addEventListener("click", () => {
+      runCommand(button.dataset.command || "");
+      input.focus();
+    });
+  });
+  if (clearButton) clearButton.addEventListener("click", () => {
+    output.replaceChildren();
+    input.focus();
+  });
+})();
