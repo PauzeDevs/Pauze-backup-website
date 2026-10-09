@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261009-4">
+  <link rel="stylesheet" href="styles.css?v=20261009-5">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -91,30 +91,38 @@
     </section>
     <section class="arcade-section section-wrap" id="arcade" data-reveal="up">
       <div class="section-heading arcade-heading" data-reveal="up">
-        <div><p class="kicker">BONUS LEVEL / 001</p><h2>PAUZE ARCADE <span class="arcade-spark">✳</span></h2></div>
-        <p class="section-note">Take a break. Jump the obstacles. Beat your own best.</p>
+        <div><p class="kicker">BONUS LEVEL / 005</p><h2>PAUZE ARCADE <span class="arcade-spark">✳</span></h2></div>
+        <p class="section-note">Six games. Pick your mode, take a break, and beat your own best.</p>
       </div>
       <div class="arcade-shell" data-reveal="up">
-        <div class="arcade-topbar"><span><i class="arcade-led"></i> DINO RUN / ENDLESS MODE</span><span id="dino-state">READY?</span></div>
+        <div class="arcade-topbar"><span><i class="arcade-led"></i> <span id="arcade-game-title">DINO RUN / ENDLESS MODE</span></span><span id="dino-state">READY?</span></div>
+        <div class="arcade-game-picker" role="group" aria-label="Choose an arcade game">
+          <button type="button" class="arcade-game-option is-active" data-arcade-game="dino" aria-pressed="true"><span>01</span> DINO RUN</button>
+          <button type="button" class="arcade-game-option" data-arcade-game="snake" aria-pressed="false"><span>02</span> SNAKE.EXE</button>
+          <button type="button" class="arcade-game-option" data-arcade-game="space" aria-pressed="false"><span>03</span> SPACE PROTOCOL</button>
+          <button type="button" class="arcade-game-option" data-arcade-game="breakout" aria-pressed="false"><span>04</span> BREAKPOINT</button>
+          <button type="button" class="arcade-game-option" data-arcade-game="memory" aria-pressed="false"><span>05</span> MEMORY LEAK</button>
+          <button type="button" class="arcade-game-option" data-arcade-game="pong" aria-pressed="false"><span>06</span> PING.EXE</button>
+        </div>
         <div class="arcade-stats" aria-live="polite">
           <div><span class="arcade-stat-label">SCORE</span><strong id="dino-score">00000</strong></div>
           <div><span class="arcade-stat-label">PERSONAL BEST</span><strong id="dino-best">00000</strong></div>
-          <div><span class="arcade-stat-label">SPEED</span><strong id="dino-speed">1.0×</strong></div>
+          <div><span class="arcade-stat-label" id="arcade-mode-label">SPEED</span><strong id="arcade-mode-value">1.0×</strong></div>
         </div>
-        <div class="dino-stage" id="dino-stage" tabindex="0" role="application" aria-label="Dino Run. Press Space or Arrow Up to jump, Arrow Down to duck, and P to pause.">
-          <canvas id="dino-canvas" width="900" height="260" aria-label="Dino Run game"></canvas>
+        <div class="dino-stage" id="dino-stage" tabindex="0" role="application" aria-label="Arcade game area. Select a game, then start.">
+          <canvas id="dino-canvas" width="900" height="260" aria-label="Arcade game canvas"></canvas>
           <div class="dino-overlay" id="dino-overlay">
-            <span class="dino-overlay-label">READY PLAYER ONE?</span><h3 id="dino-overlay-title">LET’S RUN.</h3>
-            <p id="dino-overlay-copy">Jump the cacti. Don’t hit the birds. Keep going.</p>
-            <button type="button" class="dino-start" id="dino-start">START RUN <span>↗</span></button>
+            <span class="dino-overlay-label">CHOOSE YOUR CHALLENGE</span><h3 id="dino-overlay-title">LET’S RUN.</h3>
+            <p id="dino-overlay-copy">Jump obstacles and beat your best score.</p>
+            <button type="button" class="dino-start" id="dino-start">START GAME <span>↗</span></button>
           </div>
         </div>
         <div class="arcade-controls">
-          <p><kbd>SPACE</kbd> / <kbd>↑</kbd> JUMP <span class="control-dot">•</span> <kbd>↓</kbd> DUCK <span class="control-dot">•</span> <kbd>P</kbd> PAUSE</p>
-          <div class="arcade-touch-controls"><button type="button" id="dino-jump">JUMP ↑</button><button type="button" id="dino-duck">DUCK ↓</button></div>
+          <p id="arcade-instructions">SPACE / ↑ JUMP  •  ↓ DUCK  •  P PAUSE</p>
+          <div class="arcade-touch-controls" id="arcade-touch-controls" aria-label="Touch controls"></div>
           <button type="button" class="arcade-reset" id="dino-restart">RESTART ↻</button>
         </div>
-        <p class="arcade-footnote">A tiny game built into PAUZE. Your personal best stays on this device.</p>
+        <p class="arcade-footnote">Six tiny games, one arcade. Personal bests are saved locally on this device.</p>
       </div>
     </section>
 
@@ -168,6 +176,6 @@
     <div><a href="https://github.com/PauzeX-Developments" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div>
     <small>© <span id="year"></span> PAUZE. MADE WITH INTENTION.</small>
   </footer>
-  <script src="script.js?v=20261009-6" defer></script>
+  <script src="script.js?v=20261009-7" defer></script>
 </body>
 </html>
