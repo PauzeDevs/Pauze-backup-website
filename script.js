@@ -106,7 +106,7 @@ const discordPresence = (() => {
     .replace(/[^a-z0-9]+/g, " ").trim();
   const formatTrackTime = (milliseconds) => {
     const seconds = Math.max(0, Math.floor(milliseconds / 1000));
-    return \`${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}\`;
+    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
   };
   const validTimestamp = (value) => {
     const number = Number(value);
@@ -126,7 +126,7 @@ const discordPresence = (() => {
       ["#99e3fa", "#a98cff"], ["#ffd49b", "#ff8a72"],
       ["#b5f28c", "#5ad6c8"]
     ];
-    const hashText = \`${title || ""} ${artist || ""}\`;
+    const hashText = `${title || ""} ${artist || ""}`;
     const hash = Array.from(hashText).reduce((sum, char) => (sum * 31 + char.charCodeAt(0)) >>> 0, 7);
     const palette = palettes[hash % palettes.length];
     musicArtFallback.style.setProperty("--cover-a", palette[0]);
@@ -184,10 +184,10 @@ const discordPresence = (() => {
 
     const currentDuration = Math.max(0, Number(activeTrack.durationMs) || duration);
     const clampedElapsed = currentDuration ? Math.min(currentDuration, elapsed) : elapsed;
-    if (musicProgress) musicProgress.style.width = currentDuration ? \`${Math.min(100, (clampedElapsed / currentDuration) * 100)}%\` : "0%";
+    if (musicProgress) musicProgress.style.width = currentDuration ? `${Math.min(100, (clampedElapsed / currentDuration) * 100)}%` : "0%";
     if (musicElapsed) {
       if (!available) musicElapsed.textContent = "—:—";
-      else musicElapsed.textContent = \`${estimated ? "~" : ""}${formatTrackTime(clampedElapsed)}\`;
+      else musicElapsed.textContent = `${estimated ? "~" : ""}${formatTrackTime(clampedElapsed)}`;
     }
     if (musicDuration) musicDuration.textContent = currentDuration ? formatTrackTime(currentDuration) : "LENGTH UNKNOWN";
     if (musicTimingNote) {
@@ -247,13 +247,13 @@ const discordPresence = (() => {
     const request = (async () => {
       try {
         const term = [track.title, track.artist].filter(Boolean).join(" ");
-        const endpoint = \`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=15&country=IN\`;
+        const endpoint = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=15&country=IN`;
         const controller = new AbortController();
         const timeout = window.setTimeout(() => controller.abort(), 9000);
         let payload;
         try {
           const response = await fetch(endpoint, { headers: { Accept: "application/json" }, signal: controller.signal, cache: "force-cache" });
-          if (!response.ok) throw new Error(\`Music catalogue returned ${response.status}\`);
+          if (!response.ok) throw new Error(`Music catalogue returned ${response.status}`);
           payload = await response.json();
         } finally {
           window.clearTimeout(timeout);
@@ -282,15 +282,16 @@ const discordPresence = (() => {
   function applyAmazonMetadata(key, metadata) {
     if (!activeTrack || activeTrack.key !== key || activeTrack.mode !== "amazon") return;
     if (metadata.durationMs) activeTrack.durationMs = metadata.durationMs;
+    if (metadata.album) activeTrack.album = metadata.album;
     if (musicAlbum && metadata.album) musicAlbum.textContent = metadata.album;
-    setArtwork(metadata.artwork, \`Cover art for ${activeTrack.title} by ${activeTrack.artist}\`, activeTrack.title, activeTrack.artist, activeTrack.key);
+    setArtwork(metadata.artwork, `Cover art for ${activeTrack.title} by ${activeTrack.artist}`, activeTrack.title, activeTrack.artist, activeTrack.key);
     updateMusicProgress();
   }
 
   const renderSpotify = (spotify) => {
     const title = String(spotify.song || "Unknown track").trim();
     const artist = String(spotify.artist || "Unknown artist").trim();
-    const key = \`spotify:${normalize(title)}:${normalize(artist)}\`;
+    const key = `spotify:${normalize(title)}:${normalize(artist)}`;
     const changed = key !== activeTrackKey;
     activeTrackKey = key;
     activeTrack = {
@@ -299,7 +300,7 @@ const discordPresence = (() => {
     };
     if (musicCard) musicCard.hidden = false;
     setTrackCopy("spotify", title, artist, spotify.album || "Spotify");
-    setArtwork(spotify.album_art_url || "", \`Album artwork for ${title} by ${artist}\`, title, artist, key);
+    setArtwork(spotify.album_art_url || "", `Album artwork for ${title} by ${artist}`, title, artist, key);
     updateMusicProgress();
     return changed;
   };
@@ -309,7 +310,7 @@ const discordPresence = (() => {
     const rawArtist = String(activity.state || "").trim();
     const title = rawTitle.replace(/^Amazon Music\s*[-—:]\s*/i, "").trim() || "Now playing";
     const artist = rawArtist.replace(/^Amazon Music\s*[-—:]\s*/i, "").trim() || "Amazon Music";
-    const key = \`amazon:${normalize(title)}:${normalize(artist)}\`;
+    const key = `amazon:${normalize(title)}:${normalize(artist)}`;
     const changed = key !== activeTrackKey;
     const sourceStartMs = validTimestamp(activity.timestamps?.start);
     if (changed) {
@@ -355,10 +356,10 @@ const discordPresence = (() => {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 10000);
     try {
-      const response = await fetch(\`https://api.lanyard.rest/v1/users/${userId}\`, {
+      const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`, {
         headers: { Accept: "application/json" }, cache: "no-store", signal: controller.signal
       });
-      if (!response.ok) throw new Error(\`Presence service returned ${response.status}\`);
+      if (!response.ok) throw new Error(`Presence service returned ${response.status}`);
       const payload = await response.json();
       if (!payload.success || !payload.data) throw new Error("No public presence data");
       const data = payload.data;
@@ -375,7 +376,7 @@ const discordPresence = (() => {
       activityText.textContent = status === "offline" ? "Currently offline" : status === "dnd" ? "Busy on Discord" : status === "idle" ? "Away on Discord" : "Active on Discord";
       if (avatar && user.id && user.avatar) {
         const extension = user.avatar.startsWith("a_") ? "gif" : "png";
-        const avatarUrl = \`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=128\`;
+        const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${extension}?size=128`;
         if (avatar.getAttribute("src") !== avatarUrl) avatar.src = avatarUrl;
       } else if (avatar) {
         avatar.src = "https://cdn.discordapp.com/embed/avatars/0.png";
@@ -434,7 +435,9 @@ const discordPresence = (() => {
   }
 
   try {
+    let sawIntersection = false;
     const observer = new IntersectionObserver((entries, currentObserver) => {
+      if (entries.some((entry) => entry.isIntersecting)) sawIntersection = true;
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add("is-revealed");
@@ -461,11 +464,10 @@ const discordPresence = (() => {
         }
       });
     }, 900);
-    // Fail open for unusually constrained webviews if an observer notification is lost.
-    window.setTimeout(() => {
-      if (targets.some((element) => !element.classList.contains("is-revealed"))) {
-        targets.forEach((element) => element.classList.add("is-revealed"));
-        document.documentElement.classList.remove("reveal-ready");
+    // Only fail open if the observer never reports anything visible; don't disable future scroll reveals.
+    const watchdog = window.setTimeout(() => {
+      if (!sawIntersection) {
+        revealAll();
         observer.disconnect();
       }
     }, 8000);
