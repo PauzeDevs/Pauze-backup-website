@@ -16,7 +16,7 @@
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="Pauze home">PAUZE<span>®</span></a>
     <nav class="desktop-nav" aria-label="Main navigation">
-      <a href="#about">About</a><a href="#skills">Skills</a><a href="#work">Projects</a><a href="#activity">Activity</a>
+      <a href="#about">About</a><a href="#skills">Skills</a><a href="#work">Projects</a><a href="#arcade">Arcade</a><a href="#activity">Activity</a>
     </nav>
     <a class="availability" href="#contact"><span class="status-dot"></span> OPEN TO IDEAS</a>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
@@ -89,6 +89,35 @@
         </article>
       </div>
     </section>
+    <section class="arcade-section section-wrap" id="arcade" data-reveal="up">
+      <div class="section-heading arcade-heading" data-reveal="up">
+        <div><p class="kicker">BONUS LEVEL / 001</p><h2>PAUZE ARCADE <span class="arcade-spark">✳</span></h2></div>
+        <p class="section-note">Take a break. Jump the obstacles. Beat your own best.</p>
+      </div>
+      <div class="arcade-shell" data-reveal="up">
+        <div class="arcade-topbar"><span><i class="arcade-led"></i> DINO RUN / ENDLESS MODE</span><span id="dino-state">READY?</span></div>
+        <div class="arcade-stats" aria-live="polite">
+          <div><span class="arcade-stat-label">SCORE</span><strong id="dino-score">00000</strong></div>
+          <div><span class="arcade-stat-label">PERSONAL BEST</span><strong id="dino-best">00000</strong></div>
+          <div><span class="arcade-stat-label">SPEED</span><strong id="dino-speed">1.0×</strong></div>
+        </div>
+        <div class="dino-stage" id="dino-stage" tabindex="0" role="application" aria-label="Dino Run. Press Space or Arrow Up to jump, Arrow Down to duck, and P to pause.">
+          <canvas id="dino-canvas" width="900" height="260" aria-label="Dino Run game"></canvas>
+          <div class="dino-overlay" id="dino-overlay">
+            <span class="dino-overlay-label">READY PLAYER ONE?</span><h3 id="dino-overlay-title">LET’S RUN.</h3>
+            <p id="dino-overlay-copy">Jump the cacti. Don’t hit the birds. Keep going.</p>
+            <button type="button" class="dino-start" id="dino-start">START RUN <span>↗</span></button>
+          </div>
+        </div>
+        <div class="arcade-controls">
+          <p><kbd>SPACE</kbd> / <kbd>↑</kbd> JUMP <span class="control-dot">•</span> <kbd>↓</kbd> DUCK <span class="control-dot">•</span> <kbd>P</kbd> PAUSE</p>
+          <div class="arcade-touch-controls"><button type="button" id="dino-jump">JUMP ↑</button><button type="button" id="dino-duck">DUCK ↓</button></div>
+          <button type="button" class="arcade-reset" id="dino-restart">RESTART ↻</button>
+        </div>
+        <p class="arcade-footnote">A tiny game built into PAUZE. Your personal best stays on this device.</p>
+      </div>
+    </section>
+
     <section class="live-presence section-wrap" id="activity">
       <div class="section-heading" data-reveal="up">
         <div><p class="kicker">02 / AROUND THE CODE</p><h2>RECENT<br><span class="muted">ACTIVITY.</span></h2></div>
