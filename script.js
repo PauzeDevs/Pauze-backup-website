@@ -15,62 +15,7 @@ if (menuButton && nav) {
 const year = document.querySelector("#year");
 if (year) year.textContent = new Date().getFullYear();
 
-/* Interactive technology stack */
-const stackRoot = document.querySelector(".stack-interactive");
-if (stackRoot) {
-  const stackCards = Array.from(stackRoot.querySelectorAll(".tech-card"));
-  const stackFilters = Array.from(stackRoot.querySelectorAll(".stack-filter"));
-  const stackGroups = Array.from(stackRoot.querySelectorAll("[data-stack-group]"));
-  const detailIcon = stackRoot.querySelector("#stack-detail-icon");
-  const detailName = stackRoot.querySelector("#stack-detail-name");
-  const detailDescription = stackRoot.querySelector("#stack-detail-description");
-  const detailLink = stackRoot.querySelector("#stack-detail-link");
-
-  const selectStackCard = (card) => {
-    if (!card) return;
-    stackCards.forEach((item) => {
-      const selected = item === card;
-      item.classList.toggle("is-selected", selected);
-      item.setAttribute("aria-pressed", String(selected));
-    });
-    if (detailIcon) {
-      detailIcon.src = card.dataset.logo || "";
-      detailIcon.alt = `${card.dataset.name || "Technology"} logo`;
-    }
-    if (detailName) detailName.textContent = card.dataset.name || "Technology";
-    if (detailDescription) detailDescription.textContent = card.dataset.description || "";
-    if (detailLink) {
-      detailLink.href = card.dataset.doc || "#";
-      detailLink.setAttribute("aria-label", `Open official ${card.dataset.name || "technology"} documentation in a new tab`);
-    }
-  };
-
-  const filterStack = (filter) => {
-    stackFilters.forEach((button) => {
-      const active = button.dataset.filter === filter;
-      button.classList.toggle("is-active", active);
-      button.setAttribute("aria-pressed", String(active));
-    });
-    stackCards.forEach((card) => {
-      card.hidden = filter !== "all" && card.dataset.category !== filter;
-    });
-    stackGroups.forEach((group) => {
-      group.hidden = !Array.from(group.querySelectorAll(".tech-card")).some((card) => !card.hidden);
-    });
-    const selectedVisible = stackCards.find((card) => card.classList.contains("is-selected") && !card.hidden);
-    if (!selectedVisible) selectStackCard(stackCards.find((card) => !card.hidden));
-  };
-
-  stackFilters.forEach((button) => {
-    button.addEventListener("click", () => filterStack(button.dataset.filter || "all"));
-  });
-  stackCards.forEach((card) => {
-    card.addEventListener("click", () => selectStackCard(card));
-  });
-  selectStackCard(stackCards.find((card) => card.classList.contains("is-selected")) || stackCards[0]);
-  filterStack("all");
-}
-
+/* Interactive technology stack markup is not present on this page. */
 /* Live Discord presence and now-playing metadata. Amazon timing is approximate unless timestamps are exposed by Discord. */
 const discordPresence = (() => {
   const userId = "1547264515182432398";
@@ -235,7 +180,7 @@ const discordPresence = (() => {
         winnerScore = score;
       }
     }
-    return winner;
+    return winnerScore >= 100 ? winner : null;
   };
   const resolveAmazonMetadata = async (track) => {
     if (metadataCache.has(track.key)) {
@@ -345,6 +290,9 @@ const discordPresence = (() => {
   if (!statusLabel || !statusDot || !displayName || !activityText || !currentActivity) return;
   const statusNames = { online: "ONLINE", idle: "IDLE", dnd: "DO NOT DISTURB", offline: "OFFLINE" };
   const setUnavailable = (message) => {
+    activeTrack = null;
+    activeTrackKey = "";
+    if (musicCard) musicCard.hidden = true;
     statusLabel.textContent = "STATUS UNAVAILABLE";
     statusDot.dataset.status = "offline";
     if (avatarStatus) avatarStatus.dataset.status = "offline";
@@ -552,19 +500,27 @@ const discordPresence = (() => {
     state.textContent = "LIVE · PUBLIC API";
   };
   const loadEvents = async () => {
+    const controller = typeof AbortController === "function" ? new AbortController() : null;
+    const timeout = controller ? window.setTimeout(() => controller.abort(), 8000) : null;
     try {
-      const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=30`, {
+      const requestOptions = {
         headers: { Accept: "application/vnd.github+json" },
         cache: "no-store"
-      });
+      };
+      if (controller) requestOptions.signal = controller.signal;
+      const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=30`, requestOptions);
       if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
-      renderEvents(await response.json());
+      const events = await response.json();
+      if (!Array.isArray(events)) throw new Error("Unexpected GitHub events response");
+      renderEvents(events);
     } catch (error) {
       list.replaceChildren();
       const item = document.createElement("li");
       item.textContent = "Live activity couldn't load. Open the GitHub profile to see the latest updates.";
       list.append(item);
       state.textContent = "TEMPORARILY UNAVAILABLE";
+    } finally {
+      if (timeout !== null) window.clearTimeout(timeout);
     }
   };
   loadEvents();
