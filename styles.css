@@ -26,3 +26,79 @@ body{background:radial-gradient(ellipse at 12% 7%,rgba(125,92,255,.17),transpare
 .tech:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--tech) 70%,transparent);background:color-mix(in srgb,var(--tech) 14%,transparent)}
 .tech.ts{--tech:#6ca8ff}.tech.kt{--tech:#c4a3ff}.tech.cs{--tech:#b49aff}.tech.sw{--tech:#ff9a72}.tech.py{--tech:#ffd166}.tech.react{--tech:#62e8d5}.tech.html{--tech:#ff8db7}.tech.tw{--tech:#65d9ed}.tech.node{--tech:#8ce0a3}.tech.git{--tech:#ff9b7b}.tech.api{--tech:#b8a2ff}.tech.netlify{--tech:#9ed4ff}
 @media(max-width:700px){.stack-power{grid-template-columns:1fr}.stack-power .stack-intro{border-right:0;border-bottom:1px solid var(--line);padding:22px}.stack-intro p{margin-top:15px}.stack-groups{padding:0 18px}}
+
+
+/* Cross-device hardening: phones, tablets, laptops, MacBooks and wide displays */
+html{width:100%;max-width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:calc(82px + env(safe-area-inset-top,0px))}
+body{width:100%;min-width:320px;min-height:100vh;min-height:100dvh;overflow-x:clip}
+img,svg,video,canvas,iframe{max-width:100%}
+button,input,textarea,select{font:inherit}
+a,button{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid #62e8d5;outline-offset:4px}
+.site-header{padding-left:max(48px,env(safe-area-inset-left,0px));padding-right:max(48px,env(safe-area-inset-right,0px));padding-top:env(safe-area-inset-top,0px)}
+.hero{min-height:calc(100vh - 82px);min-height:calc(100dvh - 82px)}
+.project,.project-main,.about-grid,.contact-bottom,.site-footer,.stack-power,.stack-groups,.stack-items{min-width:0}
+.project h3,.section-heading h2,.about h2,.contact h2{overflow-wrap:anywhere}
+.stack-items{align-items:center}
+@media(min-width:1440px){
+  .section-wrap{width:min(1320px,calc(100% - 128px))}
+  .hero-copy{padding-top:clamp(70px,8vh,130px)}
+}
+@media(min-width:761px) and (max-width:1100px){
+  .section-wrap{width:calc(100% - 64px)}
+  .site-header{padding-left:32px;padding-right:32px}
+  .desktop-nav{gap:22px}
+  .availability{font-size:9px}
+  .project{grid-template-columns:44px minmax(0,1fr) minmax(180px,260px) 28px;gap:18px}
+  .project h3{font-size:clamp(40px,5vw,62px)}
+  .stack-power{grid-template-columns:minmax(155px,.6fr) minmax(0,1.8fr)}
+  .stack-groups{padding-left:16px;padding-right:16px}
+}
+@media(max-width:760px){
+  html{scroll-padding-top:calc(68px + env(safe-area-inset-top,0px))}
+  .site-header{padding-left:max(19px,env(safe-area-inset-left,0px));padding-right:max(19px,env(safe-area-inset-right,0px))}
+  .hero{min-height:calc(100vh - 68px);min-height:calc(100dvh - 68px)}
+  .section-wrap{width:calc(100% - 38px)}
+  .project{grid-template-columns:minmax(0,1fr)}
+  .project-main{grid-template-columns:minmax(0,1fr)}
+  .stack-power{grid-template-columns:minmax(0,1fr)}
+  .stack-power .stack-intro{border-right:0;border-bottom:1px solid var(--line)}
+  .stack-items{gap:8px}
+  .tech{min-height:38px}
+}
+@media(max-width:420px){
+  .section-wrap{width:calc(100% - 32px)}
+  .site-header{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .wordmark{font-size:21px}
+  .availability{letter-spacing:0;font-size:7px;gap:6px;margin-right:8px}
+  .hero-copy{padding-top:clamp(52px,12vh,90px)}
+  .hero h1{font-size:clamp(62px,17vw,88px);letter-spacing:-.075em}
+  .eyebrow,.hero-index{flex-wrap:wrap;font-size:7px}
+  .section-heading h2,.about h2,.sound h2{font-size:clamp(40px,11.5vw,58px)}
+  .project h3{font-size:clamp(43px,13vw,56px)}
+  .contact h2{font-size:clamp(56px,15vw,78px)}
+  .stack-groups{padding-left:12px;padding-right:12px}
+  .tech{font-size:10px;padding-right:8px}
+  .tech b{min-width:22px;height:22px}
+}
+@media(hover:none),(pointer:coarse){
+  .desktop-nav a:hover,.site-footer a:hover{color:inherit}
+  .tech:hover{transform:none}
+  a,button{touch-action:manipulation}
+}
+@media(hover:hover) and (pointer:fine){
+  .desktop-nav a:hover,.site-footer a:hover{color:var(--accent)}
+}
+@media(orientation:landscape) and (max-height:520px) and (min-width:600px){
+  .hero{min-height:auto}
+  .hero-copy{padding-top:32px;padding-bottom:32px}
+  .hero h1{font-size:clamp(60px,10vw,110px)}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+@supports not (height:100dvh){
+  .hero{min-height:calc(100vh - 82px)}
+  @media(max-width:760px){.hero{min-height:calc(100vh - 68px)}}
+}
