@@ -325,17 +325,17 @@ const discordPresence = (() => {
       if (musicDuration) musicDuration.textContent = "LOOKING UP…";
       if (musicAlbum) musicAlbum.textContent = "Finding album details…";
       setFallbackArtwork(title, artist, key);
-      void resolveAmazonMetadata(activeTrack);
     } else if (sourceStartMs) {
       activeTrack.sourceStartMs = sourceStartMs;
     }
     if (musicCard) musicCard.hidden = false;
     setTrackCopy("amazon", title, artist, activeTrack?.album || "Amazon Music");
-    if (changed && !metadataCache.has(key)) {
-      // Artwork resolution can complete asynchronously; never block live presence updates on it.
-    } else if (metadataCache.has(key)) {
+    if (metadataCache.has(key)) {
       const cached = metadataCache.get(key);
       if (cached) applyAmazonMetadata(key, cached);
+    } else if (!metadataRequests.has(key)) {
+      // Retry transient catalogue failures on the next presence refresh.
+      void resolveAmazonMetadata(activeTrack);
     }
     updateMusicProgress();
   };
