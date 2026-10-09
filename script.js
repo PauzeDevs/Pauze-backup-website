@@ -581,10 +581,10 @@ const discordPresence = (() => {
   time+=dt;
   if(game==="dino"){
    s.speed=Math.min(650,300+time*7+score*.035);score+=dt*10;s.spawn-=dt;
-   if(s.spawn<=0){let h=rnd(28,50);s.obs.push({x:W+8,h,w:18});s.spawn=Math.max(.58,rnd(.95,1.8)-(s.speed-300)/650);}
+   if(s.spawn<=0){if(score>180&&Math.random()<.3)s.obs.push({type:"bird",x:W+8,y:176,w:32,h:17});else{let h=rnd(28,50);s.obs.push({type:"cactus",x:W+8,h,w:18});}s.spawn=Math.max(.58,rnd(.95,1.8)-(s.speed-300)/650);}
    s.obs.forEach(o=>o.x-=s.speed*dt);s.obs=s.obs.filter(o=>o.x+o.w>0);
    if(!s.on){s.vy+=1750*dt;s.y+=s.vy*dt;if(s.y>=G-s.h){s.y=G-s.h;s.vy=0;s.on=true;}}
-   s.duck=k.duck&&s.on;if(s.obs.some(o=>s.x+26>o.x&&s.x+5<o.x+o.w&&s.y+s.h>G-o.h+3)){finish("OOPS. RUN OVER.","Score "+fmt(score)+". One more run?","RUN ENDED");return;}stats();
+   s.duck=k.duck&&s.on;const px=s.x+5,py=s.y+(s.duck?13:0),pw=s.duck?34:26,ph=s.duck?23:34;if(s.obs.some(o=>px+pw>o.x&&px<o.x+o.w&&py+ph>(o.type==="bird"?o.y:G-o.h+3)&&py<(o.type==="bird"?o.y+o.h:G))){finish("OOPS. RUN OVER.","Score "+fmt(score)+". One more run?","RUN ENDED");return;}stats();
   }else if(game==="snake"){
    s.tick+=dt;if(s.tick>=Math.max(.065,.14-score*.0004)){s.tick=0;s.dir=s.next;const h={x:s.body[0].x+s.dir.x,y:s.body[0].y+s.dir.y};
     if(h.x<0||h.x>=s.cols||h.y<0||h.y>=s.rows||s.body.some((p,i)=>i<s.body.length-1&&p.x===h.x&&p.y===h.y)){finish("SYSTEM CRASH.","Score "+fmt(score)+". The line hit a wall or itself.","GAME OVER");return;}
@@ -600,7 +600,7 @@ const discordPresence = (() => {
    }
   }else if(game==="breakout"){
    if(k.left)s.paddle-=410*dt;if(k.right)s.paddle+=410*dt;s.paddle=Math.max(65,Math.min(W-65,s.paddle));const b=s.ball;b.x+=b.vx*dt;b.y+=b.vy*dt;
-   if(b.x<b.r||b.x>W-b.r)b.vx*=-1;if(b.y<b.r+6)b.vy=Math.abs(b.vy);
+   if(b.x<b.r){b.x=b.r;b.vx=Math.abs(b.vx);}if(b.x>W-b.r){b.x=W-b.r;b.vx=-Math.abs(b.vx);}if(b.y<b.r+6){b.y=b.r+6;b.vy=Math.abs(b.vy);}
    if(b.vy>0&&b.y+b.r>=240&&b.y<=248&&Math.abs(b.x-s.paddle)<65){b.vy=-Math.abs(b.vy);b.vx=(b.x-s.paddle)*3.5;b.y=234;}
    for(const br of s.bricks){if(br.on&&b.x+b.r>br.x&&b.x-b.r<br.x+br.w&&b.y+b.r>br.y&&b.y-b.r<br.y+br.h){br.on=false;score+=10;b.vy*=-1;stats();break;}}
    if(b.y>H+8){s.lives--;if(s.lives<=0){finish("BALL DROPPED.","Score "+fmt(score)+". Keep the rally alive next time.","GAME OVER");return;}b.x=s.paddle;b.y=207;b.vx=rnd(-180,180);b.vy=-220;}
@@ -619,8 +619,8 @@ const discordPresence = (() => {
   if(!s)return;
   if(game==="dino"){
    background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#b4a1ce");
-   s.obs.forEach(o=>{rect(o.x,G-o.h,5,o.h,green);rect(o.x+5,G-o.h+7,13,5,green);rect(o.x+8,G-o.h+15,5,o.h-15,green);});
-   rect(s.x+5,s.y+9,24,25,ink);rect(s.x+18,s.y,17,18,ink);rect(s.x+28,s.y+7,13,8,ink);rect(s.x+23,s.y+4,4,4,white);rect(s.x+7,s.y+31,7,7,ink);rect(s.x+20,s.y+31,7,7,ink);txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
+   s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+8,o.y+5,20,8,ink);rect(o.x+12,o.y+flap,11,4,purple);rect(o.x+3,o.y+6,8,4,ink);rect(o.x+26,o.y+7,5,3,yellow);}else{rect(o.x,G-o.h,5,o.h,green);rect(o.x+5,G-o.h+7,13,5,green);rect(o.x+8,G-o.h+15,5,o.h-15,green);}});
+   if(s.duck){const y=s.y+13;rect(s.x+2,y+16,31,16,ink);rect(s.x+22,y+6,17,17,ink);rect(s.x+33,y+11,11,7,ink);rect(s.x+34,y+8,3,3,white);}else{rect(s.x+5,s.y+9,24,25,ink);rect(s.x+18,s.y,17,18,ink);rect(s.x+28,s.y+7,13,8,ink);rect(s.x+23,s.y+4,4,4,white);rect(s.x+7,s.y+31,7,7,ink);rect(s.x+20,s.y+31,7,7,ink);}txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
   }else if(game==="snake"){
    background("#f7f1ff");rect(0,0,W,H,"#eee2fb");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#dfd1f1");
    rect(s.food.x*s.cell+4,s.food.y*s.cell+4,12,12,pink);s.body.forEach((p,i)=>{rect(p.x*s.cell+1,p.y*s.cell+1,18,18,i?green:purple);if(!i){rect(p.x*s.cell+5,p.y*s.cell+5,3,3,white);rect(p.x*s.cell+12,p.y*s.cell+5,3,3,white);}});
