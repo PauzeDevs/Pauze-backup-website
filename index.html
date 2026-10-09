@@ -129,62 +129,64 @@
     <section class="build-log section-wrap" id="build-log" data-reveal="up">
       <div class="section-heading" data-reveal="up">
         <div><p class="kicker">BUILD NOTES / 01</p><h2>BEHIND THE<br><span class="muted">BUILD.</span></h2></div>
-        <p class="section-note">Short notes on the decisions, mechanics, and details behind things I ship. First up: the Arcade.</p>
+        <p class="section-note">A closer look at how PauzeWeather is put together — from live forecast data to a short AI weather briefing.</p>
       </div>
       <div class="build-log-intro" data-reveal="up">
-        <span>PAUZE / ENGINEERING NOTES</span>
-        <p>Not a tutorial series. Just the implementation choices worth documenting.</p>
+        <span>PROJECT / PAUZEWEATHER</span>
+        <p>An Android weather client built with Kotlin and Jetpack Compose.</p>
       </div>
       <div class="build-log-grid">
         <article class="build-note" data-reveal="up">
-          <div class="build-note-meta"><span>01 / RENDERING</span><span>CANVAS 2D</span></div>
-          <h3>Six games. One canvas.</h3>
-          <p>Each game keeps its own state and update rules, while sharing one canvas and a requestAnimationFrame loop. Switching modes resets the session and draws the selected game.</p>
+          <div class="build-note-meta"><span>01 / DATA LAYER</span><span>WEATHERAPI</span></div>
+          <h3>From location to forecast.</h3>
+          <p>PauzeWeather sends a location query to WeatherAPI's forecast endpoint. The repository parses the response into typed weather data, including current conditions and a five-day forecast with temperature ranges and rain chances.</p>
           <details>
             <summary>VIEW IMPLEMENTATION <span>＋</span></summary>
-            <pre><code>const loop = t => {
-  if (!running || paused) return;
-  const dt = Math.min(0.032, (t - last) / 1000 || 0);
-  last = t;
-  update(dt);
-  draw();
-  if (running && !paused) {
-    raf = requestAnimationFrame(loop);
-  }
-};</code></pre>
+            <pre><code>val url = URL(
+  "https://api.weatherapi.com/v1/forecast.json" +
+    "?key=\${BuildConfig.WEATHER_API_KEY}" +
+    "&amp;q=$encodedQuery&amp;days=5&amp;aqi=no&amp;alerts=no"
+)</code></pre>
+            <p class="build-code-note">The request runs on Dispatchers.IO, uses connection/read timeouts, and converts non-success HTTP responses into errors for the UI state to handle.</p>
           </details>
         </article>
         <article class="build-note" data-reveal="up">
-          <div class="build-note-meta"><span>02 / INPUT</span><span>KEYBOARD + TOUCH</span></div>
-          <h3>Controls that fit the game.</h3>
-          <p>Each mode gets its own controls: keyboard movement, pointer actions, or on-screen touch buttons. The game also pauses when the browser tab becomes hidden, rather than carrying on unseen.</p>
+          <div class="build-note-meta"><span>02 / AI BRIEFING</span><span>GROQ API</span></div>
+          <h3>Weather data, explained.</h3>
+          <p>After the forecast loads, a separate Groq request turns the supplied conditions into three concise points: how it feels outside, what to wear, and one useful thing to know. The prompt explicitly tells the model not to invent weather data.</p>
           <details>
             <summary>VIEW IMPLEMENTATION <span>＋</span></summary>
-            <pre><code>document.addEventListener("visibilitychange", () => {
-  if (document.hidden && running && !paused) pause();
-});</code></pre>
+            <pre><code>append("Give 3 short bullet points: ")
+append("what it feels like, what to wear, ")
+append("and one useful thing to know. ")
+append("Do not invent data.")</code></pre>
+            <p class="build-code-note">The briefing is optional UI data: current conditions and the forecast are placed in the success state first, then the state is updated when the briefing arrives.</p>
           </details>
         </article>
         <article class="build-note" data-reveal="up">
-          <div class="build-note-meta"><span>03 / PERSISTENCE</span><span>LOCAL STORAGE</span></div>
-          <h3>Personal bests, device-local.</h3>
-          <p>Each game has its own personal-best key in localStorage. Scores persist on the same browser without an account, external service, or leaderboard backend.</p>
+          <div class="build-note-meta"><span>03 / APP ARCHITECTURE</span><span>COMPOSE + FLOW</span></div>
+          <h3>State drives the screen.</h3>
+          <p>A ViewModel exposes a StateFlow with explicit Idle, Loading, Success, and Error states. Jetpack Compose collects that state and renders the matching screen, keeping request logic out of the UI components.</p>
           <details>
             <summary>VIEW IMPLEMENTATION <span>＋</span></summary>
-            <pre><code>const storage = () =>
-  "pauze-arcade-" + game + "-best-v1";
-
-const bestRead = () => {
-  try {
-    return Math.max(0, Number(localStorage.getItem(storage())) || 0);
-  } catch {
-    return 0;
-  }
-};</code></pre>
+            <pre><code>sealed interface WeatherUiState {
+  data object Idle : WeatherUiState
+  data object Loading : WeatherUiState
+  data class Success(
+    val weather: WeatherData,
+    val aiBriefing: String? = null
+  ) : WeatherUiState
+  data class Error(val message: String) : WeatherUiState
+}</code></pre>
+            <p class="build-code-note">The search uses coroutines in viewModelScope; the network repositories switch to Dispatchers.IO for blocking HTTP work.</p>
           </details>
         </article>
       </div>
-      <p class="build-log-footnote">SOURCE NOTE / These examples are taken from the Arcade implementation on this site.</p>
+      <div class="build-log-bottom" data-reveal="up">
+        <p>STACK / KOTLIN · JETPACK COMPOSE · WEATHERAPI · GROQ</p>
+        <a class="text-link" href="#work">VIEW PAUZEWEATHER PROJECT <span>↗</span></a>
+      </div>
+      <p class="build-log-footnote">ENGINEERING NOTES / Based on the current PauzeWeather implementation.</p>
     </section>
 
     <section class="live-presence section-wrap" id="activity">
