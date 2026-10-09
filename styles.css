@@ -246,3 +246,41 @@ html.reveal-ready [data-reveal].is-revealed{opacity:1;transform:translate3d(0,0,
 @media(prefers-reduced-motion:reduce){
  html.reveal-ready [data-reveal],html.reveal-ready [data-reveal="left"],html.reveal-ready [data-reveal="right"]{opacity:1;transform:none;transition:none;will-change:auto}
 }
+
+
+/* Live GitHub feed and interactive terminal */
+.recent-activity{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+.recent-activity-heading{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px;font:8px var(--mono);letter-spacing:.08em;color:#a7a4c5}
+#github-feed-state{color:#62e8d5}
+#github-event-list{list-style:none;padding:0;margin:0;display:grid;gap:7px}
+#github-event-list li{display:flex;gap:10px;align-items:flex-start;padding:10px 11px;border:1px solid rgba(174,153,255,.1);border-radius:6px;background:rgba(5,6,14,.28);font-size:11px;line-height:1.5;color:#d5d4e6;min-width:0}
+#github-event-list li a{color:#a7f2e8;overflow-wrap:anywhere}
+#github-event-list li a:hover{text-decoration:underline}
+.activity-event-icon{flex:0 0 19px;color:#62e8d5;font-family:var(--mono);text-align:center}
+.activity-event-copy{min-width:0;overflow-wrap:anywhere}
+.activity-event-meta{display:block;margin-top:3px;font:8px var(--mono);letter-spacing:.04em;color:#8588a5}
+.activity-loading{color:var(--muted)!important}
+.activity-pulse{width:7px;height:7px;margin:5px 3px 0 0;border-radius:50%;background:#62e8d5;animation:activity-pulse 1.1s ease-in-out infinite;flex:0 0 7px}
+@keyframes activity-pulse{50%{opacity:.25;transform:scale(.72)}}
+.terminal-section{padding-top:90px;padding-bottom:100px}
+.terminal-window{margin-top:32px;border:1px solid rgba(98,232,213,.22);border-radius:10px;overflow:hidden;background:#090b10;box-shadow:0 20px 70px rgba(0,0,0,.22);font-family:var(--mono)}
+.terminal-topbar{height:43px;padding:0 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.08);background:#11131b}
+.terminal-lights{display:flex;gap:5px}.terminal-lights i{width:7px;height:7px;border-radius:50%;background:#52566a}.terminal-lights i:first-child{background:#f06c78}.terminal-lights i:nth-child(2){background:#e8bd65}.terminal-lights i:nth-child(3){background:#62e8d5}
+.terminal-topbar>span{font-size:10px;color:#999bb2}
+#terminal-clear{margin-left:auto;padding:5px 8px;border:1px solid rgba(255,255,255,.12);border-radius:4px;background:transparent;color:#9b9db3;font:8px var(--mono);cursor:pointer}
+#terminal-clear:hover{border-color:#62e8d5;color:#c7fff6}
+.terminal-output{min-height:150px;max-height:310px;overflow:auto;padding:18px 18px 6px;font-size:11px;line-height:1.8;color:#c8c9d8;overflow-wrap:anywhere}
+.terminal-output p{margin:0 0 8px}.terminal-system{color:#62e8d5;letter-spacing:.05em}.terminal-command-line{color:#a7f2e8}.terminal-output code{color:#e9cb8b}.terminal-result{padding-left:13px;color:#b5b8ce}.terminal-result a{color:#62e8d5;text-decoration:underline;text-underline-offset:3px}.terminal-error{color:#ff9da8!important}
+.terminal-form{display:flex;align-items:center;gap:9px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.08)}
+.terminal-form label{display:flex;gap:7px;align-items:center;color:#62e8d5;font-size:12px}
+.terminal-prompt{color:#9698af}
+.terminal-form input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#f2f0ff;font:11px var(--mono);padding:7px 0}
+.terminal-form input::placeholder{color:#666981}
+.terminal-form:focus-within{box-shadow:inset 0 0 0 1px rgba(98,232,213,.22)}
+.terminal-form>button{padding:8px 11px;border:1px solid rgba(98,232,213,.35);border-radius:4px;background:rgba(98,232,213,.07);color:#c7fff6;font:9px var(--mono);cursor:pointer}
+.terminal-form>button:hover{background:rgba(98,232,213,.15)}
+.terminal-shortcuts{display:flex;gap:7px;flex-wrap:wrap;padding:0 16px 16px}
+.terminal-shortcuts button{padding:6px 9px;border:1px solid rgba(255,255,255,.1);border-radius:4px;background:rgba(255,255,255,.025);color:#999bb2;font:9px var(--mono);cursor:pointer}
+.terminal-shortcuts button:hover,.terminal-shortcuts button:focus-visible{border-color:#62e8d5;color:#c7fff6}
+@media(max-width:760px){.terminal-section{padding-top:70px;padding-bottom:75px}.terminal-output{padding:14px 12px 4px;min-height:130px}.terminal-form{padding:10px 12px}.terminal-shortcuts{padding:0 12px 13px}}
+@media(prefers-reduced-motion:reduce){.activity-pulse{animation:none}}
