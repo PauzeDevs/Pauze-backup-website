@@ -88,6 +88,7 @@ const discordPresence = (() => {
   const musicArtist = document.querySelector("#discord-music-artist");
   const musicAlbum = document.querySelector("#discord-music-album");
   const musicSource = document.querySelector("#discord-music-source");
+  const musicHeading = document.querySelector("#discord-music-heading");
   const musicProgress = document.querySelector("#discord-music-progress");
   const musicElapsed = document.querySelector("#discord-music-elapsed");
   const musicDuration = document.querySelector("#discord-music-duration");
@@ -120,6 +121,7 @@ const discordPresence = (() => {
     if (musicArtist) musicArtist.textContent = spotify.artist || "Unknown artist";
     if (musicAlbum) musicAlbum.textContent = spotify.album || "Spotify";
     if (musicSource) musicSource.textContent = "SPOTIFY";
+    if (musicHeading) musicHeading.textContent = "Listening to Spotify";
     if (musicArt && spotify.album_art_url) musicArt.src = spotify.album_art_url;
     if (musicArt) musicArt.alt = `Album artwork for ${spotify.song}`;
     updateMusicProgress();
