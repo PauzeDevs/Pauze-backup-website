@@ -408,3 +408,8 @@ html.reveal-ready [data-reveal]:not(.is-revealed){
  .build-log-intro p{font-size:12px}
  .build-note pre{font-size:9px;padding:10px}
 }
+
+.build-code-note{margin:12px 0 0!important;color:#51475b;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.65}
+.build-log-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding-top:16px;border-top:2px solid #b987d1}
+.build-log-bottom>p{margin:0;color:#786c82;font-size:9px;font-weight:700;letter-spacing:.05em;line-height:1.7}
+@media(max-width:520px){.build-log-bottom{align-items:flex-start;flex-direction:column;gap:10px}}
