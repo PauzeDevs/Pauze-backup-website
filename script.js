@@ -578,3 +578,72 @@ const discordPresence = (() => {
     }
   }, { once: true });
 })();
+
+
+/* PAUZE ARCADE: self-contained endless runner, no backend or external assets */
+(() => {
+  const canvas=document.querySelector("#dino-canvas"),stage=document.querySelector("#dino-stage"),overlay=document.querySelector("#dino-overlay");
+  const overlayTitle=document.querySelector("#dino-overlay-title"),overlayCopy=document.querySelector("#dino-overlay-copy"),startButton=document.querySelector("#dino-start");
+  const restartButton=document.querySelector("#dino-restart"),jumpButton=document.querySelector("#dino-jump"),duckButton=document.querySelector("#dino-duck");
+  const scoreLabel=document.querySelector("#dino-score"),bestLabel=document.querySelector("#dino-best"),speedLabel=document.querySelector("#dino-speed"),stateLabel=document.querySelector("#dino-state");
+  if(!canvas||!stage||!overlay||!startButton)return;
+  const ctx=canvas.getContext("2d");
+  if(!ctx){overlayTitle.textContent="GAME UNAVAILABLE";overlayCopy.textContent="This browser could not start the canvas game.";startButton.hidden=true;return;}
+  const W=900,H=260,groundY=218,colors={ink:"#17121f",muted:"#786c82",sky:"#f3eaff",pink:"#ffc7e8",green:"#d8f99d",yellow:"#fff08b",white:"#fffdf8",purple:"#6656ff"};
+  const bestKey="pauze-dino-best-v1";
+  const rect=(x,y,w,h,color)=>{ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));};
+  const getBest=()=>{try{const n=Number(localStorage.getItem(bestKey));return Number.isFinite(n)&&n>0?Math.floor(n):0;}catch{return 0;}};
+  const fmt=n=>String(Math.max(0,Math.floor(n))).padStart(5,"0");
+  let best=getBest(),score=0,speed=300,elapsed=0,spawnIn=.8,groundOffset=0,lastTime=0,raf=0,running=false,paused=false,gameOver=false;
+  let obstacles=[],dust=[],clouds=[{x:130,y:52,s:1},{x:490,y:82,s:.7},{x:760,y:39,s:.85}];
+  const dino={x:94,y:groundY-42,w:36,h:42,vy:0,onGround:true,ducking:false};
+  const refresh=()=>{scoreLabel.textContent=fmt(score);bestLabel.textContent=fmt(best);speedLabel.textContent=(speed/300).toFixed(1)+"×";};
+  const show=(title,copy,button)=>{overlayTitle.textContent=title;overlayCopy.textContent=copy;startButton.textContent=button+" ↗";overlay.hidden=false;};
+  const hide=()=>{overlay.hidden=true;};
+  const reset=()=>{score=0;speed=300;elapsed=0;spawnIn=.8;groundOffset=0;lastTime=0;obstacles=[];dust=[];dino.y=groundY-dino.h;dino.vy=0;dino.onGround=true;dino.ducking=false;paused=false;gameOver=false;refresh();};
+  const drawCloud=c=>{rect(c.x,c.y+8*c.s,40*c.s,8*c.s,colors.white);rect(c.x+8*c.s,c.y,14*c.s,16*c.s,colors.white);rect(c.x+21*c.s,c.y+3*c.s,12*c.s,13*c.s,colors.white);rect(c.x-4*c.s,c.y+12*c.s,48*c.s,4*c.s,"#e4d9f5");};
+  const drawDino=()=>{
+    const x=dino.x,y=dino.y+(dino.ducking?13:0),c=colors.ink;
+    if(dino.ducking){rect(x+1,y+16,30,16,c);rect(x+22,y+6,17,17,c);rect(x+32,y+11,10,8,c);rect(x+31,y+9,3,3,colors.white);rect(x+3,y+30,9,5,c);rect(x+20,y+30,10,5,c);rect(x-4,y+18,8,5,c);}
+    else{rect(x+6,y+11,22,24,c);rect(x+18,y+2,19,18,c);rect(x+32,y+10,13,8,c);rect(x+25,y+5,4,4,colors.white);rect(x+1,y+13,9,5,c);rect(x+3,y+18,8,4,c);const leg=Math.floor(elapsed*14)%2;rect(x+(leg?4:6),y+(leg?37:40),10,4,c);rect(x+19,y+(leg?40:37),10,4,c);rect(x+8,y+33,7,10,c);rect(x+19,y+33,7,10,c);}
+    rect(x+7,y+16,5,3,colors.pink);
+  };
+  const drawCactus=o=>{const x=o.x,y=o.y,c=colors.green;rect(x+7,y,8,o.h,c);rect(x+3,y+9,6,4,c);rect(x,y+5,5,13,c);rect(x+1,y+5,7,4,c);rect(x+15,y+16,5,4,c);rect(x+17,y+12,5,13,c);rect(x+15,y+24,7,4,c);rect(x+4,y+o.h-3,15,4,colors.ink);};
+  const drawBird=o=>{const flap=Math.sin(elapsed*13+o.phase)>0?0:7,x=o.x,y=o.y;rect(x+9,y+8,22,10,colors.ink);rect(x+28,y+9,10,5,colors.ink);rect(x+37,y+10,5,3,colors.yellow);rect(x+13,y+4+flap,12,5,colors.purple);rect(x+8,y+1+flap,8,5,colors.purple);rect(x+14,y+18-flap,12,4,colors.purple);rect(x+4,y+8,8,5,colors.ink);rect(x+25,y+9,3,3,colors.white);};
+  const draw=()=>{
+    ctx.clearRect(0,0,W,H);rect(0,0,W,H,colors.sky);
+    rect(764,25,34,34,colors.yellow);rect(772,17,18,8,colors.yellow);rect(772,59,18,8,colors.yellow);rect(756,33,8,18,colors.yellow);rect(798,33,8,18,colors.yellow);
+    for(let i=0;i<12;i++)rect((i*89+24)%W,24+(i*37)%115,3,3,"#e6d9f6");
+    clouds.forEach(drawCloud);rect(0,groundY,W,3,colors.ink);
+    for(let x=-(groundOffset%44);x<W;x+=44){rect(x,groundY+12,18,3,"#b4a1ce");rect(x+24,groundY+23,6,3,"#b4a1ce");}
+    obstacles.forEach(o=>o.type==="bird"?drawBird(o):drawCactus(o));drawDino();dust.forEach(p=>rect(p.x,p.y,4,4,p.color));
+    ctx.fillStyle=colors.muted;ctx.font="700 12px monospace";ctx.textAlign="right";ctx.fillText("PAUZE / RUNNER",W-18,24);
+  };
+  const collides=(a,b)=>a.x<b.x+b.w-4&&a.x+a.w-4>b.x+3&&a.y<b.y+b.h-3&&a.y+a.h-3>b.y+3;
+  const spawn=()=>{if(score>220&&Math.random()<.26)obstacles.push({type:"bird",x:W+20,y:groundY-(Math.random()<.5?72:95),w:38,h:24,phase:Math.random()*6});else{const tall=Math.random()<.35;obstacles.push({type:"cactus",x:W+20,y:groundY-(tall?51:36),w:tall?24:18,h:tall?51:36});}spawnIn=Math.max(.58,1.1+Math.random()*.8-(speed-300)/650);};
+  const finish=()=>{running=false;gameOver=true;stateLabel.textContent="RUN ENDED";if(score>best){best=score;try{localStorage.setItem(bestKey,String(best));}catch{}}refresh();show("OOPS. RUN OVER.","Score "+fmt(score)+" · Best "+fmt(best)+". One more run?","PLAY AGAIN");};
+  const update=dt=>{
+    elapsed+=dt;speed=Math.min(650,300+elapsed*7+score*.035);score+=dt*10;spawnIn-=dt;if(spawnIn<=0)spawn();
+    groundOffset=(groundOffset+speed*dt)%44;clouds.forEach(c=>{c.x-=speed*.14*dt;if(c.x<-60)c.x=W+Math.random()*100;});
+    if(!dino.onGround){dino.vy+=1850*dt;dino.y+=dino.vy*dt;if(dino.y>=groundY-dino.h){dino.y=groundY-dino.h;dino.vy=0;dino.onGround=true;}}
+    obstacles.forEach(o=>{o.x-=speed*dt;});obstacles=obstacles.filter(o=>o.x+o.w>-10);
+    dust.forEach(p=>{p.x+=p.vx*dt;p.life-=dt;});dust=dust.filter(p=>p.life>0);
+    const player={x:dino.x+4,y:dino.y+(dino.ducking?13:0),w:dino.ducking?44:32,h:dino.ducking?22:36};
+    if(obstacles.some(o=>collides(player,o))){finish();return;}refresh();
+  };
+  const loop=time=>{if(!running||paused)return;if(!lastTime)lastTime=time;const dt=Math.min(.032,(time-lastTime)/1000||0);lastTime=time;update(dt);draw();if(running&&!paused)raf=requestAnimationFrame(loop);};
+  const start=()=>{cancelAnimationFrame(raf);reset();running=true;stateLabel.textContent="RUNNING";hide();stage.focus({preventScroll:true});raf=requestAnimationFrame(loop);};
+  const jump=()=>{if(!running){start();return;}if(paused){paused=false;hide();stateLabel.textContent="RUNNING";lastTime=0;raf=requestAnimationFrame(loop);return;}if(dino.onGround){dino.vy=-690;dino.onGround=false;dino.ducking=false;dust.push({x:dino.x+5,y:groundY-3,vx:-45,life:.25,color:colors.purple});}};
+  const duck=down=>{dino.ducking=!!down&&running&&!paused&&!gameOver&&dino.onGround;};
+  const pause=()=>{if(!running||gameOver)return;paused=!paused;stateLabel.textContent=paused?"PAUSED":"RUNNING";if(paused)show("TAKE A BREATHER.","Press P or tap resume when you’re ready.","RESUME");else{hide();lastTime=0;raf=requestAnimationFrame(loop);}};
+  const onKey=e=>{if(["Space","ArrowUp","ArrowDown","KeyP"].includes(e.code))e.preventDefault();if(e.repeat&&["Space","ArrowUp","KeyP"].includes(e.code))return;if(e.code==="Space"||e.code==="ArrowUp")jump();else if(e.code==="ArrowDown")duck(true);else if(e.code==="KeyP")pause();};
+  stage.addEventListener("keydown",onKey);
+  window.addEventListener("keydown",e=>{if(stage.contains(document.activeElement))return;if(["Space","ArrowUp","ArrowDown","KeyP"].includes(e.code)&&!e.target.closest("input,textarea,button,a,select"))onKey(e);});
+  window.addEventListener("keyup",e=>{if(e.code==="ArrowDown")duck(false);});
+  stage.addEventListener("pointerdown",e=>{if(e.target===canvas)jump();});
+  startButton.addEventListener("click",()=>{if(paused){paused=false;hide();stateLabel.textContent="RUNNING";lastTime=0;raf=requestAnimationFrame(loop);}else start();});
+  restartButton.addEventListener("click",start);
+  if(jumpButton)jumpButton.addEventListener("pointerdown",e=>{e.preventDefault();jump();});
+  if(duckButton){duckButton.addEventListener("pointerdown",e=>{e.preventDefault();duck(true);});["pointerup","pointercancel","pointerleave"].forEach(name=>duckButton.addEventListener(name,()=>duck(false)));}
+  bestLabel.textContent=fmt(best);refresh();draw();
+})();
