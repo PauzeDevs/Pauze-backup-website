@@ -536,71 +536,138 @@ const discordPresence = (() => {
 })();
 
 
-/* PAUZE ARCADE: self-contained endless runner, no backend or external assets */
-(() => {
-  const canvas=document.querySelector("#dino-canvas"),stage=document.querySelector("#dino-stage"),overlay=document.querySelector("#dino-overlay");
-  const overlayTitle=document.querySelector("#dino-overlay-title"),overlayCopy=document.querySelector("#dino-overlay-copy"),startButton=document.querySelector("#dino-start");
-  const restartButton=document.querySelector("#dino-restart"),jumpButton=document.querySelector("#dino-jump"),duckButton=document.querySelector("#dino-duck");
-  const scoreLabel=document.querySelector("#dino-score"),bestLabel=document.querySelector("#dino-best"),speedLabel=document.querySelector("#dino-speed"),stateLabel=document.querySelector("#dino-state");
-  if(!canvas||!stage||!overlay||!startButton)return;
-  const ctx=canvas.getContext("2d");
-  if(!ctx){overlayTitle.textContent="GAME UNAVAILABLE";overlayCopy.textContent="This browser could not start the canvas game.";startButton.hidden=true;return;}
-  const W=900,H=260,groundY=218,colors={ink:"#17121f",muted:"#786c82",sky:"#f3eaff",pink:"#ffc7e8",green:"#d8f99d",yellow:"#fff08b",white:"#fffdf8",purple:"#6656ff"};
-  const bestKey="pauze-dino-best-v1";
-  const rect=(x,y,w,h,color)=>{ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));};
-  const getBest=()=>{try{const n=Number(localStorage.getItem(bestKey));return Number.isFinite(n)&&n>0?Math.floor(n):0;}catch{return 0;}};
-  const fmt=n=>String(Math.max(0,Math.floor(n))).padStart(5,"0");
-  let best=getBest(),score=0,speed=300,elapsed=0,spawnIn=.8,groundOffset=0,lastTime=0,raf=0,running=false,paused=false,gameOver=false;
-  let obstacles=[],dust=[],clouds=[{x:130,y:52,s:1},{x:490,y:82,s:.7},{x:760,y:39,s:.85}];
-  const dino={x:94,y:groundY-42,w:36,h:42,vy:0,onGround:true,ducking:false};
-  const refresh=()=>{scoreLabel.textContent=fmt(score);bestLabel.textContent=fmt(best);speedLabel.textContent=(speed/300).toFixed(1)+"×";};
-  const show=(title,copy,button)=>{overlayTitle.textContent=title;overlayCopy.textContent=copy;startButton.textContent=button+" ↗";overlay.hidden=false;};
-  const hide=()=>{overlay.hidden=true;};
-  const reset=()=>{score=0;speed=300;elapsed=0;spawnIn=.8;groundOffset=0;lastTime=0;obstacles=[];dust=[];dino.y=groundY-dino.h;dino.vy=0;dino.onGround=true;dino.ducking=false;paused=false;gameOver=false;refresh();};
-  const drawCloud=c=>{rect(c.x,c.y+8*c.s,40*c.s,8*c.s,colors.white);rect(c.x+8*c.s,c.y,14*c.s,16*c.s,colors.white);rect(c.x+21*c.s,c.y+3*c.s,12*c.s,13*c.s,colors.white);rect(c.x-4*c.s,c.y+12*c.s,48*c.s,4*c.s,"#e4d9f5");};
-  const drawDino=()=>{
-    const x=dino.x,y=dino.y+(dino.ducking?13:0),c=colors.ink;
-    if(dino.ducking){rect(x+1,y+16,30,16,c);rect(x+22,y+6,17,17,c);rect(x+32,y+11,10,8,c);rect(x+31,y+9,3,3,colors.white);rect(x+3,y+30,9,5,c);rect(x+20,y+30,10,5,c);rect(x-4,y+18,8,5,c);}
-    else{rect(x+6,y+11,22,24,c);rect(x+18,y+2,19,18,c);rect(x+32,y+10,13,8,c);rect(x+25,y+5,4,4,colors.white);rect(x+1,y+13,9,5,c);rect(x+3,y+18,8,4,c);const leg=Math.floor(elapsed*14)%2;rect(x+(leg?4:6),y+(leg?37:40),10,4,c);rect(x+19,y+(leg?40:37),10,4,c);rect(x+8,y+33,7,10,c);rect(x+19,y+33,7,10,c);}
-    rect(x+7,y+16,5,3,colors.pink);
-  };
-  const drawCactus=o=>{const x=o.x,y=o.y,c=colors.green;rect(x+7,y,8,o.h,c);rect(x+3,y+9,6,4,c);rect(x,y+5,5,13,c);rect(x+1,y+5,7,4,c);rect(x+15,y+16,5,4,c);rect(x+17,y+12,5,13,c);rect(x+15,y+24,7,4,c);rect(x+4,y+o.h-3,15,4,colors.ink);};
-  const drawBird=o=>{const flap=Math.sin(elapsed*13+o.phase)>0?0:7,x=o.x,y=o.y;rect(x+9,y+8,22,10,colors.ink);rect(x+28,y+9,10,5,colors.ink);rect(x+37,y+10,5,3,colors.yellow);rect(x+13,y+4+flap,12,5,colors.purple);rect(x+8,y+1+flap,8,5,colors.purple);rect(x+14,y+18-flap,12,4,colors.purple);rect(x+4,y+8,8,5,colors.ink);rect(x+25,y+9,3,3,colors.white);};
-  const draw=()=>{
-    ctx.clearRect(0,0,W,H);rect(0,0,W,H,colors.sky);
-    rect(764,25,34,34,colors.yellow);rect(772,17,18,8,colors.yellow);rect(772,59,18,8,colors.yellow);rect(756,33,8,18,colors.yellow);rect(798,33,8,18,colors.yellow);
-    for(let i=0;i<12;i++)rect((i*89+24)%W,24+(i*37)%115,3,3,"#e6d9f6");
-    clouds.forEach(drawCloud);rect(0,groundY,W,3,colors.ink);
-    for(let x=-(groundOffset%44);x<W;x+=44){rect(x,groundY+12,18,3,"#b4a1ce");rect(x+24,groundY+23,6,3,"#b4a1ce");}
-    obstacles.forEach(o=>o.type==="bird"?drawBird(o):drawCactus(o));drawDino();dust.forEach(p=>rect(p.x,p.y,4,4,p.color));
-    ctx.fillStyle=colors.muted;ctx.font="700 12px monospace";ctx.textAlign="right";ctx.fillText("PAUZE / RUNNER",W-18,24);
-  };
-  const collides=(a,b)=>a.x<b.x+b.w-4&&a.x+a.w-4>b.x+3&&a.y<b.y+b.h-3&&a.y+a.h-3>b.y+3;
-  const spawn=()=>{if(score>220&&Math.random()<.26)obstacles.push({type:"bird",x:W+20,y:groundY-(Math.random()<.5?53:60),w:38,h:24,phase:Math.random()*6});else{const tall=Math.random()<.35;obstacles.push({type:"cactus",x:W+20,y:groundY-(tall?51:36),w:tall?24:18,h:tall?51:36});}spawnIn=Math.max(.58,1.1+Math.random()*.8-(speed-300)/650);};
-  const finish=()=>{running=false;gameOver=true;stateLabel.textContent="RUN ENDED";if(score>best){best=score;try{localStorage.setItem(bestKey,String(best));}catch{}}refresh();show("OOPS. RUN OVER.","Score "+fmt(score)+" · Best "+fmt(best)+". One more run?","PLAY AGAIN");};
-  const update=dt=>{
-    elapsed+=dt;speed=Math.min(650,300+elapsed*7+score*.035);score+=dt*10;spawnIn-=dt;if(spawnIn<=0)spawn();
-    groundOffset=(groundOffset+speed*dt)%44;clouds.forEach(c=>{c.x-=speed*.14*dt;if(c.x<-60)c.x=W+Math.random()*100;});
-    if(!dino.onGround){dino.vy+=1850*dt;dino.y+=dino.vy*dt;if(dino.y>=groundY-dino.h){dino.y=groundY-dino.h;dino.vy=0;dino.onGround=true;}}
-    obstacles.forEach(o=>{o.x-=speed*dt;});obstacles=obstacles.filter(o=>o.x+o.w>-10);
-    dust.forEach(p=>{p.x+=p.vx*dt;p.life-=dt;});dust=dust.filter(p=>p.life>0);
-    const player={x:dino.x+4,y:dino.y+(dino.ducking?13:0),w:dino.ducking?44:32,h:dino.ducking?22:36};
-    if(obstacles.some(o=>collides(player,o))){finish();return;}refresh();
-  };
-  const loop=time=>{if(!running||paused)return;if(!lastTime)lastTime=time;const dt=Math.min(.032,(time-lastTime)/1000||0);lastTime=time;update(dt);draw();if(running&&!paused)raf=requestAnimationFrame(loop);};
-  const start=()=>{cancelAnimationFrame(raf);reset();running=true;stateLabel.textContent="RUNNING";hide();stage.focus({preventScroll:true});raf=requestAnimationFrame(loop);};
-  const jump=()=>{if(!running){start();return;}if(paused){paused=false;hide();stateLabel.textContent="RUNNING";lastTime=0;raf=requestAnimationFrame(loop);return;}if(dino.onGround){dino.vy=-690;dino.onGround=false;dino.ducking=false;dust.push({x:dino.x+5,y:groundY-3,vx:-45,life:.25,color:colors.purple});}};
-  const duck=down=>{dino.ducking=!!down&&running&&!paused&&!gameOver&&dino.onGround;};
-  const pause=()=>{if(!running||gameOver)return;paused=!paused;stateLabel.textContent=paused?"PAUSED":"RUNNING";if(paused)show("TAKE A BREATHER.","Press P or tap resume when you’re ready.","RESUME");else{hide();lastTime=0;raf=requestAnimationFrame(loop);}};
-  const onKey=e=>{if(["Space","ArrowUp","ArrowDown","KeyP"].includes(e.code))e.preventDefault();if(e.repeat&&["Space","ArrowUp","KeyP"].includes(e.code))return;if(e.code==="Space"||e.code==="ArrowUp")jump();else if(e.code==="ArrowDown")duck(true);else if(e.code==="KeyP")pause();};
-  document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!paused)pause();});
-  stage.addEventListener("keydown",onKey);
-  window.addEventListener("keydown",e=>{if(stage.contains(document.activeElement))return;if(["Space","ArrowUp","ArrowDown","KeyP"].includes(e.code)&&!e.target.closest("input,textarea,button,a,select"))onKey(e);});
-  window.addEventListener("keyup",e=>{if(e.code==="ArrowDown")duck(false);});
-  stage.addEventListener("pointerdown",e=>{if(e.target===canvas)jump();});
-  startButton.addEventListener("click",()=>{if(paused){paused=false;hide();stateLabel.textContent="RUNNING";lastTime=0;raf=requestAnimationFrame(loop);}else start();});
-  restartButton.addEventListener("click",start);
-  if(jumpButton)jumpButton.addEventListener("pointerdown",e=>{e.preventDefault();jump();});
-  if(duckButton){duckButton.addEventListener("pointerdown",e=>{e.preventDefault();duck(true);});["pointerup","pointercancel","pointerleave"].forEach(name=>duckButton.addEventListener(name,()=>duck(false)));}
-  bestLabel.textContent=fmt(best);refresh();draw();
+/* PAUZE ARCADE: six standalone canvas games */
+(()=>{
+ const cv=document.querySelector("#dino-canvas"),stage=document.querySelector("#dino-stage"),overlay=document.querySelector("#dino-overlay"),picker=document.querySelector(".arcade-game-picker"),touch=document.querySelector("#arcade-touch-controls"),start=document.querySelector("#dino-start"),restart=document.querySelector("#dino-restart");
+ const heading=document.querySelector("#arcade-game-title"),status=document.querySelector("#dino-state"),scoreEl=document.querySelector("#dino-score"),bestEl=document.querySelector("#dino-best"),modeEl=document.querySelector("#arcade-mode-label"),modeVal=document.querySelector("#arcade-mode-value"),help=document.querySelector("#arcade-instructions"),overTitle=document.querySelector("#dino-overlay-title"),overCopy=document.querySelector("#dino-overlay-copy");
+ if(!cv||!stage||!overlay||!picker||!start)return;const c=cv.getContext("2d");if(!c){overTitle.textContent="GAME UNAVAILABLE";start.hidden=true;return;}
+ const W=900,H=260,G=218,ink="#17121f",muted="#786c82",purple="#6656ff",green="#d8f99d",pink="#ffc7e8",yellow="#fff08b",white="#fffdf8",blue="#bdeaff",bgc="#f3eaff";
+ const config={
+ dino:["DINO RUN / ENDLESS MODE","Jump obstacles and beat your best score.","START RUN","SPACE / ↑ JUMP • ↓ DUCK • P PAUSE","SPEED",[["jump","JUMP ↑"],["duck","DUCK ↓"]]],
+ snake:["SNAKE.EXE / SURVIVAL MODE","Eat the data. Grow the line. Avoid yourself and the walls.","START SNAKE","ARROWS / WASD MOVE • P PAUSE","PACE",[["up","UP ↑"],["left","← LEFT"],["down","DOWN ↓"],["right","RIGHT →"]]],
+ space:["SPACE PROTOCOL / DEFENCE MODE","Shoot the incoming signals before they reach your ship.","DEPLOY SHIP","← / → MOVE • SPACE / X FIRE • P PAUSE","WAVE",[["left","← LEFT"],["fire","FIRE ✦"],["right","RIGHT →"]]],
+ breakout:["BREAKPOINT / BRICK MODE","Keep the ball alive and break every block.","START BREAKOUT","← / → OR A / D MOVE PADDLE • P PAUSE","LEVEL",[["left","← LEFT"],["right","RIGHT →"]]],
+ memory:["MEMORY LEAK / MATCH MODE","Find all eight pairs. Fewer turns means a cleaner system.","OPEN MEMORY","TAP / CLICK TWO CARDS TO FIND A MATCH","PAIRS",[]],
+ pong:["PING.EXE / PLAYER VS CPU","Beat the CPU to five points. Keep the paddle ready.","START MATCH","↑ / ↓ OR W / S MOVE • FIRST TO 5 WINS","CPU",[["up","UP ↑"],["down","DOWN ↓"]]]
+ };
+ let game="dino",s=null,score=0,best=0,time=0,last=0,raf=0,running=false,paused=false,ended=false;
+ const k={left:false,right:false,up:false,down:false,duck:false},rnd=(a,b)=>Math.random()*(b-a)+a,fmt=n=>String(Math.max(0,Math.floor(n))).padStart(5,"0"),storage=()=>"pauze-arcade-"+game+"-best-v1";
+ const rect=(x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));};
+ const txt=(v,x,y,size,col=muted,align="left")=>{c.fillStyle=col;c.font="700 "+size+"px monospace";c.textAlign=align;c.fillText(v,x,y);};
+ const background=col=>rect(0,0,W,H,col||bgc);
+ const show=(tag,title,copy,button)=>{overlay.querySelector(".dino-overlay-label").textContent=tag;overTitle.textContent=title;overCopy.textContent=copy;start.textContent=button+" ↗";overlay.hidden=false;};
+ const hide=()=>overlay.hidden=true,stat=v=>status.textContent=v,clearKeys=()=>Object.keys(k).forEach(a=>k[a]=false);
+ const bestRead=()=>{try{return Math.max(0,Number(localStorage.getItem(storage()))||0);}catch{return 0;}};
+ const stats=()=>{scoreEl.textContent=fmt(game==="pong"&&s?s.you:score);bestEl.textContent=fmt(best);
+  modeVal.textContent=game==="dino"?(s?(s.speed/300).toFixed(1):"1.0")+"×":game==="snake"?(1+Math.floor(score/50))+"×":game==="space"?String(s?s.wave:1).padStart(2,"0"):game==="breakout"?String(s?s.level:1).padStart(2,"0"):game==="memory"?(s?s.pairs:0)+"/8":(s?s.cpu:0)+"/5";};
+ const save=()=>{if(score>best){best=score;try{localStorage.setItem(storage(),String(score));}catch{}}};
+ const finish=(title,copy,state)=>{running=false;paused=false;ended=true;save();stats();stat(state||"GAME OVER");show("SESSION ENDED",title,copy,"PLAY AGAIN");stage.focus({preventScroll:true});};
+ const bricks=()=>{let a=[],cols=14,w=48,gap=8,left=(W-(cols*w+(cols-1)*gap))/2,rows=Math.min(3+s.level,6),colors=[pink,blue,yellow,green,"#ffd5a8",purple];for(let r=0;r<rows;r++)for(let col=0;col<cols;col++)a.push({x:left+col*(w+gap),y:34+r*19,w,h:12,on:true,col:colors[r%colors.length]});return a;};
+ const food=()=>{let p;do{p={x:Math.floor(rnd(0,s.cols)),y:Math.floor(rnd(0,s.rows))};}while(s.body.some(b=>b.x===p.x&&b.y===p.y));return p;};
+ const reset=()=>{
+  score=0;time=0;last=0;ended=false;paused=false;clearKeys();best=bestRead();
+  if(game==="dino")s={x:95,y:G-38,w:34,h:38,vy:0,on:true,obs:[],spawn:.9,speed:300};
+  if(game==="snake"){s={cell:20,cols:45,rows:13,body:[{x:12,y:6},{x:11,y:6},{x:10,y:6}],dir:{x:1,y:0},next:{x:1,y:0},tick:0,food:null};s.food=food();}
+  if(game==="space")s={x:W/2,shots:[],foes:[],spawn:.5,cool:0,wave:1};
+  if(game==="breakout"){s={paddle:W/2,ball:{x:W/2,y:205,vx:230,vy:-210,r:6},level:1,lives:3,bricks:[]};s.bricks=bricks();}
+  if(game==="memory"){let vals=["⌘","⌁","⟡","⌬","⏣","⎔","⧉","◈"],cards=vals.concat(vals).map(v=>({v,open:false,done:false}));for(let i=cards.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];}s={cards,a:-1,b:-1,lock:0,pairs:0,turns:0};}
+  if(game==="pong")s={y:H/2,cpuY:H/2,x:W/2,ballY:H/2,vx:-220,vy:rnd(-110,110),you:0,cpu:0,ph:64};
+  stats();draw();stat("READY?");
+ };
+ const jump=()=>{if(game==="dino"&&running&&!paused&&s.on){s.vy=-650;s.on=false;}};
+ const fire=()=>{if(game==="space"&&running&&!paused&&s.cool<=0){s.shots.push({x:s.x,y:220});s.cool=.2;}};
+ const flip=i=>{if(game!=="memory"||!running||paused||ended||time<s.lock)return;const card=s.cards[i];if(!card||card.done||card.open)return;card.open=true;if(s.a<0){s.a=i;return;}s.b=i;s.turns++;const a=s.cards[s.a],b=s.cards[s.b];if(a.v===b.v){a.done=b.done=true;s.pairs++;score+=10;s.a=s.b=-1;stats();if(s.pairs===8)finish("MEMORY CLEAN.","All eight pairs found in "+s.turns+" turns. No leaks detected.","SYSTEM CLEAR");}else s.lock=time+.7;};
+ const update=dt=>{
+  time+=dt;
+  if(game==="dino"){
+   s.speed=Math.min(650,300+time*7+score*.035);score+=dt*10;s.spawn-=dt;
+   if(s.spawn<=0){let h=rnd(28,50);s.obs.push({x:W+8,h,w:18});s.spawn=Math.max(.58,rnd(.95,1.8)-(s.speed-300)/650);}
+   s.obs.forEach(o=>o.x-=s.speed*dt);s.obs=s.obs.filter(o=>o.x+o.w>0);
+   if(!s.on){s.vy+=1750*dt;s.y+=s.vy*dt;if(s.y>=G-s.h){s.y=G-s.h;s.vy=0;s.on=true;}}
+   s.duck=k.duck&&s.on;if(s.obs.some(o=>s.x+26>o.x&&s.x+5<o.x+o.w&&s.y+s.h>G-o.h+3)){finish("OOPS. RUN OVER.","Score "+fmt(score)+". One more run?","RUN ENDED");return;}stats();
+  }else if(game==="snake"){
+   s.tick+=dt;if(s.tick>=Math.max(.065,.14-score*.0004)){s.tick=0;s.dir=s.next;const h={x:s.body[0].x+s.dir.x,y:s.body[0].y+s.dir.y};
+    if(h.x<0||h.x>=s.cols||h.y<0||h.y>=s.rows||s.body.some((p,i)=>i<s.body.length-1&&p.x===h.x&&p.y===h.y)){finish("SYSTEM CRASH.","Score "+fmt(score)+". The line hit a wall or itself.","GAME OVER");return;}
+    s.body.unshift(h);if(h.x===s.food.x&&h.y===s.food.y){score+=10;s.food=food();stats();}else s.body.pop();
+   }
+  }else if(game==="space"){
+   if(k.left)s.x-=350*dt;if(k.right)s.x+=350*dt;s.x=Math.max(22,Math.min(W-22,s.x));s.cool-=dt;s.spawn-=dt;
+   if(s.spawn<=0){s.foes.push({x:rnd(25,W-25),y:-12,size:rnd(12,19),speed:rnd(65,102)});s.spawn=Math.max(.28,.78-Math.floor(score/100)*.025);}
+   s.wave=1+Math.floor(score/100);s.shots.forEach(b=>b.y-=440*dt);s.shots=s.shots.filter(b=>b.y>0);
+   for(let i=s.foes.length-1;i>=0;i--){let f=s.foes[i];f.y+=f.speed*dt;let hit=s.shots.findIndex(b=>Math.abs(b.x-f.x)<f.size+3&&Math.abs(b.y-f.y)<f.size+3);
+    if(hit>=0){s.shots.splice(hit,1);s.foes.splice(i,1);score+=10;stats();continue;}
+    if(f.y>H-7||(Math.abs(f.x-s.x)<f.size+15&&f.y>190)){finish("SIGNAL LOST.","Score "+fmt(score)+". The defence line was breached.","MISSION ENDED");return;}
+   }
+  }else if(game==="breakout"){
+   if(k.left)s.paddle-=410*dt;if(k.right)s.paddle+=410*dt;s.paddle=Math.max(65,Math.min(W-65,s.paddle));const b=s.ball;b.x+=b.vx*dt;b.y+=b.vy*dt;
+   if(b.x<b.r||b.x>W-b.r)b.vx*=-1;if(b.y<b.r+6)b.vy=Math.abs(b.vy);
+   if(b.vy>0&&b.y+b.r>=240&&b.y<=248&&Math.abs(b.x-s.paddle)<65){b.vy=-Math.abs(b.vy);b.vx=(b.x-s.paddle)*3.5;b.y=234;}
+   for(const br of s.bricks){if(br.on&&b.x+b.r>br.x&&b.x-b.r<br.x+br.w&&b.y+b.r>br.y&&b.y-b.r<br.y+br.h){br.on=false;score+=10;b.vy*=-1;stats();break;}}
+   if(b.y>H+8){s.lives--;if(s.lives<=0){finish("BALL DROPPED.","Score "+fmt(score)+". Keep the rally alive next time.","GAME OVER");return;}b.x=s.paddle;b.y=207;b.vx=rnd(-180,180);b.vy=-220;}
+   if(s.bricks.every(br=>!br.on)){s.level++;s.bricks=bricks();b.vx*=1.08;b.vy*=1.08;}
+  }else if(game==="memory"){
+   if(s.b>=0&&time>=s.lock){s.cards[s.a].open=false;s.cards[s.b].open=false;s.a=s.b=-1;}
+  }else if(game==="pong"){
+   if(k.up)s.y-=360*dt;if(k.down)s.y+=360*dt;s.y=Math.max(36,Math.min(H-36,s.y));const d=s.ballY-s.cpuY;if(Math.abs(d)>4)s.cpuY+=Math.sign(d)*Math.min(Math.abs(d),210*dt);s.cpuY=Math.max(36,Math.min(H-36,s.cpuY));
+   s.x+=s.vx*dt;s.ballY+=s.vy*dt;if(s.ballY<7||s.ballY>H-7)s.vy*=-1;
+   if(s.vx<0&&s.x<46&&Math.abs(s.ballY-s.y)<s.ph/2+7){s.x=47;s.vx=Math.abs(s.vx)*1.04;s.vy+=(s.ballY-s.y)*2;}
+   if(s.vx>0&&s.x>W-46&&Math.abs(s.ballY-s.cpuY)<s.ph/2+7){s.x=W-47;s.vx=-Math.abs(s.vx)*1.02;s.vy+=(s.ballY-s.cpuY)*1.5;}
+   if(s.x>W+8||s.x<-8){if(s.x>W){s.you++;score=s.you;}else s.cpu++;stats();if(s.you>=5){finish("PING CONFIRMED.","You beat the CPU "+s.you+"–"+s.cpu+". Connection stable.","YOU WIN");return;}if(s.cpu>=5){finish("CONNECTION LOST.","The CPU won "+s.cpu+"–"+s.you+". Run it back.","CPU WINS");return;}s.x=W/2;s.ballY=H/2;s.vx=s.you>s.cpu?-230:230;s.vy=rnd(-130,130);}
+  }
+ };
+ const draw=()=>{
+  if(!s)return;
+  if(game==="dino"){
+   background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#b4a1ce");
+   s.obs.forEach(o=>{rect(o.x,G-o.h,5,o.h,green);rect(o.x+5,G-o.h+7,13,5,green);rect(o.x+8,G-o.h+15,5,o.h-15,green);});
+   rect(s.x+5,s.y+9,24,25,ink);rect(s.x+18,s.y,17,18,ink);rect(s.x+28,s.y+7,13,8,ink);rect(s.x+23,s.y+4,4,4,white);rect(s.x+7,s.y+31,7,7,ink);rect(s.x+20,s.y+31,7,7,ink);txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
+  }else if(game==="snake"){
+   background("#f7f1ff");rect(0,0,W,H,"#eee2fb");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#dfd1f1");
+   rect(s.food.x*s.cell+4,s.food.y*s.cell+4,12,12,pink);s.body.forEach((p,i)=>{rect(p.x*s.cell+1,p.y*s.cell+1,18,18,i?green:purple);if(!i){rect(p.x*s.cell+5,p.y*s.cell+5,3,3,white);rect(p.x*s.cell+12,p.y*s.cell+5,3,3,white);}});
+  }else if(game==="space"){
+   background("#eee8ff");for(let i=0;i<55;i++)rect((i*167+31)%W,(i*47+19)%H,2,2,"#c7b5e5");s.shots.forEach(b=>rect(b.x-2,b.y-8,4,12,purple));
+   s.foes.forEach(f=>{rect(f.x-f.size,f.y-f.size,f.size*2,f.size*2,pink);rect(f.x-7,f.y-2,14,5,ink);});rect(s.x-4,204,8,25,ink);rect(s.x-14,214,28,13,purple);rect(s.x-8,208,16,9,blue);txt("DEFENCE / WAVE "+s.wave,W-18,23,11,muted,"right");
+  }else if(game==="breakout"){
+   background("#f7f1ff");rect(16,12,W-32,H-24,"#eee5fb");s.bricks.forEach(b=>{if(b.on){rect(b.x,b.y,b.w,b.h,b.col);rect(b.x,b.y,b.w,2,ink);}});
+   rect(s.paddle-58,240,116,8,ink);rect(s.paddle-16,242,32,4,yellow);rect(s.ball.x-s.ball.r,s.ball.y-s.ball.r,s.ball.r*2,s.ball.r*2,purple);txt("LIVES / "+s.lives,W-22,H-12,10,muted,"right");
+  }else if(game==="memory"){
+   background();txt("MEMORY / MATCH THE PAIRS",W/2,18,10,muted,"center");const cw=125,ch=40,gx=14,gy=11,left=(W-(cw*4+gx*3))/2,top=29,icons=["⌘","⌁","⟡","⌬","⏣","⎔","⧉","◈"];
+   s.cards.forEach((a,i)=>{const x=left+(i%4)*(cw+gx),y=top+Math.floor(i/4)*(ch+gy);rect(x+2,y+3,cw,ch,ink);rect(x,y,cw,ch,a.done?green:a.open?yellow:white);rect(x,y,cw,3,ink);txt(a.done||a.open?a.v:icons[i%8],x+cw/2,y+27,a.done||a.open?23:17,a.done||a.open?ink:"#b5a8c5","center");});txt("TURNS / "+s.turns,W/2,H-8,10,muted,"center");
+  }else if(game==="pong"){
+   background("#f1e9ff");for(let y=12;y<H;y+=19)rect(W/2-2,y,4,10,"#cbbce2");rect(20,s.y-s.ph/2,11,s.ph,purple);rect(W-31,s.cpuY-s.ph/2,11,s.ph,ink);rect(s.x-6,s.ballY-6,12,12,pink);txt(String(s.you),W/2-42,40,20,ink,"center");txt(String(s.cpu),W/2+42,40,20,ink,"center");txt("YOU",40,22,9,muted);txt("CPU",W-40,22,9,muted,"right");
+  }
+ };
+ const loop=t=>{if(!running||paused)return;if(!last)last=t;const dt=Math.min(.032,(t-last)/1000||0);last=t;update(dt);draw();if(running&&!paused)raf=requestAnimationFrame(loop);};
+ const startGame=()=>{cancelAnimationFrame(raf);reset();running=true;paused=false;ended=false;hide();stat("IN SESSION");stage.focus({preventScroll:true});raf=requestAnimationFrame(loop);};
+ const resume=()=>{paused=false;running=true;last=0;hide();stat("IN SESSION");stage.focus({preventScroll:true});raf=requestAnimationFrame(loop);};
+ const pause=()=>{if(!running||ended)return;paused=true;stat("PAUSED");show("PAUSED / TAKE A BREATHER","GAME PAUSED","Press P or tap resume when you are ready.","RESUME");};
+ const choose=id=>{
+  if(!config[id])return;cancelAnimationFrame(raf);running=false;paused=false;game=id;heading.textContent=config[id][0];modeEl.textContent=config[id][4];help.textContent=config[id][3];
+  picker.querySelectorAll("[data-arcade-game]").forEach(b=>{const on=b.dataset.arcadeGame===id;b.classList.toggle("is-active",on);b.setAttribute("aria-pressed",String(on));});
+  touch.replaceChildren();config[id][5].forEach(([action,caption])=>{const b=document.createElement("button");b.type="button";b.textContent=caption;b.addEventListener("pointerdown",e=>{
+   e.preventDefault();if(!running||paused||ended)return;if(game==="dino"&&action==="jump"){jump();return;}if(game==="space"&&action==="fire"){fire();return;}
+   if(game==="snake"){const d={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[action];if(d&&!(s.dir.x+d[0]===0&&s.dir.y+d[1]===0))s.next={x:d[0],y:d[1]};return;}if(["left","right","up","down","duck"].includes(action))k[action]=true;
+  });["pointerup","pointercancel","pointerleave"].forEach(ev=>b.addEventListener(ev,()=>{if(["left","right","up","down","duck"].includes(action))k[action]=false;}));touch.append(b);});
+  reset();const names={dino:"LET’S RUN.",snake:"GROW THE LINE.",space:"DEFEND THE SIGNAL.",breakout:"BREAK THE BLOCKS.",memory:"CLEAR YOUR CACHE.",pong:"PING THE CPU."};show("CHOOSE YOUR CHALLENGE",names[id],config[id][1],config[id][2]);draw();
+ };
+ const keydown=e=>{
+  if(!["Space","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","KeyA","KeyD","KeyW","KeyS","KeyP","KeyX","Enter"].includes(e.code))return;
+  if(e.target.closest&&e.target.closest("button,a,input,textarea,select"))return;
+  if(["Space","ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.code))e.preventDefault();
+  if(e.code==="KeyP"&&(running||paused)){paused?resume():pause();return;}
+  if(!running&&!paused&&!ended&&(e.code==="Enter"||e.code==="Space")){startGame();return;}if(paused&&(e.code==="Enter"||e.code==="Space")){resume();return;}if(!running||paused||ended)return;
+  if(game==="dino"){if(e.code==="Space"||e.code==="ArrowUp")jump();if(e.code==="ArrowDown")k.duck=true;}
+  if(game==="snake"){const d={ArrowUp:[0,-1],KeyW:[0,-1],ArrowDown:[0,1],KeyS:[0,1],ArrowLeft:[-1,0],KeyA:[-1,0],ArrowRight:[1,0],KeyD:[1,0]}[e.code];if(d&&!(s.dir.x+d[0]===0&&s.dir.y+d[1]===0))s.next={x:d[0],y:d[1]};}
+  if(game==="space"){if(e.code==="ArrowLeft"||e.code==="KeyA")k.left=true;if(e.code==="ArrowRight"||e.code==="KeyD")k.right=true;if(e.code==="Space"||e.code==="KeyX")fire();}
+  if(game==="breakout"){if(e.code==="ArrowLeft"||e.code==="KeyA")k.left=true;if(e.code==="ArrowRight"||e.code==="KeyD")k.right=true;}
+  if(game==="pong"){if(e.code==="ArrowUp"||e.code==="KeyW")k.up=true;if(e.code==="ArrowDown"||e.code==="KeyS")k.down=true;}
+ };
+ const keyup=e=>{if(e.code==="ArrowLeft"||e.code==="KeyA")k.left=false;if(e.code==="ArrowRight"||e.code==="KeyD")k.right=false;if(e.code==="ArrowUp"||e.code==="KeyW")k.up=false;if(e.code==="ArrowDown"||e.code==="KeyS"){k.down=false;k.duck=false;}};
+ const memoryClick=e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height,cw=125,ch=40,gx=14,gy=11,left=(W-(cw*4+gx*3))/2,top=29;for(let i=0;i<s.cards.length;i++){const cx=left+(i%4)*(cw+gx),cy=top+Math.floor(i/4)*(ch+gy);if(x>=cx&&x<=cx+cw&&y>=cy&&y<=cy+ch){flip(i);break;}}};
+  picker.querySelectorAll("[data-arcade-game]").forEach(b=>b.addEventListener("click",()=>choose(b.dataset.arcadeGame)));
+  start.addEventListener("click",()=>{if(paused)resume();else startGame();});restart.addEventListener("click",startGame);
+  window.addEventListener("keydown",e=>{if(stage.contains(document.activeElement)||!(e.target.closest&&e.target.closest("button,a,input,textarea,select")))keydown(e);});window.addEventListener("keyup",keyup);
+  stage.addEventListener("pointerdown",e=>{if(!running||paused||ended)return;if(game==="dino")jump();if(game==="space")fire();if(game==="memory")memoryClick(e);});
+  document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!paused)pause();});window.addEventListener("blur",clearKeys);window.addEventListener("resize",draw);
+  choose("dino");
 })();
