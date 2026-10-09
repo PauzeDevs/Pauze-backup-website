@@ -82,6 +82,52 @@ const discordPresence = (() => {
   const currentActivity = document.querySelector("#discord-current-activity");
   const avatar = document.querySelector("#discord-avatar");
   const note = document.querySelector("#discord-status-note");
+  const musicCard = document.querySelector("#discord-music-card");
+  const musicArt = document.querySelector("#discord-music-art");
+  const musicTitle = document.querySelector("#discord-music-title");
+  const musicArtist = document.querySelector("#discord-music-artist");
+  const musicAlbum = document.querySelector("#discord-music-album");
+  const musicSource = document.querySelector("#discord-music-source");
+  const musicProgress = document.querySelector("#discord-music-progress");
+  const musicElapsed = document.querySelector("#discord-music-elapsed");
+  const musicDuration = document.querySelector("#discord-music-duration");
+  let spotifyTrack = null;
+  const formatTrackTime = (milliseconds) => {
+    const seconds = Math.max(0, Math.floor(milliseconds / 1000));
+    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+  };
+  const updateMusicProgress = () => {
+    if (!spotifyTrack || !musicProgress) return;
+    const now = Date.now();
+    const start = Number(spotifyTrack.timestamps?.start || now);
+    const end = Number(spotifyTrack.timestamps?.end || now);
+    const duration = Math.max(0, end - start);
+    const elapsed = Math.max(0, Math.min(duration, now - start));
+    musicProgress.style.width = `${duration ? (elapsed / duration) * 100 : 0}%`;
+    if (musicElapsed) musicElapsed.textContent = formatTrackTime(elapsed);
+    if (musicDuration) musicDuration.textContent = formatTrackTime(duration);
+  };
+  const renderSpotify = (spotify) => {
+    if (!musicCard) return;
+    if (!spotify || !spotify.song) {
+      spotifyTrack = null;
+      musicCard.hidden = true;
+      return;
+    }
+    spotifyTrack = spotify;
+    musicCard.hidden = false;
+    if (musicTitle) musicTitle.textContent = spotify.song || "Unknown track";
+    if (musicArtist) musicArtist.textContent = spotify.artist || "Unknown artist";
+    if (musicAlbum) musicAlbum.textContent = spotify.album || "Spotify";
+    if (musicSource) musicSource.textContent = "SPOTIFY";
+    if (musicArt && spotify.album_art_url) musicArt.src = spotify.album_art_url;
+    if (musicArt) musicArt.alt = `Album artwork for ${spotify.song}`;
+    updateMusicProgress();
+  };
+  if (musicArt) musicArt.addEventListener("error", () => {
+    musicArt.style.visibility = "hidden";
+  });
+  window.setInterval(updateMusicProgress, 1000);
   if (!statusLabel || !statusDot || !displayName || !activityText || !currentActivity) return;
   const statusNames = { online: "ONLINE", idle: "IDLE", dnd: "DO NOT DISTURB", offline: "OFFLINE" };
   const setUnavailable = (message) => {
@@ -99,6 +145,7 @@ const discordPresence = (() => {
       const payload = await response.json();
       if (!payload.success || !payload.data) throw new Error("No public presence data");
       const data = payload.data;
+      renderSpotify(data.spotify || null);
       const status = data.discord_status || "offline";
       statusLabel.textContent = statusNames[status] || "UNKNOWN";
       statusDot.dataset.status = status;
