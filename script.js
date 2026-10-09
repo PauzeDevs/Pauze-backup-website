@@ -353,12 +353,16 @@ const discordPresence = (() => {
   const loadPresence = async () => {
     if (presenceLoading) return;
     presenceLoading = true;
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 10000);
+    let controller = null;
+    let timeout = null;
     try {
-      const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`, {
-        headers: { Accept: "application/json" }, cache: "no-store", signal: controller.signal
-      });
+      if (typeof AbortController === "function") {
+        controller = new AbortController();
+        timeout = window.setTimeout(() => controller.abort(), 10000);
+      }
+      const requestOptions = { headers: { Accept: "application/json" }, cache: "no-store" };
+      if (controller) requestOptions.signal = controller.signal;
+      const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`, requestOptions);
       if (!response.ok) throw new Error(`Presence service returned ${response.status}`);
       const payload = await response.json();
       if (!payload.success || !payload.data) throw new Error("No public presence data");
@@ -408,7 +412,7 @@ const discordPresence = (() => {
     } catch (error) {
       setUnavailable("Live presence is temporarily unavailable. The page will retry automatically.");
     } finally {
-      window.clearTimeout(timeout);
+      if (timeout !== null) window.clearTimeout(timeout);
       presenceLoading = false;
     }
   };
