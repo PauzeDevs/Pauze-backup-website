@@ -138,3 +138,19 @@ a{color:inherit;text-decoration:none}
 }
 @media(max-width:390px){.desktop-nav{gap:7px}.desktop-nav a{font-size:8px}.availability{font-size:7px;gap:4px}.status-dot{width:6px;height:6px}.eyebrow span:last-child,.hero-index span:last-child{display:none}.project-topline{align-items:flex-start;flex-direction:column;gap:6px}.activity-foot{font-size:7px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Embedded now-playing panel: inspired by the supplied Amazon Music screenshot */
+.discord-music-card{margin-top:18px;padding:20px 22px 18px;border:0;border-radius:20px;background:#4a2946;color:#fff;box-shadow:none}
+.discord-music-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff;font-family:var(--sans);font-size:clamp(16px,2.2vw,24px);font-weight:500;letter-spacing:-.025em}
+.discord-music-heading .music-badge{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:#20d6d5;color:#111;font-size:19px;font-weight:700}
+.discord-music-track{display:flex;align-items:center;gap:16px;margin-top:20px}
+.discord-music-track img{width:112px;height:112px;flex:0 0 112px;object-fit:cover;border:0;border-radius:9px;background:#2c1c2b}
+.discord-music-copy{min-width:0;color:#fff}
+.discord-music-copy h4{margin:0;color:#fff;font-family:var(--sans);font-size:clamp(20px,3vw,30px);font-weight:700;letter-spacing:-.04em;white-space:normal;overflow-wrap:anywhere}
+.discord-music-copy p{margin:3px 0;color:#fff;font-family:var(--sans);font-size:clamp(15px,2.2vw,22px);font-weight:500}
+.discord-music-copy span{display:block;color:#e0cddd;font-family:var(--sans);font-size:clamp(13px,1.8vw,18px)}
+.discord-music-progress{height:5px;margin-top:20px;border:0;border-radius:8px;background:#694763;overflow:hidden}
+#discord-music-progress{border-radius:8px;background:#5b5ff7}
+.discord-music-times{display:flex;justify-content:space-between;margin-top:8px;color:#e8dce7;font-family:var(--sans);font-size:clamp(13px,1.8vw,18px);font-variant-numeric:tabular-nums}
+@media(max-width:700px){.discord-music-card{padding:16px;border-radius:16px}.discord-music-track{gap:13px;margin-top:15px}.discord-music-track img{width:82px;height:82px;flex-basis:82px}.discord-music-copy h4{font-size:20px}.discord-music-copy p{font-size:15px}.discord-music-copy span{font-size:12px}}
