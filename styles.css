@@ -413,3 +413,22 @@ html.reveal-ready [data-reveal]:not(.is-revealed){
 .build-log-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding-top:16px;border-top:2px solid #b987d1}
 .build-log-bottom>p{margin:0;color:#786c82;font-size:9px;font-weight:700;letter-spacing:.05em;line-height:1.7}
 @media(max-width:520px){.build-log-bottom{align-items:flex-start;flex-direction:column;gap:10px}}
+
+
+/* PAUZE intro splash — short black graffiti ident */
+html.pauze-splash-active,html.pauze-splash-active body{overflow:hidden!important}
+.pauze-intro-splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:#050505;color:#fff;opacity:1;visibility:visible}
+.pauze-splash-grain{position:absolute;inset:-50%;pointer-events:none;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");animation:pauze-grain-drift .22s steps(2) infinite}
+.pauze-splash-art{position:relative;display:grid;justify-items:center;padding:24px;transform:rotate(-5deg);animation:pauze-graffiti-in .72s cubic-bezier(.16,1.2,.3,1) both}
+.pauze-splash-word{position:relative;z-index:1;font-family:Impact,'Arial Black',system-ui,sans-serif;font-size:clamp(76px,19vw,190px);font-weight:1000;line-height:.86;letter-spacing:-.095em;font-style:italic;color:#f5f0ff;-webkit-text-stroke:2px #0b0b0b;text-shadow:5px 5px 0 #7b35ff,10px 10px 0 #ff2f9a,14px 14px 0 #fff;filter:drop-shadow(0 0 24px rgba(137,59,255,.4));white-space:nowrap}
+.pauze-splash-word:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(168deg,transparent 0 12px,rgba(0,0,0,.75) 13px 15px,transparent 16px 28px);mix-blend-mode:screen;opacity:.25;pointer-events:none}
+.pauze-splash-tag{margin-top:30px;padding:5px 12px;border:1px solid rgba(255,255,255,.65);font:700 10px/1.4 'Space Mono',monospace;letter-spacing:.42em;color:#fff;transform:rotate(2deg);animation:pauze-tag-in .5s .28s both}
+.pauze-splash-spray{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 22% 35%,rgba(255,47,154,.6) 0 1px,transparent 2px),radial-gradient(ellipse at 76% 30%,rgba(123,53,255,.8) 0 2px,transparent 3px),radial-gradient(ellipse at 18% 68%,rgba(255,255,255,.8) 0 1px,transparent 2px),radial-gradient(ellipse at 84% 70%,rgba(255,47,154,.7) 0 2px,transparent 3px);background-size:100% 100%;filter:drop-shadow(0 0 12px rgba(123,53,255,.5));animation:pauze-spray-flicker .18s steps(2) infinite}
+.pauze-intro-splash.is-leaving{opacity:0;visibility:hidden;transition:opacity .65s ease,visibility .65s}
+.pauze-intro-splash.is-leaving .pauze-splash-art{transform:scale(1.12) rotate(-8deg);filter:blur(8px);transition:transform .65s ease,filter .65s ease}
+@keyframes pauze-graffiti-in{from{opacity:0;transform:translateY(22px) scale(.55) rotate(-12deg);filter:blur(12px)}to{opacity:1;transform:translateY(0) scale(1) rotate(-5deg);filter:blur(0)}}
+@keyframes pauze-tag-in{from{opacity:0;transform:translateY(8px) rotate(2deg)}to{opacity:1;transform:translateY(0) rotate(2deg)}}
+@keyframes pauze-spray-flicker{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.025)}}
+@keyframes pauze-grain-drift{0%{transform:translate(0,0)}100%{transform:translate(2%,-2%)}}
+@media(max-width:480px){.pauze-splash-word{font-size:clamp(68px,21vw,110px);text-shadow:3px 3px 0 #7b35ff,6px 6px 0 #ff2f9a,9px 9px 0 #fff;-webkit-text-stroke:1px #0b0b0b}.pauze-splash-tag{font-size:8px;letter-spacing:.3em;margin-top:23px}}
+@media(prefers-reduced-motion:reduce){.pauze-splash-grain,.pauze-splash-spray{animation:none}.pauze-splash-art,.pauze-splash-tag{animation:none}}
