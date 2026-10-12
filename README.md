@@ -2,7 +2,9 @@
 
 **Live website:** https://pauze.is-a.dev
 
-A responsive, project-first portfolio for Pauze, showcasing software, developer tools, experiments, and creative work. Built with plain HTML, CSS, and JavaScript — no build step or package installation required.
+A responsive, project-first portfolio for Pauze, showcasing software, developer tools, experiments, and creative work. Built with plain HTML, CSS, and JavaScript.
+
+> **Proprietary project — All Rights Reserved.** This repository is public for viewing, but its source code and creative assets are not licensed for reuse. See [LICENSE](./LICENSE).
 
 ## Visit the website
 
@@ -26,29 +28,23 @@ Open **[pauze.is-a.dev](https://pauze.is-a.dev)** to explore the live portfolio.
 - GitHub Pages for hosting
 - Custom domain: `pauze.is-a.dev`
 
-## Run locally
+## Project structure
 
-No dependencies or build tools are required.
+- `index.html` — page structure and content
+- `styles.css` — styling, layout, and animations
+- `script.js` — interactive behavior
+- `LICENSE` — proprietary usage restrictions
 
-1. Clone or download this repository.
-2. Open `index.html` in a browser, or start a local server:
+## Usage and permissions
 
-   ```bash
-   python3 -m http.server 8000
-   ```
+Viewing this public repository does **not** grant permission to copy, republish, modify, redistribute, sell, or create derivative works from its code or creative assets. Written permission from the copyright holder is required, except where applicable law provides otherwise.
 
-3. Visit [http://localhost:8000](http://localhost:8000).
-
-## Customize
-
-- **Content and links:** edit `index.html`.
-- **Styling and animations:** edit `styles.css`.
-- **Interactive behavior:** edit `script.js`.
+GitHub does not offer a way to disable cloning or downloading for a public repository. The license states the reuse restrictions, but it cannot technically prevent someone from accessing public source code. Do not place API keys, passwords, tokens, or other secrets in this repository.
 
 ## Deployment
 
-The website is hosted with GitHub Pages and uses the custom domain `pauze.is-a.dev`. Push changes to the configured publishing branch and confirm the deployment in the repository's **Actions** tab if a GitHub Pages workflow is enabled.
+The website is hosted with GitHub Pages at **[pauze.is-a.dev](https://pauze.is-a.dev)**.
 
 ---
 
-Made by **PAUZE®**.
+Made by **PAUZE®**. All rights reserved.
