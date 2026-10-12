@@ -15,7 +15,7 @@
     #pauze-intro-splash .pauze-splash-grain{position:absolute;inset:-50%;pointer-events:none;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
     #pauze-intro-splash .pauze-splash-art{position:relative;width:min(96vw,900px);padding:18px;animation:pauze-graffiti-in .5s ease-out both}
     #pauze-intro-splash .pauze-draw-svg{display:block;width:100%;height:auto;overflow:visible}
-    #pauze-intro-splash .pauze-lettering{font-family:Impact,'Arial Black',system-ui,sans-serif;font-weight:1000;font-style:italic;letter-spacing:-5px;fill:transparent;stroke:#f5f0ff;stroke-width:2.5;stroke-linejoin:round;stroke-dasharray:1100;stroke-dashoffset:1100;filter:drop-shadow(5px 5px 0 #7b35ff) drop-shadow(10px 10px 0 #ff2f9a);animation:pauze-write-word 1.65s .35s ease-in-out forwards}
+    #pauze-intro-splash .pauze-lettering{font-family:Impact,'Arial Black',system-ui,sans-serif;font-weight:1000;font-style:italic;letter-spacing:-5px;fill:transparent;stroke:#f5f0ff;stroke-width:2.5;stroke-linejoin:round;stroke-dasharray:3000;stroke-dashoffset:3000;filter:drop-shadow(5px 5px 0 #7b35ff) drop-shadow(10px 10px 0 #ff2f9a);animation:pauze-write-word 1.65s .35s ease-in-out forwards}
     #pauze-intro-splash .pauze-lettering-fill{fill:#f5f0ff;opacity:0;animation:pauze-fill-word .25s 1.65s ease-out forwards}
     #pauze-intro-splash .pauze-artist-line{fill:#09070d;stroke:#f5f0ff;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
     #pauze-intro-splash .pauze-artist-accent{fill:none;stroke:#ff2f9a;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
@@ -24,7 +24,7 @@
     #pauze-intro-splash .pauze-spray-stream{fill:none;stroke:#ff2f9a;stroke-width:5;stroke-linecap:round;stroke-dasharray:3 12;animation:pauze-spray-stream .2s linear infinite}
     #pauze-intro-splash .pauze-splash-tag{margin-top:0;padding:5px 12px;border:1px solid rgba(255,255,255,.65);font:700 10px/1.4 'Space Mono',monospace;letter-spacing:.42em;color:#fff;text-align:center}
     #pauze-intro-splash.is-leaving .pauze-splash-art{transform:scale(1.05);filter:blur(5px);transition:transform .55s ease,filter .55s ease}
-    @keyframes pauze-write-word{0%{stroke-dashoffset:1100}85%{fill:transparent}100%{stroke-dashoffset:0;fill:#f5f0ff}}
+    @keyframes pauze-write-word{0%{stroke-dashoffset:3000}85%{fill:transparent}100%{stroke-dashoffset:0;fill:#f5f0ff}}
     @keyframes pauze-fill-word{to{opacity:1}}
     @keyframes pauze-spray-arm{from{transform:rotate(-8deg)}to{transform:rotate(9deg)}}
     @keyframes pauze-spray-stream{to{stroke-dashoffset:-30}}
