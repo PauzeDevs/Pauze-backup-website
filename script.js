@@ -581,10 +581,10 @@ const discordPresence = (() => {
   time+=dt;
   if(game==="dino"){
    s.speed=Math.min(650,300+time*7+score*.035);score+=dt*10;s.spawn-=dt;
-   if(s.spawn<=0){if(score>180&&Math.random()<.3)s.obs.push({type:"bird",x:W+8,y:176,w:32,h:17});else{let h=rnd(28,50);s.obs.push({type:"cactus",x:W+8,h,w:18});}s.spawn=Math.max(.58,rnd(.95,1.8)-(s.speed-300)/650);}
+   if(s.spawn<=0){if(score>80&&Math.random()<.35)s.obs.push({type:"bird",x:W+8,y:164,w:32,h:20});else{let h=rnd(28,50);s.obs.push({type:"cactus",x:W+8,h,w:18});}s.spawn=Math.max(.58,rnd(.95,1.8)-(s.speed-300)/650);}
    s.obs.forEach(o=>o.x-=s.speed*dt);s.obs=s.obs.filter(o=>o.x+o.w>0);
    if(!s.on){s.vy+=1750*dt;s.y+=s.vy*dt;if(s.y>=G-s.h){s.y=G-s.h;s.vy=0;s.on=true;}}
-   s.duck=k.duck&&s.on;const px=s.x+5,py=s.y+(s.duck?13:0),pw=s.duck?34:26,ph=s.duck?23:34;if(s.obs.some(o=>px+pw>o.x&&px<o.x+o.w&&py+ph>(o.type==="bird"?o.y:G-o.h+3)&&py<(o.type==="bird"?o.y+o.h:G))){finish("OOPS. RUN OVER.","Score "+fmt(score)+". One more run?","RUN ENDED");return;}stats();
+   s.duck=k.duck&&s.on;const px=s.x+5,py=s.y+(s.duck?13:0),pw=s.duck?34:26,ph=s.duck?23:34;if(s.obs.some(o=>px+pw>o.x&&px<o.x+o.w&&py+ph>(o.type==="bird"?o.y+2:G-o.h+3)&&py<(o.type==="bird"?o.y+o.h-2:G))){finish("OOPS. RUN OVER.","Score "+fmt(score)+". One more run?","RUN ENDED");return;}stats();
   }else if(game==="snake"){
    s.tick+=dt;if(s.tick>=Math.max(.065,.14-score*.0004)){s.tick=0;s.dir=s.next;const h={x:s.body[0].x+s.dir.x,y:s.body[0].y+s.dir.y};
     if(h.x<0||h.x>=s.cols||h.y<0||h.y>=s.rows||s.body.some((p,i)=>i<s.body.length-1&&p.x===h.x&&p.y===h.y)){finish("SYSTEM CRASH.","Score "+fmt(score)+". The line hit a wall or itself.","GAME OVER");return;}
@@ -619,7 +619,7 @@ const discordPresence = (() => {
   if(!s)return;
   if(game==="dino"){
    background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#9a7cc8");
-   s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+8,o.y+5,20,8,ink);rect(o.x+12,o.y+flap,11,4,purple);rect(o.x+3,o.y+6,8,4,ink);rect(o.x+26,o.y+7,5,3,yellow);}else{rect(o.x,G-o.h,8,o.h,cactusColor);rect(o.x+8,G-o.h+7,10,5,cactusColor);rect(o.x+10,G-o.h+15,7,o.h-15,cactusColor);}});
+   s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+7,o.y+7,20,8,ink);rect(o.x+12,o.y+flap,12,5,purple);rect(o.x+2,o.y+7,9,5,ink);rect(o.x+25,o.y+7,6,4,ink);rect(o.x+28,o.y+8,4,3,yellow);}else{rect(o.x,G-o.h,8,o.h,cactusColor);rect(o.x+8,G-o.h+7,10,5,cactusColor);rect(o.x+10,G-o.h+15,7,o.h-15,cactusColor);}});
    if(s.duck){
     const y=s.y+5;
     // Squat version of the same goofy PAUZE hoodie mascot.
