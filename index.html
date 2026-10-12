@@ -9,9 +9,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261009-7">
+  <link rel="stylesheet" href="styles.css?v=20261012-splash1">
 </head>
 <body>
+  <div id="pauze-intro-splash" class="pauze-intro-splash" role="status" aria-label="PAUZE intro" aria-live="polite">
+    <div class="pauze-splash-grain" aria-hidden="true"></div>
+    <div class="pauze-splash-art" aria-hidden="true">
+      <span class="pauze-splash-spray"></span>
+      <span class="pauze-splash-word">PAUZE</span>
+      <span class="pauze-splash-tag">DIGITAL STUDIO</span>
+    </div>
+  </div>
   <div class="noise" aria-hidden="true"></div>
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="Pauze home">PAUZE<span>®</span></a>
@@ -239,6 +247,22 @@ append("Do not invent data.")</code></pre>
     <div><a href="https://github.com/PauzeX-Developments" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div>
     <small>© <span id="year"></span> PAUZE. MADE WITH INTENTION.</small>
   </footer>
-  <script src="script.js?v=20261009-7" defer></script>
+  <script src="script.js?v=20261012-splash1" defer></script>
+  <script>
+    (() => {
+      const splash = document.getElementById("pauze-intro-splash");
+      if (!splash) return;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const duration = reducedMotion ? 700 : 3200;
+      document.documentElement.classList.add("pauze-splash-active");
+      window.setTimeout(() => {
+        splash.classList.add("is-leaving");
+        window.setTimeout(() => {
+          splash.remove();
+          document.documentElement.classList.remove("pauze-splash-active");
+        }, reducedMotion ? 100 : 650);
+      }, duration);
+    })();
+  </script>
 </body>
 </html>
