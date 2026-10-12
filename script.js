@@ -541,7 +541,7 @@ const discordPresence = (() => {
  const cv=document.querySelector("#dino-canvas"),stage=document.querySelector("#dino-stage"),overlay=document.querySelector("#dino-overlay"),picker=document.querySelector(".arcade-game-picker"),touch=document.querySelector("#arcade-touch-controls"),start=document.querySelector("#dino-start"),restart=document.querySelector("#dino-restart");
  const heading=document.querySelector("#arcade-game-title"),status=document.querySelector("#dino-state"),scoreEl=document.querySelector("#dino-score"),bestEl=document.querySelector("#dino-best"),modeEl=document.querySelector("#arcade-mode-label"),modeVal=document.querySelector("#arcade-mode-value"),help=document.querySelector("#arcade-instructions"),overTitle=document.querySelector("#dino-overlay-title"),overCopy=document.querySelector("#dino-overlay-copy");
  if(!cv||!stage||!overlay||!picker||!start)return;const c=cv.getContext("2d");if(!c){overTitle.textContent="GAME UNAVAILABLE";start.hidden=true;return;}
- const W=900,H=260,G=218,ink="#291c3a",muted="#604187",purple="#604187",green="#9a7cc8",pink="#e6ddf5",yellow="#f8f5fd",white="#ffffff",blue="#e6ddf5",bgc="#f8f5fd";
+ const W=900,H=260,G=218,ink="#291c3a",muted="#604187",purple="#604187",green="#9a7cc8",cactusColor="#4a3467",pink="#e6ddf5",yellow="#f8f5fd",white="#ffffff",blue="#e6ddf5",bgc="#f8f5fd";
  const config={
  dino:["DINO RUN / ENDLESS MODE","Jump obstacles and beat your best score.","START RUN","SPACE / ↑ JUMP • ↓ DUCK • P PAUSE","SPEED",[["jump","JUMP ↑"],["duck","DUCK ↓"]]],
  snake:["SNAKE.EXE / SURVIVAL MODE","Eat the data. Grow the line. Avoid yourself and the walls.","START SNAKE","ARROWS / WASD MOVE • P PAUSE","PACE",[["up","UP ↑"],["left","← LEFT"],["down","DOWN ↓"],["right","RIGHT →"]]],
@@ -588,7 +588,7 @@ const discordPresence = (() => {
   }else if(game==="snake"){
    s.tick+=dt;if(s.tick>=Math.max(.065,.14-score*.0004)){s.tick=0;s.dir=s.next;const h={x:s.body[0].x+s.dir.x,y:s.body[0].y+s.dir.y};
     if(h.x<0||h.x>=s.cols||h.y<0||h.y>=s.rows||s.body.some((p,i)=>i<s.body.length-1&&p.x===h.x&&p.y===h.y)){finish("SYSTEM CRASH.","Score "+fmt(score)+". The line hit a wall or itself.","GAME OVER");return;}
-    s.body.unshift(h);if(h.x===s.food.x&&h.y===s.food.y){score+=10;s.food=food();stats();}else s.body.pop();
+    s.body.unshift(h);if(h.x===s.food.x&&h.y===s.food.y){score+=10;if(s.body.length>=s.cols*s.rows){finish("BOARD CLEARED.","You filled all "+(s.cols*s.rows)+" cells. Perfect run.","SYSTEM CLEAR");return;}s.food=food();stats();}else s.body.pop();
    }
   }else if(game==="space"){
    if(k.left)s.x-=350*dt;if(k.right)s.x+=350*dt;s.x=Math.max(22,Math.min(W-22,s.x));s.cool-=dt;s.spawn-=dt;
@@ -619,7 +619,7 @@ const discordPresence = (() => {
   if(!s)return;
   if(game==="dino"){
    background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#9a7cc8");
-   s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+8,o.y+5,20,8,ink);rect(o.x+12,o.y+flap,11,4,purple);rect(o.x+3,o.y+6,8,4,ink);rect(o.x+26,o.y+7,5,3,yellow);}else{rect(o.x,G-o.h,5,o.h,green);rect(o.x+5,G-o.h+7,13,5,green);rect(o.x+8,G-o.h+15,5,o.h-15,green);}});
+   s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+8,o.y+5,20,8,ink);rect(o.x+12,o.y+flap,11,4,purple);rect(o.x+3,o.y+6,8,4,ink);rect(o.x+26,o.y+7,5,3,yellow);}else{rect(o.x,G-o.h,8,o.h,cactusColor);rect(o.x+8,G-o.h+7,14,5,cactusColor);rect(o.x+10,G-o.h+15,7,o.h-15,cactusColor);}});
    if(s.duck){const y=s.y+13;rect(s.x+2,y+16,31,16,ink);rect(s.x+22,y+6,17,17,ink);rect(s.x+33,y+11,11,7,ink);rect(s.x+34,y+8,3,3,white);}else{rect(s.x+5,s.y+9,24,25,ink);rect(s.x+18,s.y,17,18,ink);rect(s.x+28,s.y+7,13,8,ink);rect(s.x+23,s.y+4,4,4,white);rect(s.x+7,s.y+31,7,7,ink);rect(s.x+20,s.y+31,7,7,ink);}txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
   }else if(game==="snake"){
    background("#f8f5fd");rect(0,0,W,H,"#e6ddf5");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#e6ddf5");

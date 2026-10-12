@@ -896,3 +896,6 @@ button,a,summary{ -webkit-tap-highlight-color:transparent }
 #pauze-intro-splash .pauze-spray{stroke:#7957ad}
 #pauze-intro-splash .pauze-drip{stroke:#7957ad}
 #pauze-intro-splash .pauze-splash-tag{background:#7957ad;color:#ffffff;border-color:#291c3a;box-shadow:4px 4px 0 #c1afe5}
+
+/* Mobile arcade canvas: give the games usable vertical space on narrow screens. */
+@media(max-width:700px){#dino-canvas{height:clamp(150px,45vw,210px);aspect-ratio:auto}}
