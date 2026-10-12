@@ -67,9 +67,9 @@ const discordPresence = (() => {
     const words = String(title || "Music").trim().split(/\s+/).filter(Boolean);
     const initials = (words.slice(0, 2).map((word) => word[0]).join("") || "♪").toUpperCase();
     const palettes = [
-      ["#645bff", "#29d6d2"], ["#ff8abe", "#ffd65e"],
-      ["#99e3fa", "#a98cff"], ["#ffd49b", "#ff8a72"],
-      ["#b5f28c", "#5ad6c8"]
+      ["#604187", "#c1afe5"], ["#9a7cc8", "#e6ddf5"],
+      ["#e6ddf5", "#7957ad"], ["#e6ddf5", "#9a7cc8"],
+      ["#e6ddf5", "#c1afe5"]
     ];
     const hashText = `${title || ""} ${artist || ""}`;
     const hash = Array.from(hashText).reduce((sum, char) => (sum * 31 + char.charCodeAt(0)) >>> 0, 7);
@@ -541,7 +541,7 @@ const discordPresence = (() => {
  const cv=document.querySelector("#dino-canvas"),stage=document.querySelector("#dino-stage"),overlay=document.querySelector("#dino-overlay"),picker=document.querySelector(".arcade-game-picker"),touch=document.querySelector("#arcade-touch-controls"),start=document.querySelector("#dino-start"),restart=document.querySelector("#dino-restart");
  const heading=document.querySelector("#arcade-game-title"),status=document.querySelector("#dino-state"),scoreEl=document.querySelector("#dino-score"),bestEl=document.querySelector("#dino-best"),modeEl=document.querySelector("#arcade-mode-label"),modeVal=document.querySelector("#arcade-mode-value"),help=document.querySelector("#arcade-instructions"),overTitle=document.querySelector("#dino-overlay-title"),overCopy=document.querySelector("#dino-overlay-copy");
  if(!cv||!stage||!overlay||!picker||!start)return;const c=cv.getContext("2d");if(!c){overTitle.textContent="GAME UNAVAILABLE";start.hidden=true;return;}
- const W=900,H=260,G=218,ink="#17121f",muted="#786c82",purple="#6656ff",green="#d8f99d",pink="#ffc7e8",yellow="#fff08b",white="#fffdf8",blue="#bdeaff",bgc="#f3eaff";
+ const W=900,H=260,G=218,ink="#291c3a",muted="#604187",purple="#604187",green="#f8f5fd",pink="#e6ddf5",yellow="#f8f5fd",white="#ffffff",blue="#e6ddf5",bgc="#f8f5fd";
  const config={
  dino:["DINO RUN / ENDLESS MODE","Jump obstacles and beat your best score.","START RUN","SPACE / ↑ JUMP • ↓ DUCK • P PAUSE","SPEED",[["jump","JUMP ↑"],["duck","DUCK ↓"]]],
  snake:["SNAKE.EXE / SURVIVAL MODE","Eat the data. Grow the line. Avoid yourself and the walls.","START SNAKE","ARROWS / WASD MOVE • P PAUSE","PACE",[["up","UP ↑"],["left","← LEFT"],["down","DOWN ↓"],["right","RIGHT →"]]],
@@ -562,7 +562,7 @@ const discordPresence = (() => {
   modeVal.textContent=game==="dino"?(s?(s.speed/300).toFixed(1):"1.0")+"×":game==="snake"?(1+Math.floor(score/50))+"×":game==="space"?String(s?s.wave:1).padStart(2,"0"):game==="breakout"?String(s?s.level:1).padStart(2,"0"):game==="memory"?(s?s.pairs:0)+"/8":(s?s.cpu:0)+"/5";};
  const save=()=>{if(score>best){best=score;try{localStorage.setItem(storage(),String(score));}catch{}}};
  const finish=(title,copy,state)=>{running=false;paused=false;ended=true;save();stats();stat(state||"GAME OVER");show("SESSION ENDED",title,copy,"PLAY AGAIN");stage.focus({preventScroll:true});};
- const bricks=()=>{let a=[],cols=14,w=48,gap=8,left=(W-(cols*w+(cols-1)*gap))/2,rows=Math.min(3+s.level,6),colors=[pink,blue,yellow,green,"#ffd5a8",purple];for(let r=0;r<rows;r++)for(let col=0;col<cols;col++)a.push({x:left+col*(w+gap),y:34+r*19,w,h:12,on:true,col:colors[r%colors.length]});return a;};
+ const bricks=()=>{let a=[],cols=14,w=48,gap=8,left=(W-(cols*w+(cols-1)*gap))/2,rows=Math.min(3+s.level,6),colors=[pink,blue,yellow,green,"#e6ddf5",purple];for(let r=0;r<rows;r++)for(let col=0;col<cols;col++)a.push({x:left+col*(w+gap),y:34+r*19,w,h:12,on:true,col:colors[r%colors.length]});return a;};
  const food=()=>{let p;do{p={x:Math.floor(rnd(0,s.cols)),y:Math.floor(rnd(0,s.rows))};}while(s.body.some(b=>b.x===p.x&&b.y===p.y));return p;};
  const reset=()=>{
   score=0;time=0;last=0;ended=false;paused=false;clearKeys();best=bestRead();
@@ -618,23 +618,23 @@ const discordPresence = (() => {
  const draw=()=>{
   if(!s)return;
   if(game==="dino"){
-   background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#b4a1ce");
+   background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#9a7cc8");
    s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+8,o.y+5,20,8,ink);rect(o.x+12,o.y+flap,11,4,purple);rect(o.x+3,o.y+6,8,4,ink);rect(o.x+26,o.y+7,5,3,yellow);}else{rect(o.x,G-o.h,5,o.h,green);rect(o.x+5,G-o.h+7,13,5,green);rect(o.x+8,G-o.h+15,5,o.h-15,green);}});
    if(s.duck){const y=s.y+13;rect(s.x+2,y+16,31,16,ink);rect(s.x+22,y+6,17,17,ink);rect(s.x+33,y+11,11,7,ink);rect(s.x+34,y+8,3,3,white);}else{rect(s.x+5,s.y+9,24,25,ink);rect(s.x+18,s.y,17,18,ink);rect(s.x+28,s.y+7,13,8,ink);rect(s.x+23,s.y+4,4,4,white);rect(s.x+7,s.y+31,7,7,ink);rect(s.x+20,s.y+31,7,7,ink);}txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
   }else if(game==="snake"){
-   background("#f7f1ff");rect(0,0,W,H,"#eee2fb");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#dfd1f1");
+   background("#f8f5fd");rect(0,0,W,H,"#e6ddf5");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#e6ddf5");
    rect(s.food.x*s.cell+4,s.food.y*s.cell+4,12,12,pink);s.body.forEach((p,i)=>{rect(p.x*s.cell+1,p.y*s.cell+1,18,18,i?green:purple);if(!i){rect(p.x*s.cell+5,p.y*s.cell+5,3,3,white);rect(p.x*s.cell+12,p.y*s.cell+5,3,3,white);}});
   }else if(game==="space"){
-   background("#eee8ff");for(let i=0;i<55;i++)rect((i*167+31)%W,(i*47+19)%H,2,2,"#c7b5e5");s.shots.forEach(b=>rect(b.x-2,b.y-8,4,12,purple));
+   background("#f8f5fd");for(let i=0;i<55;i++)rect((i*167+31)%W,(i*47+19)%H,2,2,"#c1afe5");s.shots.forEach(b=>rect(b.x-2,b.y-8,4,12,purple));
    s.foes.forEach(f=>{rect(f.x-f.size,f.y-f.size,f.size*2,f.size*2,pink);rect(f.x-7,f.y-2,14,5,ink);});rect(s.x-4,204,8,25,ink);rect(s.x-14,214,28,13,purple);rect(s.x-8,208,16,9,blue);txt("DEFENCE / WAVE "+s.wave,W-18,23,11,muted,"right");
   }else if(game==="breakout"){
-   background("#f7f1ff");rect(16,12,W-32,H-24,"#eee5fb");s.bricks.forEach(b=>{if(b.on){rect(b.x,b.y,b.w,b.h,b.col);rect(b.x,b.y,b.w,2,ink);}});
+   background("#f8f5fd");rect(16,12,W-32,H-24,"#f8f5fd");s.bricks.forEach(b=>{if(b.on){rect(b.x,b.y,b.w,b.h,b.col);rect(b.x,b.y,b.w,2,ink);}});
    rect(s.paddle-58,240,116,8,ink);rect(s.paddle-16,242,32,4,yellow);rect(s.ball.x-s.ball.r,s.ball.y-s.ball.r,s.ball.r*2,s.ball.r*2,purple);txt("LIVES / "+s.lives,W-22,H-12,10,muted,"right");
   }else if(game==="memory"){
    background();txt("MEMORY / MATCH THE PAIRS",W/2,18,10,muted,"center");const cw=125,ch=40,gx=14,gy=11,left=(W-(cw*4+gx*3))/2,top=29,icons=["⌘","⌁","⟡","⌬","⏣","⎔","⧉","◈"];
-   s.cards.forEach((a,i)=>{const x=left+(i%4)*(cw+gx),y=top+Math.floor(i/4)*(ch+gy);rect(x+2,y+3,cw,ch,ink);rect(x,y,cw,ch,a.done?green:a.open?yellow:white);rect(x,y,cw,3,ink);txt(a.done||a.open?a.v:icons[i%8],x+cw/2,y+27,a.done||a.open?23:17,a.done||a.open?ink:"#b5a8c5","center");});txt("TURNS / "+s.turns,W/2,H-8,10,muted,"center");
+   s.cards.forEach((a,i)=>{const x=left+(i%4)*(cw+gx),y=top+Math.floor(i/4)*(ch+gy);rect(x+2,y+3,cw,ch,ink);rect(x,y,cw,ch,a.done?green:a.open?yellow:white);rect(x,y,cw,3,ink);txt(a.done||a.open?a.v:icons[i%8],x+cw/2,y+27,a.done||a.open?23:17,a.done||a.open?ink:"#9a7cc8","center");});txt("TURNS / "+s.turns,W/2,H-8,10,muted,"center");
   }else if(game==="pong"){
-   background("#f1e9ff");for(let y=12;y<H;y+=19)rect(W/2-2,y,4,10,"#cbbce2");rect(20,s.y-s.ph/2,11,s.ph,purple);rect(W-31,s.cpuY-s.ph/2,11,s.ph,ink);rect(s.x-6,s.ballY-6,12,12,pink);txt(String(s.you),W/2-42,40,20,ink,"center");txt(String(s.cpu),W/2+42,40,20,ink,"center");txt("YOU",40,22,9,muted);txt("CPU",W-40,22,9,muted,"right");
+   background("#f8f5fd");for(let y=12;y<H;y+=19)rect(W/2-2,y,4,10,"#c1afe5");rect(20,s.y-s.ph/2,11,s.ph,purple);rect(W-31,s.cpuY-s.ph/2,11,s.ph,ink);rect(s.x-6,s.ballY-6,12,12,pink);txt(String(s.you),W/2-42,40,20,ink,"center");txt(String(s.cpu),W/2+42,40,20,ink,"center");txt("YOU",40,22,9,muted);txt("CPU",W-40,22,9,muted,"right");
   }
  };
  const loop=t=>{if(!running||paused)return;if(!last)last=t;const dt=Math.min(.032,(t-last)/1000||0);last=t;update(dt);draw();if(running&&!paused)raf=requestAnimationFrame(loop);};
