@@ -10,63 +10,80 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* Critical splash styles: keep the intro visible even if the external stylesheet is delayed. */
-    #pauze-intro-splash{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;overflow:hidden;background:#050505;color:#fff;opacity:1;visibility:visible}
-    #pauze-intro-splash .pauze-splash-grain{position:absolute;inset:-50%;pointer-events:none;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
-    #pauze-intro-splash .pauze-splash-art{position:relative;width:min(96vw,900px);padding:18px;animation:pauze-graffiti-in .5s ease-out both}
+    /* Critical intro styling: bold cel-shaded NYC graffiti, inspired by arcade street-art games. */
+    #pauze-intro-splash{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;overflow:hidden;background:#101014;color:#fff;opacity:1;visibility:visible;isolation:isolate}
+    #pauze-intro-splash:before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(125deg,transparent 0 38%,rgba(255,43,151,.08) 38.2% 38.8%,transparent 39%),repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 5px),#111116}
+    #pauze-intro-splash .pauze-splash-grain{position:absolute;inset:0;pointer-events:none;opacity:.18;background-image:radial-gradient(#fff 0.7px,transparent .9px);background-size:5px 5px;mask-image:linear-gradient(110deg,#000,transparent 75%)}
+    #pauze-intro-splash .pauze-splash-art{position:relative;width:min(98vw,1040px);padding:12px;animation:pauze-street-drop .7s cubic-bezier(.16,1.25,.3,1) both}
     #pauze-intro-splash .pauze-draw-svg{display:block;width:100%;height:auto;overflow:visible}
-    #pauze-intro-splash .pauze-lettering{font-family:Impact,'Arial Black',system-ui,sans-serif;font-weight:1000;font-style:italic;letter-spacing:-5px;fill:transparent;stroke:#f5f0ff;stroke-width:2.5;stroke-linejoin:round;stroke-dasharray:3000;stroke-dashoffset:3000;filter:drop-shadow(5px 5px 0 #7b35ff) drop-shadow(10px 10px 0 #ff2f9a);animation:pauze-write-word 1.65s .35s ease-in-out forwards}
-    #pauze-intro-splash .pauze-lettering-fill{fill:#f5f0ff;opacity:0;animation:pauze-fill-word .25s 1.65s ease-out forwards}
-    #pauze-intro-splash .pauze-artist-line{fill:#09070d;stroke:#f5f0ff;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
-    #pauze-intro-splash .pauze-artist-accent{fill:none;stroke:#ff2f9a;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
-    #pauze-intro-splash .pauze-artist-arm{transform-origin:190px 190px;animation:pauze-spray-arm 1.1s .2s ease-in-out infinite alternate}
-    #pauze-intro-splash .pauze-can{fill:#7b35ff;stroke:#fff;stroke-width:3}
-    #pauze-intro-splash .pauze-spray-stream{fill:none;stroke:#ff2f9a;stroke-width:5;stroke-linecap:round;stroke-dasharray:3 12;animation:pauze-spray-stream .2s linear infinite}
-    #pauze-intro-splash .pauze-splash-tag{margin-top:0;padding:5px 12px;border:1px solid rgba(255,255,255,.65);font:700 10px/1.4 'Space Mono',monospace;letter-spacing:.42em;color:#fff;text-align:center}
-    #pauze-intro-splash.is-leaving .pauze-splash-art{transform:scale(1.05);filter:blur(5px);transition:transform .55s ease,filter .55s ease}
-    @keyframes pauze-write-word{0%{stroke-dashoffset:3000}85%{fill:transparent}100%{stroke-dashoffset:0;fill:#f5f0ff}}
-    @keyframes pauze-fill-word{to{opacity:1}}
-    @keyframes pauze-spray-arm{from{transform:rotate(-8deg)}to{transform:rotate(9deg)}}
-    @keyframes pauze-spray-stream{to{stroke-dashoffset:-30}}
+    #pauze-intro-splash .pauze-wall{fill:#24232a;stroke:#08080a;stroke-width:5}
+    #pauze-intro-splash .pauze-wall-line{fill:none;stroke:#45424c;stroke-width:3}
+    #pauze-intro-splash .pauze-wildstyle{font-family:Impact,'Arial Black',system-ui,sans-serif;font-size:170px;font-weight:1000;font-style:italic;letter-spacing:-9px;stroke:#09090d;stroke-width:18;stroke-linejoin:round;paint-order:stroke fill;fill:#d9ff32;filter:drop-shadow(8px 8px 0 #ff2b97);transform:skewX(-10deg);transform-origin:center;stroke-dasharray:2600;stroke-dashoffset:2600;animation:pauze-tag-write 1.3s .45s cubic-bezier(.4,0,.2,1) forwards}
+    #pauze-intro-splash .pauze-wildstyle-highlight{font-family:Impact,'Arial Black',system-ui,sans-serif;font-size:170px;font-weight:1000;font-style:italic;letter-spacing:-9px;fill:none;stroke:#f7fff0;stroke-width:3;stroke-linejoin:round;stroke-dasharray:2600;stroke-dashoffset:2600;animation:pauze-tag-write 1.3s .45s cubic-bezier(.4,0,.2,1) forwards}
+    #pauze-intro-splash .pauze-character-outline{fill:#111116;stroke:#f7fff0;stroke-width:7;stroke-linejoin:round;stroke-linecap:round}
+    #pauze-intro-splash .pauze-character-color{fill:#ff2b97;stroke:#09090d;stroke-width:5;stroke-linejoin:round}
+    #pauze-intro-splash .pauze-spray-can{fill:#d9ff32;stroke:#09090d;stroke-width:4}
+    #pauze-intro-splash .pauze-spray-arm{transform-box:fill-box;transform-origin:20% 50%;animation:pauze-arm-tag .7s .2s ease-in-out infinite alternate}
+    #pauze-intro-splash .pauze-spray{fill:none;stroke:#d9ff32;stroke-width:5;stroke-linecap:round;stroke-dasharray:2 12;animation:pauze-spray-burst .18s linear infinite}
+    #pauze-intro-splash .pauze-drip{stroke:#d9ff32;stroke-width:5;stroke-linecap:round;stroke-dasharray:90;stroke-dashoffset:90;animation:pauze-drip-down .45s 1.45s ease-out forwards}
+    #pauze-intro-splash .pauze-splash-tag{display:inline-block;margin:2px 0 0;padding:6px 14px;background:#d9ff32;color:#111116;border:3px solid #09090d;box-shadow:4px 4px 0 #ff2b97;font:900 10px/1.3 'Space Mono',monospace;letter-spacing:.32em;text-align:center;transform:rotate(-2deg);animation:pauze-label-pop .45s 1.2s both}
     #pauze-intro-splash.is-leaving{opacity:0;visibility:hidden;transition:opacity .55s ease,visibility .55s}
-    @media(max-width:480px){#pauze-intro-splash .pauze-splash-art{width:100vw;padding:4px}#pauze-intro-splash .pauze-splash-tag{font-size:8px;letter-spacing:.3em;margin-top:0}}
+    #pauze-intro-splash.is-leaving .pauze-splash-art{transform:scale(1.12) rotate(-2deg);filter:blur(8px);transition:transform .55s ease,filter .55s ease}
+    @keyframes pauze-street-drop{from{opacity:0;transform:translateY(35px) scale(.7) rotate(-5deg);filter:blur(10px)}to{opacity:1;transform:translateY(0) scale(1) rotate(0);filter:blur(0)}}
+    @keyframes pauze-tag-write{to{stroke-dashoffset:0}}
+    @keyframes pauze-arm-tag{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+    @keyframes pauze-spray-burst{to{stroke-dashoffset:-28}}
+    @keyframes pauze-drip-down{to{stroke-dashoffset:0}}
+    @keyframes pauze-label-pop{from{opacity:0;transform:translateY(12px) rotate(-5deg)}to{opacity:1;transform:translateY(0) rotate(-2deg)}}
+    @media(max-width:600px){#pauze-intro-splash .pauze-splash-art{width:100vw;padding:2px}#pauze-intro-splash .pauze-splash-tag{font-size:8px;letter-spacing:.2em;margin-top:0}#pauze-intro-splash .pauze-wildstyle,#pauze-intro-splash .pauze-wildstyle-highlight{font-size:170px;letter-spacing:-12px}}
+    @media(prefers-reduced-motion:reduce){#pauze-intro-splash .pauze-splash-art,#pauze-intro-splash .pauze-wildstyle,#pauze-intro-splash .pauze-wildstyle-highlight,#pauze-intro-splash .pauze-spray,#pauze-intro-splash .pauze-splash-tag{animation:none;stroke-dashoffset:0}}
   </style>
-  <link rel="stylesheet" href="styles.css?v=20261012-splash1">
+  <link rel="stylesheet" href="styles.css?v=20261012-jets2">
 </head>
 <body>
-  <div id="pauze-intro-splash" class="pauze-intro-splash" role="status" aria-label="PAUZE intro" aria-live="polite">
+  <div id="pauze-intro-splash" class="pauze-intro-splash" role="status" aria-label="PAUZE street-art intro" aria-live="polite">
     <div class="pauze-splash-grain" aria-hidden="true"></div>
     <div class="pauze-splash-art" aria-hidden="true">
-      <svg class="pauze-draw-svg" viewBox="0 0 900 390" role="presentation">
+      <svg class="pauze-draw-svg" viewBox="0 0 1000 430" role="presentation">
         <defs>
-          <linearGradient id="pauze-spray-paint" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f0ff"/><stop offset=".55" stop-color="#c9a4ff"/><stop offset="1" stop-color="#ff2f9a"/></linearGradient>
-          <filter id="pauze-spray-glow"><feGaussianBlur stdDeviation="5"/></filter>
+          <linearGradient id="pauze-wall-light" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#383540"/><stop offset="1" stop-color="#17171d"/></linearGradient>
+          <linearGradient id="pauze-lime-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4ff9c"/><stop offset=".45" stop-color="#d9ff32"/><stop offset="1" stop-color="#82d927"/></linearGradient>
         </defs>
-        <g class="pauze-artist" transform="translate(10 28)">
-          <path d="M94 100 Q62 104 58 139 L45 206 Q42 224 60 227 L113 224 L135 165 L152 216 L180 204 L155 132 Q145 102 120 98Z" fill="#17131e" stroke="#f5f0ff" stroke-width="6" stroke-linejoin="round"/>
-          <path d="M67 105 Q45 80 69 51 Q91 27 119 48 L133 76 L119 101Z" fill="#24202c" stroke="#f5f0ff" stroke-width="6"/>
-          <path d="M61 68 Q85 18 129 56 L139 77 L118 71 L97 57 L78 81Z" fill="#7b35ff" stroke="#f5f0ff" stroke-width="5" stroke-linejoin="round"/>
-          <path d="M69 77 L120 78 L116 92 L76 91Z" fill="#ff2f9a" stroke="#f5f0ff" stroke-width="3"/>
-          <path d="M67 224 L60 282 L83 282 L104 229 M130 225 L147 279 L170 277 L163 215" fill="#09070d" stroke="#f5f0ff" stroke-width="7" stroke-linejoin="round"/>
-          <path d="M51 283 L85 283 M143 280 L176 280" stroke="#ff2f9a" stroke-width="9" stroke-linecap="round"/>
-          <g class="pauze-artist-arm">
-            <path d="M127 121 Q159 133 176 161 L202 143" fill="none" stroke="#f5f0ff" stroke-width="18" stroke-linecap="round"/>
-            <path d="M127 121 Q159 133 176 161 L202 143" fill="none" stroke="#17131e" stroke-width="10" stroke-linecap="round"/>
-            <rect class="pauze-can" x="193" y="128" width="32" height="20" rx="5" transform="rotate(-25 209 138)"/>
-            <path d="M199 128 L199 123 L217 123 L217 128" fill="#fff" stroke="#fff" stroke-width="2"/>
-            <path class="pauze-spray-stream" d="M226 132 Q260 107 280 112"/>
-            <path class="pauze-spray-stream" d="M228 138 Q261 140 281 132"/>
-            <path class="pauze-spray-stream" d="M225 143 Q258 164 280 151"/>
+        <rect class="pauze-wall" x="25" y="25" width="950" height="365" rx="8" fill="url(#pauze-wall-light)"/>
+        <path class="pauze-wall-line" d="M25 120H975M25 250H975M25 330H975M180 25V120M650 120V250M350 250V390M825 250V390"/>
+        <path d="M45 45h130v6H45zM830 355h115v5H830z" fill="#ff2b97"/>
+        <g opacity=".85" fill="#d9ff32">
+          <circle cx="80" cy="75" r="4"/><circle cx="95" cy="88" r="2"/><circle cx="905" cy="68" r="5"/><circle cx="923" cy="83" r="2"/>
+        </g>
+        <g transform="translate(50 62) rotate(-7 105 155)">
+          <path class="pauze-character-outline" d="M69 119Q38 131 39 169L25 244Q23 259 39 263L86 263L105 202L121 260L157 252L144 165Q140 125 111 117Z"/>
+          <path class="pauze-character-color" d="M46 126Q18 92 43 55Q68 19 111 40L139 76L124 123Z"/>
+          <path class="pauze-character-outline" d="M40 72Q48 23 98 31L129 49L142 83L117 71L89 58L62 91Z"/>
+          <path d="M41 81L124 79L119 98L48 101Z" fill="#d9ff32" stroke="#09090d" stroke-width="5"/>
+          <path d="M48 263L42 318L70 318L88 263M120 258L140 316L168 313L154 252" fill="#111116" stroke="#f7fff0" stroke-width="7" stroke-linejoin="round"/>
+          <path d="M33 319L75 319M134 317L176 314" stroke="#ff2b97" stroke-width="11" stroke-linecap="round"/>
+          <g class="pauze-spray-arm">
+            <path d="M113 141Q147 146 174 166L207 137" fill="none" stroke="#f7fff0" stroke-width="21" stroke-linecap="round"/>
+            <path d="M113 141Q147 146 174 166L207 137" fill="none" stroke="#111116" stroke-width="12" stroke-linecap="round"/>
+            <rect class="pauze-spray-can" x="195" y="121" width="38" height="25" rx="5" transform="rotate(-23 214 133)"/>
+            <path d="M203 122V115H224V122" fill="#f7fff0" stroke="#09090d" stroke-width="3"/>
+            <path class="pauze-spray" d="M231 128Q270 104 300 113M233 136Q275 139 302 132M230 143Q266 166 297 155"/>
           </g>
         </g>
-        <g transform="translate(255 72) rotate(-4 300 100)">
-          <text class="pauze-lettering" x="0" y="142" font-size="142" textLength="610" lengthAdjust="spacingAndGlyphs">PAUZE</text>
-          <text class="pauze-lettering-fill" x="0" y="142" font-size="142" textLength="610" lengthAdjust="spacingAndGlyphs">PAUZE</text>
-          <path d="M4 166 Q130 188 250 166 T590 166" fill="none" stroke="#ff2f9a" stroke-width="8" stroke-linecap="round" stroke-dasharray="620" stroke-dashoffset="620"><animate attributeName="stroke-dashoffset" from="620" to="0" dur=".55s" begin="1.6s" fill="freeze"/></path>
+        <g transform="translate(270 90) rotate(-5 330 105)">
+          <text class="pauze-wildstyle" x="0" y="145" textLength="650" lengthAdjust="spacingAndGlyphs" fill="url(#pauze-lime-fill)">PAUZE</text>
+          <text class="pauze-wildstyle-highlight" x="0" y="145" textLength="650" lengthAdjust="spacingAndGlyphs">PAUZE</text>
+          <path d="M15 170L93 185L165 169L230 185L307 168L385 185L463 166L550 180L624 163" fill="none" stroke="#ff2b97" stroke-width="13" stroke-linejoin="bevel"/>
+          <path class="pauze-drip" d="M105 180V225M310 177V246M504 175V220M594 171V205" fill="none"/>
+          <path d="M28 205L52 190L73 199L91 186L113 197" fill="none" stroke="#f7fff0" stroke-width="4"/>
         </g>
-        <g fill="#ff2f9a"><circle cx="285" cy="188" r="5"><animate attributeName="opacity" values="0;1;.2;1" dur=".35s" repeatCount="indefinite"/></circle><circle cx="760" cy="113" r="4"><animate attributeName="opacity" values="0;.8;.1" dur=".4s" repeatCount="indefinite"/></circle></g>
+        <g fill="#ff2b97" stroke="#09090d" stroke-width="3">
+          <path d="M285 66l10 18-16 1z"><animateTransform attributeName="transform" type="translate" values="0 0;0 8;0 0" dur=".8s" repeatCount="indefinite"/></path>
+          <circle cx="875" cy="145" r="6"><animate attributeName="r" values="4;7;4" dur=".5s" repeatCount="indefinite"/></circle>
+          <circle cx="835" cy="294" r="4"/>
+        </g>
       </svg>
-      <div class="pauze-splash-tag">DIGITAL STUDIO</div>
+      <div class="pauze-splash-tag">NEW YORK ENERGY · DIGITAL STUDIO</div>
     </div>
   </div>
   <div class="noise" aria-hidden="true"></div>
