@@ -620,7 +620,37 @@ const discordPresence = (() => {
   if(game==="dino"){
    background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#9a7cc8");
    s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+8,o.y+5,20,8,ink);rect(o.x+12,o.y+flap,11,4,purple);rect(o.x+3,o.y+6,8,4,ink);rect(o.x+26,o.y+7,5,3,yellow);}else{rect(o.x,G-o.h,8,o.h,cactusColor);rect(o.x+8,G-o.h+7,10,5,cactusColor);rect(o.x+10,G-o.h+15,7,o.h-15,cactusColor);}});
-   if(s.duck){const y=s.y+13;rect(s.x+2,y+16,31,16,ink);rect(s.x+22,y+6,17,17,ink);rect(s.x+33,y+11,11,7,ink);rect(s.x+34,y+8,3,3,white);}else{rect(s.x+5,s.y+9,24,25,ink);rect(s.x+18,s.y,17,18,ink);rect(s.x+28,s.y+7,13,8,ink);rect(s.x+23,s.y+4,4,4,white);rect(s.x+7,s.y+31,7,7,ink);rect(s.x+20,s.y+31,7,7,ink);}txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
+   if(s.duck){
+    const y=s.y+5;
+    // Squat version of the same goofy PAUZE hoodie mascot.
+    rect(s.x+2,y+16,37,14,ink);rect(s.x+4,y+18,33,10,purple);
+    rect(s.x+1,y+19,7,8,ink);rect(s.x+3,y+21,4,4,pink);
+    rect(s.x+33,y+19,7,8,ink);rect(s.x+35,y+21,4,4,pink);
+    rect(s.x+24,y+2,18,18,ink);rect(s.x+27,y+5,12,12,pink);
+    rect(s.x+26,y+1,6,4,ink);rect(s.x+35,y+3,7,4,purple);
+    rect(s.x+28,y+7,5,5,white);rect(s.x+35,y+8,4,5,white);
+    rect(s.x+30,y+9,2,3,ink);rect(s.x+35,y+8,2,3,ink);
+    rect(s.x+31,y+14,8,2,ink);rect(s.x+33,y+16,3,3,white);rect(s.x+38,y+15,3,4,pink);
+    txt("PAUZE",s.x+19,y+25,5,yellow,"center");
+    rect(s.x+5,y+28,10,4,ink);rect(s.x+19,y+28,10,4,ink);
+   }else{
+    // A goofy, cross-eyed gremlin in a branded PAUZE hoodie.
+    rect(s.x+2,s.y+20,7,11,ink);rect(s.x+4,s.y+22,4,6,pink);
+    rect(s.x+32,s.y+20,8,10,ink);rect(s.x+34,s.y+22,5,5,pink);
+    rect(s.x+5,s.y+18,32,16,ink);rect(s.x+7,s.y+20,28,12,purple);
+    rect(s.x+13,s.y+31,5,5,ink);rect(s.x+25,s.y+31,5,5,ink);
+    rect(s.x+10,s.y+35,10,3,ink);rect(s.x+22,s.y+35,10,3,ink);
+    rect(s.x+7,s.y+1,30,21,ink);rect(s.x+10,s.y+4,24,14,pink);
+    rect(s.x+10,s.y-2,7,6,ink);rect(s.x+25,s.y-1,9,5,purple);
+    rect(s.x+6,s.y+6,5,7,purple);
+    rect(s.x+14,s.y+7,7,6,white);rect(s.x+25,s.y+6,7,7,white);
+    rect(s.x+18,s.y+8,2,4,ink);rect(s.x+26,s.y+9,2,4,ink);
+    rect(s.x+17,s.y+14,12,3,ink);rect(s.x+19,s.y+16,3,3,white);
+    rect(s.x+24,s.y+16,3,3,white);rect(s.x+29,s.y+14,4,5,pink);
+    txt("PAUZE",s.x+21,s.y+28,5,yellow,"center");
+    rect(s.x+16,s.y+29,3,2,pink);rect(s.x+24,s.y+29,3,2,pink);
+   }
+   txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
   }else if(game==="snake"){
    background("#f8f5fd");rect(0,0,W,H,"#e6ddf5");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#e6ddf5");
    rect(s.food.x*s.cell+4,s.food.y*s.cell+4,12,12,pink);s.body.forEach((p,i)=>{rect(p.x*s.cell+1,p.y*s.cell+1,18,18,i?green:purple);if(!i){rect(p.x*s.cell+5,p.y*s.cell+5,3,3,white);rect(p.x*s.cell+12,p.y*s.cell+5,3,3,white);}});
