@@ -619,7 +619,7 @@ const discordPresence = (() => {
   if(!s)return;
   if(game==="dino"){
    background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#9a7cc8");
-   s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+8,o.y+5,20,8,ink);rect(o.x+12,o.y+flap,11,4,purple);rect(o.x+3,o.y+6,8,4,ink);rect(o.x+26,o.y+7,5,3,yellow);}else{rect(o.x,G-o.h,8,o.h,cactusColor);rect(o.x+8,G-o.h+7,14,5,cactusColor);rect(o.x+10,G-o.h+15,7,o.h-15,cactusColor);}});
+   s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+8,o.y+5,20,8,ink);rect(o.x+12,o.y+flap,11,4,purple);rect(o.x+3,o.y+6,8,4,ink);rect(o.x+26,o.y+7,5,3,yellow);}else{rect(o.x,G-o.h,8,o.h,cactusColor);rect(o.x+8,G-o.h+7,10,5,cactusColor);rect(o.x+10,G-o.h+15,7,o.h-15,cactusColor);}});
    if(s.duck){const y=s.y+13;rect(s.x+2,y+16,31,16,ink);rect(s.x+22,y+6,17,17,ink);rect(s.x+33,y+11,11,7,ink);rect(s.x+34,y+8,3,3,white);}else{rect(s.x+5,s.y+9,24,25,ink);rect(s.x+18,s.y,17,18,ink);rect(s.x+28,s.y+7,13,8,ink);rect(s.x+23,s.y+4,4,4,white);rect(s.x+7,s.y+31,7,7,ink);rect(s.x+20,s.y+31,7,7,ink);}txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
   }else if(game==="snake"){
    background("#f8f5fd");rect(0,0,W,H,"#e6ddf5");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#e6ddf5");
