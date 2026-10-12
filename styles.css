@@ -514,3 +514,45 @@ body{background-image:radial-gradient(ellipse at 50% -18%,rgba(159,129,185,.09),
 @media(prefers-reduced-motion:reduce){
   .site-header,.project,.skill-chips span,.text-link,.hero-actions a{transition:none}
 }
+
+
+/* PAUZEPULSE PROJECT SHOWCASE — follows the existing card language */
+.project-list>.project.project-pulse{background:#ffc7e8!important}
+.pulse-visual{display:flex;flex-direction:column;gap:9px;padding:12px;background:linear-gradient(145deg,#272039,#151320 72%);color:#fffdf8}
+.pulse-visual-topline{display:flex;justify-content:space-between;gap:10px;padding-bottom:7px;border-bottom:1px solid rgba(255,255,255,.23);font-size:8px;font-weight:700;letter-spacing:.05em;color:#e7dafa}
+.pulse-screen{display:flex;flex:1;flex-direction:column;gap:7px;min-height:0}
+.pulse-brand{font-size:clamp(19px,2.3vw,27px);font-weight:700;letter-spacing:-.09em;line-height:1.05}
+.pulse-brand span{margin-left:6px;color:#d8f99d}
+.pulse-screen-label{margin:0;color:#c9bddb;font-size:7px;font-weight:700;letter-spacing:.1em}
+.pulse-player-count{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.pulse-player-count b{padding:5px 6px;border:1px solid rgba(255,255,255,.43);border-radius:5px;background:rgba(255,255,255,.06);font-size:7px;letter-spacing:.02em}
+.pulse-player-count b:nth-child(2){background:#d8f99d;color:#181422;border-color:#d8f99d}
+.pulse-game-preview{position:relative;display:flex;flex:1;min-height:90px;align-items:center;justify-content:space-around;overflow:hidden;border:1px solid rgba(216,249,157,.55);border-radius:8px;background:linear-gradient(180deg,rgba(102,86,255,.25),rgba(30,24,48,.65)),repeating-linear-gradient(0deg,transparent 0 18px,rgba(255,255,255,.05) 19px 20px)}
+.pulse-game-preview:before{position:absolute;inset:0;content:"";background:radial-gradient(ellipse at 50% 100%,rgba(216,249,157,.13),transparent 55%)}
+.pulse-game-target{position:absolute;top:19%;left:50%;width:42px;height:42px;border:2px solid #fff08b;border-radius:50%;transform:translateX(-50%);box-shadow:0 0 17px rgba(255,240,139,.34);animation:pulse-target-bob 2.4s ease-in-out infinite}
+.pulse-game-target:after{position:absolute;inset:10px;content:"";border:2px solid #fff08b;border-radius:50%}
+.pulse-game-player{position:absolute;bottom:14px;left:29%;width:19px;height:28px;border:2px solid #181422;border-radius:9px 9px 5px 5px;background:#ff8ab8;box-shadow:0 0 0 3px rgba(255,138,184,.15)}
+.pulse-game-player:before{position:absolute;top:-12px;left:2px;width:11px;height:11px;content:"";border:2px solid #181422;border-radius:50%;background:#ffd5a8}
+.pulse-game-player-two{left:auto;right:29%;background:#bdeaff}
+.pulse-game-player-two:before{background:#d8f99d}
+.pulse-game-caption{position:absolute;right:8px;bottom:6px;color:#d8f99d;font-size:6px;font-weight:700;letter-spacing:.08em}
+.pulse-build-block{margin-top:44px;padding-top:34px;border-top:2px dashed #b987d1}
+.pulse-build-heading{max-width:720px;margin:0 0 24px}
+.pulse-build-heading .kicker{color:#694b7d}
+.pulse-build-heading h3{margin:0;font-size:clamp(27px,4vw,40px);line-height:1.16;letter-spacing:-.065em}
+.pulse-build-heading>p:last-child{max-width:660px;margin:14px 0 0;color:#51445f;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.85}
+.pulse-build-grid .build-note:nth-child(1){border-top:5px solid #b3a0c8}
+.pulse-build-grid .build-note:nth-child(2){border-top:5px solid #b6bac8}
+.pulse-build-grid .build-note:nth-child(3){border-top:5px solid #b9c4a8}
+.pulse-build-grid .build-note pre{white-space:pre-wrap;overflow-wrap:anywhere}
+.pulse-build-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding-top:16px;border-top:2px solid #b987d1}
+.pulse-build-bottom>p{margin:0;color:#786c82;font-size:9px;font-weight:700;letter-spacing:.05em;line-height:1.8}
+@keyframes pulse-target-bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-5px)}}
+@media(max-width:800px){
+  .pulse-build-grid{grid-template-columns:1fr}
+  .pulse-build-bottom{align-items:flex-start;flex-direction:column}
+  .pulse-visual{min-height:235px}
+}
+@media(prefers-reduced-motion:reduce){
+  .pulse-game-target{animation:none}
+}
