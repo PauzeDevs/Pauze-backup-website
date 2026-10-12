@@ -38,7 +38,7 @@
     @media(max-width:600px){#pauze-intro-splash .pauze-splash-art{width:100vw;padding:2px}#pauze-intro-splash .pauze-splash-tag{font-size:8px;letter-spacing:.2em;margin-top:0}#pauze-intro-splash .pauze-wildstyle,#pauze-intro-splash .pauze-wildstyle-highlight{font-size:170px;letter-spacing:-12px}}
     @media(prefers-reduced-motion:reduce){#pauze-intro-splash .pauze-splash-art,#pauze-intro-splash .pauze-wildstyle,#pauze-intro-splash .pauze-wildstyle-highlight,#pauze-intro-splash .pauze-spray,#pauze-intro-splash .pauze-splash-tag{animation:none;stroke-dashoffset:0}}
   </style>
-  <link rel="stylesheet" href="styles.css?v=20261012-pauzepulse">
+  <link rel="stylesheet" href="styles.css?v=20261012-pulse-build1">
 </head>
 <body>
   <div id="pauze-intro-splash" class="pauze-intro-splash" role="status" aria-label="PAUZE street-art intro" aria-live="polite">
@@ -138,34 +138,11 @@
             <div class="visual weather-visual" aria-label="Abstract weather radar visual"><div class="radar-grid"></div><div class="radar-ring ring-a"></div><div class="radar-ring ring-b"></div><div class="radar-ring ring-c"></div><div class="radar-sweep"></div><span class="radar-label">LIVE / ATMOSPHERE</span><span class="radar-coords">26.85° N<br>80.95° E</span></div>
           </div>
         </article>
-        <article data-reveal="up" class="project project-pulse">
-          <div class="project-topline"><span>02 — ANDROID / LOCAL MULTIPLAYER</span><span class="project-state"><i></i> IN DEVELOPMENT</span></div>
-          <div class="project-main">
-            <div class="project-copy">
-              <p class="project-index">PX / 002</p><h3>Pauze<span>Pulse</span></h3>
-              <p>An offline-first Android arcade built around quick solo sessions and local multiplayer on one phone. The project is evolving toward a 23-game collection, with game-specific rules, responsive touch controls, animated arenas, scoring, and round results.</p>
-              <div class="tags"><span>ANDROID</span><span>KOTLIN</span><span>JETPACK COMPOSE</span><span>OFFLINE PLAY</span></div>
-              <a class="text-link" href="https://github.com/PauzeDevs/PauzePulse" target="_blank" rel="noreferrer">EXPLORE PAUZEPULSE <span>↗</span></a>
-            </div>
-            <div class="visual pulse-visual" role="img" aria-label="PauzePulse interface concept showing player-count selection and a mini-game arena">
-              <div class="pulse-visual-topline"><span>PAUZE / PULSE</span><span>ANDROID BUILD</span></div>
-              <div class="pulse-screen">
-                <div class="pulse-brand">PAUZE<span>PULSE</span></div>
-                <p class="pulse-screen-label">CHOOSE YOUR PLAYERS</p>
-                <div class="pulse-player-count"><b>01 PLAYER</b><b>02 PLAYERS</b><b>03 PLAYERS</b><b>04 PLAYERS</b></div>
-                <div class="pulse-game-preview">
-                  <span class="pulse-game-target"></span><span class="pulse-game-player"></span><span class="pulse-game-player pulse-game-player-two"></span>
-                  <span class="pulse-game-caption">LOCAL ARCADE / READY</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </article>
         <article data-reveal="up" class="project">
-          <div class="project-topline"><span>03 — CONTROL / DEVELOPER TOOLS</span><span class="project-state"><i></i> PROJECT</span></div>
+          <div class="project-topline"><span>02 — CONTROL / DEVELOPER TOOLS</span><span class="project-state"><i></i> PROJECT</span></div>
           <div class="project-main">
             <div class="project-copy">
-              <p class="project-index">PX / 003</p><h3>Pauze<span>Control</span></h3>
+              <p class="project-index">PX / 002</p><h3>Pauze<span>Control</span></h3>
               <p>A growing set of tools and utilities designed to make digital workflows feel more deliberate and less complicated.</p>
               <div class="tags"><span>TYPESCRIPT</span><span>TOOLS</span><span>UTILITY</span></div>
               <a class="text-link" href="https://github.com/PauzeX-Developments/PauzeControl" target="_blank" rel="noreferrer">VIEW ON GITHUB <span>↗</span></a>
@@ -174,10 +151,10 @@
           </div>
         </article>
         <article data-reveal="up" class="project project-last">
-          <div class="project-topline"><span>04 — EXPERIMENTS / OPEN SOURCE</span><span class="project-state"><i></i> ALWAYS EVOLVING</span></div>
+          <div class="project-topline"><span>03 — EXPERIMENTS / OPEN SOURCE</span><span class="project-state"><i></i> ALWAYS EVOLVING</span></div>
           <div class="project-main">
             <div class="project-copy">
-              <p class="project-index">PX / 004</p><h3>Other<span>Experiments</span></h3>
+              <p class="project-index">PX / 003</p><h3>Other<span>Experiments</span></h3>
               <p>Discord bots, community tools, developer experiments, and small ideas that turn into something useful.</p>
               <div class="tags"><span>OPEN SOURCE</span><span>DISCORD</span><span>PROTOTYPES</span></div>
               <a class="text-link" href="https://github.com/PauzeX-Developments" target="_blank" rel="noreferrer">BROWSE THE ORGANIZATION <span>↗</span></a>
@@ -226,11 +203,11 @@
     <section class="build-log section-wrap" id="build-log" data-reveal="up">
       <div class="section-heading" data-reveal="up">
         <div><p class="kicker">BUILD NOTES / 01</p><h2>BEHIND THE<br><span class="muted">BUILD.</span></h2></div>
-        <p class="section-note">Engineering notes from active projects — from weather data and AI briefing to Android gameplay systems.</p>
+        <p class="section-note">A closer look at how PauzeWeather is put together — from live forecast data to a short AI weather briefing.</p>
       </div>
       <div class="build-log-intro" data-reveal="up">
-        <span>PROJECT NOTES / WEATHER + ANDROID</span>
-        <p>Deep dives into the decisions, systems, and trade-offs behind projects currently being built.</p>
+        <span>PROJECT / PAUZEWEATHER</span>
+        <p>An Android weather client built with Kotlin and Jetpack Compose.</p>
       </div>
       <div class="build-log-grid">
         <article class="build-note" data-reveal="up">
@@ -285,15 +262,15 @@ append("Do not invent data.")</code></pre>
       </div>
       <div class="pulse-build-block" id="pauzepulse-build" data-reveal="up">
         <div class="pulse-build-heading">
-          <p class="kicker">CURRENT FOCUS / PAUZEPULSE</p>
+          <p class="kicker">PROJECT / PAUZEPULSE</p>
           <h3>Building the play loop, one system at a time.</h3>
-          <p>PauzePulse is a local, offline-first mini-game collection for Android. The goal is for every game to feel like its own small experience, while shared infrastructure handles navigation, timing, state, and results.</p>
+          <p>PauzePulse is an offline-first Android mini-game collection for solo play and local multiplayer on one phone. These notes document the systems being built and the engineering challenges still being worked through.</p>
         </div>
         <div class="build-log-grid pulse-build-grid">
           <article class="build-note" data-reveal="up">
             <div class="build-note-meta"><span>01 / GAME FLOW</span><span>COMPOSE UI</span></div>
             <h3>From player setup to the arena.</h3>
-            <p>The app separates player-count selection, a game catalogue filtered by supported players, game instructions and difficulty, the start countdown, active play, and the result state. That keeps setup screens from getting mixed into live gameplay.</p>
+            <p>The app separates player-count selection, the game catalogue, instructions and difficulty, the countdown, active play, and results. Keeping these phases distinct makes it easier to control navigation and reset each match cleanly.</p>
             <details>
               <summary>VIEW THE PLAY LOOP <span>＋</span></summary>
               <pre><code>Player count
@@ -305,25 +282,25 @@ Instructions + difficulty
 Countdown → live arena
     ↓
 Results + next round</code></pre>
-              <p class="build-code-note">This is the intended user flow, not a claim that every game has reached final release quality.</p>
+              <p class="build-code-note">This is the intended flow; each game still needs its own rules and quality checks.</p>
             </details>
           </article>
           <article class="build-note" data-reveal="up">
             <div class="build-note-meta"><span>02 / INPUT MODEL</span><span>TOUCH + TURNS</span></div>
             <h3>Controls should match the game.</h3>
-            <p>Real-time games need responsive input from multiple people sharing the screen. Turn-based games need clear ownership of the current move. The implementation is being refined around pointer tracking, player targeting, legal actions, and avoiding stale touches between rounds.</p>
+            <p>Real-time games need responsive input from multiple players sharing the screen. Turn-based games need clear move ownership. The work includes pointer tracking, player targeting, legal actions, and safely resetting touches between rounds.</p>
             <details>
               <summary>WHY THIS MATTERS <span>＋</span></summary>
-              <p class="build-code-note">A shared-device game should not silently turn an intended simultaneous match into a one-player-at-a-time experience. Input rules, hit areas, turn changes, and reset behaviour need to be checked per game.</p>
+              <p class="build-code-note">A shared-device game should not turn an intended simultaneous match into a one-player-at-a-time experience. Hit areas, turn changes, and cancellation paths must be verified for each control style.</p>
             </details>
           </article>
           <article class="build-note" data-reveal="up">
             <div class="build-note-meta"><span>03 / GAME SYSTEMS</span><span>RULES + PHYSICS</span></div>
             <h3>Different games, different mechanics.</h3>
-            <p>The catalogue spans reflex challenges, sports-style aiming, action rounds, and board or card puzzles. Those modes need their own state, rendering, scoring, collision or move-validation rules, win conditions, and restart behaviour rather than one generic interaction dressed up with a new title.</p>
+            <p>The catalogue spans reflex challenges, sports-style aiming, action rounds, and board or card puzzles. Each mode needs its own state, rendering, scoring, collisions or move validation, win conditions, and restart behaviour—not a generic interaction with a new title.</p>
             <details>
               <summary>WHAT IS STILL IN PROGRESS <span>＋</span></summary>
-              <p class="build-code-note">Gameplay coverage, animation polish, input edge cases, balancing, and on-device verification are still being iterated. The size of the catalogue should not be read as a statement that every game is finished.</p>
+              <p class="build-code-note">Gameplay coverage, animation polish, input edge cases, balancing, and on-device verification are still being iterated. A catalogue entry is not a claim that every game is finished.</p>
             </details>
           </article>
         </div>
@@ -332,7 +309,7 @@ Results + next round</code></pre>
           <a class="text-link" href="https://github.com/PauzeDevs/PauzePulse" target="_blank" rel="noreferrer">FOLLOW THE REPOSITORY <span>↗</span></a>
         </div>
       </div>
-      <p class="build-log-footnote">ENGINEERING NOTES / Notes describe active work and should not be read as release sign-off.</p>
+      <p class="build-log-footnote">ENGINEERING NOTES / Based on the current PauzeWeather implementation.</p>
     </section>
 
     <section class="live-presence section-wrap" id="activity">
