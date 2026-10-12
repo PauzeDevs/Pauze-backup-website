@@ -875,3 +875,24 @@ button,a,summary{ -webkit-tap-highlight-color:transparent }
   html{scroll-behavior:auto}
   .site-header,.project,.skill-chips span,.text-link,.hero-actions a,.pulse-game-target{transition:none;animation:none}
 }
+
+
+/* PAUZE SPLASH COLOR DETAIL — retain contrast inside the illustrated intro */
+#pauze-intro-splash:before{
+  background:linear-gradient(125deg,transparent 0 38%,rgba(121,87,173,.08) 38.2% 38.8%,transparent 39%),repeating-linear-gradient(0deg,rgba(121,87,173,.045) 0 1px,transparent 1px 5px),#f8f5fd;
+}
+#pauze-intro-splash .pauze-splash-grain{
+  opacity:.04;background-image:radial-gradient(#7957ad .7px,transparent .9px);
+}
+#pauze-intro-splash .pauze-wall{fill:#eee6fa;stroke:#4a3467}
+#pauze-intro-splash .pauze-wall-line{stroke:#d8c9ef}
+#pauze-intro-splash .pauze-wildstyle{fill:#7957ad;stroke:#291c3a;filter:drop-shadow(8px 8px 0 #c1afe5)}
+#pauze-intro-splash .pauze-wildstyle-highlight{stroke:#ffffff}
+#pauze-intro-splash .pauze-character-outline{fill:#4a3467;stroke:#4a3467}
+#pauze-intro-splash .pauze-character-color{fill:#c1afe5;stroke:#291c3a}
+#pauze-intro-splash .pauze-spray-can{fill:#7957ad;stroke:#291c3a}
+#pauze-intro-splash .pauze-spray-arm path:first-child{stroke:#ffffff}
+#pauze-intro-splash .pauze-spray-arm path:nth-child(2){stroke:#4a3467}
+#pauze-intro-splash .pauze-spray{stroke:#7957ad}
+#pauze-intro-splash .pauze-drip{stroke:#7957ad}
+#pauze-intro-splash .pauze-splash-tag{background:#7957ad;color:#ffffff;border-color:#291c3a;box-shadow:4px 4px 0 #c1afe5}
