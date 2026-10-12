@@ -432,3 +432,85 @@ html.pauze-splash-active,html.pauze-splash-active body{overflow:hidden!important
 @keyframes pauze-grain-drift{0%{transform:translate(0,0)}100%{transform:translate(2%,-2%)}}
 @media(max-width:480px){.pauze-splash-word{font-size:clamp(68px,21vw,110px);text-shadow:3px 3px 0 #7b35ff,6px 6px 0 #ff2f9a,9px 9px 0 #fff;-webkit-text-stroke:1px #0b0b0b}.pauze-splash-tag{font-size:8px;letter-spacing:.3em;margin-top:23px}}
 @media(prefers-reduced-motion:reduce){.pauze-splash-grain,.pauze-splash-spray{animation:none}.pauze-splash-art,.pauze-splash-tag{animation:none}}
+
+
+/* Refined, lower-saturation portfolio theme — preserve layout and character, reduce large color blocks. */
+:root{
+  --bg:#f5f2f7;
+  --ink:#211c27;
+  --muted:#655b6d;
+  --yellow:#e8dff2;
+  --pink:#f1e5ec;
+  --blue:#e7eaf0;
+  --green:#e8ecdf;
+  --orange:#eee7df;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{background-image:radial-gradient(ellipse at 50% -18%,rgba(159,129,185,.09),transparent 52%)}
+::selection{background:#d7c4e8;color:#211c27}
+.site-header{background:rgba(255,254,255,.96);border-color:#29232f;box-shadow:4px 4px 0 #29232f;backdrop-filter:blur(12px)}
+.wordmark{letter-spacing:-.08em}
+.availability{background:#f0ebf4}
+.status-dot,.presence-dot{background:#7d9b79}
+.hero .kicker,.section-title .kicker,.section-heading .kicker,.build-note-meta,.build-log-intro>span{color:#766482}
+.hero .outline{-webkit-text-stroke-color:#3a3142}
+.hero-description,.section-title>p:last-child,.section-note{color:#5c5362}
+.hero-primary{background:#e3d7ef}
+.hero-secondary{background:#fff}
+.hero-actions a{border-color:#29232f;box-shadow:4px 4px 0 #29232f}
+.hero-primary:hover,.hero-secondary:hover{filter:brightness(.985)}
+.hero-index{border-top-color:#dfd6e5;color:#786c82}
+.intro-section,.skills-section,.work,.live-presence{position:relative}
+.about-card,.project,.presence-card,.skill-panel,.build-note{border-color:#29232f;box-shadow:5px 5px 0 rgba(41,35,47,.92)}
+.about-card,.presence-card,.build-note{background:#fffdfd}
+.pixel-icon{background:#eee7f3;box-shadow:3px 3px 0 #29232f}
+.about-card .kicker{color:#766482}
+.skill-panel{background:#fffdfd!important}
+.skill-panel:nth-child(1){border-top:4px solid #b3a0c8}
+.skill-panel:nth-child(2){border-top:4px solid #b6bac8}
+.skill-panel:nth-child(3){border-top:4px solid #b9c4a8}
+.skill-chips span{background:#faf8fb;border-color:#d9d2df;box-shadow:2px 2px 0 rgba(41,35,47,.7)}
+.skill-chips span:hover{background:#f0eaf5;box-shadow:1px 1px 0 rgba(41,35,47,.7)}
+.project-featured,.project-list>.project:nth-child(2),.project-list>.project:nth-child(3),.project-list>.project:nth-child(4){background:#fffdfd}
+.project-featured{background:#fbf9fc!important}
+.project-topline{border-bottom-color:#e5dfe8}
+.project-index{color:#766482}
+.project-copy>p:not(.project-index){color:#514956}
+.tags span{background:#f7f4f8;border-color:#d9d2df}
+.text-link{border-color:#29232f;background:#fff;box-shadow:3px 3px 0 #29232f}
+.text-link:hover{background:#f3edf7}
+.visual{box-shadow:4px 4px 0 #29232f}
+.control-visual{background:#ebe7ef}
+.radar-label,.radar-coords{color:#e4e8d5}
+.presence-card-top{border-bottom-color:#e8e2eb}
+.presence-card-top>a,.activity-foot a,#github-event-list li a{color:#766482}
+#github-event-list li{border-color:#e1d9e7;background:#faf8fb}
+.discord-music-card{background:#2e2934!important;border-color:#29232f!important}
+.contact-button{box-shadow:3px 3px 0 #29232f}
+.site-footer{border-top-color:#ded6e4}
+.arcade-shell{background:#fffdfd;border-color:#29232f;box-shadow:5px 5px 0 #29232f}
+.arcade-game-picker{background:#faf8fb;border-bottom-color:#e8e2eb}
+.arcade-game-option{border-color:#ded6e5;background:#fffdfd}
+.arcade-game-option:hover{border-color:#665675}
+.arcade-game-option.is-active{border-color:#29232f;background:#e8dff2;box-shadow:2px 2px 0 #29232f}
+.arcade-stats{background:#fffdfd}
+.dino-stage{background:#f1edf4}
+.dino-overlay{background:rgba(246,243,248,.9)}
+.dino-overlay-label{color:#766482}
+.dino-start,.arcade-touch-controls button{background:#e8dff2;border-color:#29232f;box-shadow:2px 2px 0 #29232f}
+.arcade-controls,.arcade-topbar{border-color:#e8e2eb}
+.arcade-led{background:#b5c6a5}
+#dino-state{color:#766482}
+.build-log-intro,.build-log-bottom{border-color:#ded6e4}
+.build-note summary{color:#403747}
+.build-note pre{background:#f5f1f7;border-color:#ded6e4}
+.build-code-note{color:#5c5362}
+.text-link:focus-visible,.hero-actions a:focus-visible,.availability:focus-visible{outline:3px solid #9983b0;outline-offset:3px}
+@media(max-width:700px){
+  .site-header{box-shadow:3px 3px 0 #29232f}
+  .hero-actions a{box-shadow:2px 2px 0 #29232f}
+  .about-card,.project,.presence-card,.skill-panel,.build-note{box-shadow:3px 3px 0 rgba(41,35,47,.92)}
+}
+@media(prefers-reduced-motion:reduce){
+  .site-header,.project,.skill-chips span,.text-link,.hero-actions a{transition:none}
+}
