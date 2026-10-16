@@ -12,6 +12,47 @@ if (menuButton && nav) {
     menuButton.setAttribute("aria-label", "Open menu");
   }));
 }
+/* Accessible command palette: keyboard shortcut, live filtering, and safe dismissal. */
+(() => {
+  const dialog = document.querySelector("#command-palette");
+  const trigger = document.querySelector(".command-trigger");
+  const search = document.querySelector("#command-search");
+  const closeButton = document.querySelector("[data-command-close]");
+  const items = [...document.querySelectorAll("[data-command-item]")];
+  const empty = document.querySelector("#command-empty");
+  if (!dialog || !trigger || !search || !closeButton || !items.length || !empty) return;
+  const openPalette = () => {
+    if (typeof dialog.showModal === "function" && !dialog.open) {
+      dialog.showModal();
+      search.value = "";
+      filterItems();
+      window.requestAnimationFrame(() => search.focus());
+    }
+  };
+  const closePalette = () => { if (dialog.open) dialog.close(); };
+  const filterItems = () => {
+    const query = search.value.trim().toLowerCase();
+    let visible = 0;
+    items.forEach((item) => {
+      const matches = item.textContent.toLowerCase().includes(query);
+      item.hidden = !matches;
+      if (matches) visible++;
+    });
+    empty.hidden = visible !== 0;
+  };
+  trigger.addEventListener("click", openPalette);
+  closeButton.addEventListener("click", closePalette);
+  search.addEventListener("input", filterItems);
+  items.forEach((item) => item.addEventListener("click", closePalette));
+  dialog.addEventListener("click", (event) => { if (event.target === dialog) closePalette(); });
+  document.addEventListener("keydown", (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      if (dialog.open) closePalette(); else openPalette();
+    }
+  });
+})();
+
 const year = document.querySelector("#year");
 if (year) year.textContent = new Date().getFullYear();
 
