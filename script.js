@@ -2,12 +2,12 @@ const menuButton = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".desktop-nav");
 if (menuButton && nav) {
   menuButton.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
+    const open = nav.classList.toggle("is-open");
     menuButton.setAttribute("aria-expanded", String(open));
     menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
   });
   nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
-    nav.classList.remove("open");
+    nav.classList.remove("is-open");
     menuButton.setAttribute("aria-expanded", "false");
     menuButton.setAttribute("aria-label", "Open menu");
   }));
@@ -530,12 +530,37 @@ const discordPresence = (() => {
   }
 })();
 
-/* Real public GitHub events with loading, empty, and error states */
+/* Contact hub: copy email without blocking the mailto fallback. */
+(() => {
+  const button = document.querySelector("[data-copy-email]");
+  const status = document.querySelector(".copy-email-status");
+  if (!button || !status) return;
+  button.addEventListener("click", async () => {
+    const email = button.getAttribute("data-copy-email");
+    try {
+      if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+        throw new Error("Clipboard unavailable");
+      }
+      await navigator.clipboard.writeText(email);
+      button.textContent = "Copied";
+      status.textContent = "Email copied to clipboard.";
+    } catch (error) {
+      button.textContent = "Copy unavailable";
+      status.textContent = "Clipboard access isn't available here. Use Get in touch to email directly.";
+    }
+    window.setTimeout(() => { button.textContent = "Copy email"; }, 2200);
+  });
+})();
+
+/* Real public GitHub events from the personal profile and PauzeDevs organization. */
 (() => {
   const list = document.querySelector("#github-event-list");
   const state = document.querySelector("#github-feed-state");
   if (!list || !state) return;
-  const username = "PauzeDevs";
+  const feeds = [
+    { label: "PERSONAL", url: "https://api.github.com/users/personala aravsingh-cmd/events/public?per_page=30".replace("personala aravsingh-cmd", "personalaaravsingh-cmd") },
+    { label: "PAUZEDEVS", url: "https://api.github.com/orgs/PauzeDevs/events?per_page=30" }
+  ];
   const eventLabels = {
     PushEvent: "Pushed commits",
     PullRequestEvent: "Updated a pull request",
@@ -550,9 +575,9 @@ const discordPresence = (() => {
   const relativeTime = (dateString) => {
     const seconds = Math.max(0, Math.floor((Date.now() - new Date(dateString).getTime()) / 1000));
     if (seconds < 60) return "JUST NOW";
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}M AGO`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}H AGO`;
-    if (seconds < 604800) return `${Math.floor(seconds / 86400)}D AGO`;
+    if (seconds < 3600) return Math.floor(seconds / 60) + "M AGO";
+    if (seconds < 86400) return Math.floor(seconds / 3600) + "H AGO";
+    if (seconds < 604800) return Math.floor(seconds / 86400) + "D AGO";
     return new Date(dateString).toLocaleDateString(undefined, { month: "short", day: "numeric" }).toUpperCase();
   };
   const makeLink = (url, label) => {
@@ -563,14 +588,20 @@ const discordPresence = (() => {
     link.rel = "noreferrer";
     return link;
   };
-  const renderEvents = (events) => {
+  const renderEvents = (events, failedCount) => {
     list.replaceChildren();
-    const useful = events.filter((event) => eventLabels[event.type] && event.repo?.name).slice(0, 5);
+    const useful = events
+      .filter((event) => eventLabels[event.type] && event.repo && event.repo.name && event.created_at)
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .filter((event, index, all) => all.findIndex((other) => other.id === event.id) === index)
+      .slice(0, 5);
     if (!useful.length) {
       const item = document.createElement("li");
-      item.textContent = "No recent public events to show.";
+      item.textContent = failedCount === feeds.length
+        ? "Live activity is temporarily unavailable. Open GitHub to see the latest updates."
+        : "No recent public events to show.";
       list.append(item);
-      state.textContent = "NO RECENT EVENTS";
+      state.textContent = failedCount === feeds.length ? "TEMPORARILY UNAVAILABLE" : "NO RECENT EVENTS";
       return;
     }
     useful.forEach((event) => {
@@ -583,40 +614,45 @@ const discordPresence = (() => {
       copy.className = "activity-event-copy";
       const description = document.createElement("span");
       description.textContent = eventLabels[event.type] + " · ";
-      description.append(makeLink(`https://github.com/${event.repo.name}`, event.repo.name.split("/").pop()));
-      copy.append(description);
-      if (event.type === "PushEvent" && event.payload?.commits?.length) {
+      description.append(makeLink("https://github.com/" + event.repo.name, event.repo.name.split("/").pop()));
+      if (event.type === "PushEvent" && event.payload && Array.isArray(event.payload.commits) && event.payload.commits.length) {
         const commitCount = document.createElement("span");
-        commitCount.textContent = ` (${event.payload.commits.length} commit${event.payload.commits.length === 1 ? "" : "s"})`;
+        commitCount.textContent = " (" + event.payload.commits.length + " commit" + (event.payload.commits.length === 1 ? "" : "s") + ")";
         description.append(commitCount);
       }
       const meta = document.createElement("span");
       meta.className = "activity-event-meta";
       meta.textContent = relativeTime(event.created_at);
-      copy.append(meta);
+      copy.append(description, meta);
       item.append(icon, copy);
       list.append(item);
     });
-    state.textContent = "LIVE · PUBLIC API";
+    state.textContent = failedCount ? "LIVE · PARTIAL DATA" : "LIVE · PUBLIC API";
   };
   const loadEvents = async () => {
     const controller = typeof AbortController === "function" ? new AbortController() : null;
     const timeout = controller ? window.setTimeout(() => controller.abort(), 8000) : null;
     try {
-      const requestOptions = {
-        headers: { Accept: "application/vnd.github+json" },
-        cache: "no-store"
-      };
-      if (controller) requestOptions.signal = controller.signal;
-      const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=30`, requestOptions);
-      if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
-      const events = await response.json();
-      if (!Array.isArray(events)) throw new Error("Unexpected GitHub events response");
-      renderEvents(events);
+      const options = { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" };
+      if (controller) options.signal = controller.signal;
+      const results = await Promise.allSettled(feeds.map(async (feed) => {
+        const response = await fetch(feed.url, options);
+        if (!response.ok) throw new Error("GitHub API returned " + response.status);
+        const events = await response.json();
+        if (!Array.isArray(events)) throw new Error("Unexpected GitHub events response");
+        return events;
+      }));
+      const events = [];
+      let failedCount = 0;
+      results.forEach((result) => {
+        if (result.status === "fulfilled") events.push(...result.value);
+        else failedCount++;
+      });
+      renderEvents(events, failedCount);
     } catch (error) {
       list.replaceChildren();
       const item = document.createElement("li");
-      item.textContent = "Live activity couldn't load. Open the GitHub profile to see the latest updates.";
+      item.textContent = "Live activity couldn't load. Open GitHub to see the latest updates.";
       list.append(item);
       state.textContent = "TEMPORARILY UNAVAILABLE";
     } finally {
@@ -625,14 +661,17 @@ const discordPresence = (() => {
   };
   loadEvents();
   window.setInterval(loadEvents, 300000);
-  const graph = document.querySelector(".contribution-graph");
-  if (graph) graph.addEventListener("error", () => {
-    const link = graph.closest(".contribution-graph-link");
-    if (link) {
-      link.textContent = "Contribution graph unavailable — open the GitHub profile to view activity.";
-      link.classList.add("graph-unavailable");
-    }
-  }, { once: true });
+
+  const graph = document.querySelector(".contribution-graph-link");
+  const graphImage = document.querySelector(".contribution-graph-image");
+  const graphFallback = document.querySelector(".contribution-graph-fallback");
+  if (graphImage && graphFallback) {
+    graphImage.addEventListener("error", () => {
+      graphImage.hidden = true;
+      graphFallback.hidden = false;
+      if (graph) graph.classList.add("graph-unavailable");
+    }, { once: true });
+  }
 })();
 
 
