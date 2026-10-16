@@ -877,7 +877,7 @@ const discordPresence = (() => {
   picker.querySelectorAll("[data-arcade-game]").forEach(b=>b.addEventListener("click",()=>choose(b.dataset.arcadeGame)));
   start.addEventListener("click",()=>{if(paused)resume();else startGame();});restart.addEventListener("click",startGame);
   window.addEventListener("keydown",e=>{if(stage.contains(document.activeElement)||!(e.target.closest&&e.target.closest("button,a,input,textarea,select")))keydown(e);});window.addEventListener("keyup",keyup);
-  stage.addEventListener("pointerdown",e=>{if(!running||paused||ended)return;if(game==="dino")jump();if(game==="space")fire();if(game==="memory")memoryClick(e);});
+  stage.addEventListener("pointerdown",e=>{if(!cv.contains(e.target)||!running||paused||ended)return;if(game==="dino")jump();if(game==="space")fire();if(game==="memory")memoryClick(e);});
   document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!paused)pause();});window.addEventListener("blur",clearKeys);window.addEventListener("resize",draw);
   choose("dino");
 })();
