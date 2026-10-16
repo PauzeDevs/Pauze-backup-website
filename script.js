@@ -58,6 +58,8 @@ const discordPresence = (() => {
   const activityText = document.querySelector("#discord-activity-text");
   const currentActivity = document.querySelector("#discord-current-activity");
   const avatar = document.querySelector("#discord-avatar");
+  const nitroStatus = document.querySelector("#discord-nitro-status");
+  const publicBadges = document.querySelector("#discord-badges");
   const note = document.querySelector("#discord-status-note");
   const musicCard = document.querySelector("#discord-music-card");
   const musicArt = document.querySelector("#discord-music-art");
@@ -99,9 +101,9 @@ const discordPresence = (() => {
     const words = String(title || "Music").trim().split(/\s+/).filter(Boolean);
     const initials = (words.slice(0, 2).map((word) => word[0]).join("") || "♪").toUpperCase();
     const palettes = [
-      ["#604187", "#c1afe5"], ["#9a7cc8", "#e6ddf5"],
-      ["#e6ddf5", "#7957ad"], ["#e6ddf5", "#9a7cc8"],
-      ["#e6ddf5", "#c1afe5"]
+      ["#315efb", "#d4ff70"], ["#151a25", "#6387ff"],
+      ["#d4ff70", "#edf1ff"], ["#edf1ff", "#315efb"],
+      ["#151a25", "#9cce54"]
     ];
     const hashText = `${title || ""} ${artist || ""}`;
     const hash = Array.from(hashText).reduce((sum, char) => (sum * 31 + char.charCodeAt(0)) >>> 0, 7);
@@ -321,6 +323,70 @@ const discordPresence = (() => {
   };
 
   if (!statusLabel || !statusDot || !displayName || !activityText || !currentActivity) return;
+
+  /* Render subscription details only when Lanyard actually supplies a value.
+     Standard Lanyard payloads commonly include public_flags but may omit premium_type. */
+  const profileBadgeDefinitions = [
+    { flag: 1 << 0, label: "Discord Staff", short: "STAFF" },
+    { flag: 1 << 1, label: "Partnered Server Owner", short: "PARTNER" },
+    { flag: 1 << 2, label: "HypeSquad Events", short: "HYPESQUAD" },
+    { flag: 1 << 3, label: "Bug Hunter Level 1", short: "BUG HUNTER I" },
+    { flag: 1 << 6, label: "HypeSquad House of Bravery", short: "BRAVERY" },
+    { flag: 1 << 7, label: "HypeSquad House of Brilliance", short: "BRILLIANCE" },
+    { flag: 1 << 8, label: "HypeSquad House of Balance", short: "BALANCE" },
+    { flag: 1 << 9, label: "Early Nitro Supporter", short: "EARLY SUPPORTER" },
+    { flag: 1 << 14, label: "Bug Hunter Level 2", short: "BUG HUNTER II" },
+    { flag: 1 << 17, label: "Early Verified Bot Developer", short: "EARLY DEVELOPER" },
+    { flag: 1 << 18, label: "Certified Moderator", short: "MODERATOR" },
+    { flag: 1 << 22, label: "Active Developer", short: "ACTIVE DEVELOPER" }
+  ];
+  const renderProfileMarkers = (user, presenceData) => {
+    if (nitroStatus) {
+      const rawNitro = user.premium_type ?? presenceData.premium_type ?? presenceData.kv?.nitro;
+      const token = rawNitro == null ? "" : String(rawNitro).trim().toLowerCase();
+      const nitroLabels = {
+        "0": "NO NITRO", "none": "NO NITRO", "false": "NO NITRO", "no": "NO NITRO", "inactive": "NO NITRO",
+        "1": "NITRO CLASSIC", "classic": "NITRO CLASSIC", "nitro classic": "NITRO CLASSIC",
+        "2": "NITRO", "nitro": "NITRO",
+        "3": "NITRO BASIC", "basic": "NITRO BASIC", "nitro basic": "NITRO BASIC",
+        "true": "NITRO ACTIVE", "yes": "NITRO ACTIVE", "active": "NITRO ACTIVE"
+      };
+      const label = nitroLabels[token] || (token ? "NITRO STATUS UNKNOWN" : "NITRO NOT EXPOSED");
+      nitroStatus.textContent = label;
+      nitroStatus.classList.toggle("is-active", Boolean(token) && !["0", "none", "false", "no", "inactive"].includes(token) && Boolean(nitroLabels[token]));
+      nitroStatus.classList.toggle("is-unknown", !token || !nitroLabels[token]);
+      nitroStatus.setAttribute("aria-label", "Discord Nitro: " + label.toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase()));
+    }
+
+    if (!publicBadges) return;
+    publicBadges.replaceChildren();
+    const rawFlags = user.public_flags ?? user.flags;
+    const flags = Number(rawFlags);
+    if (rawFlags == null || !Number.isFinite(flags)) {
+      const empty = document.createElement("span");
+      empty.className = "discord-marker-empty";
+      empty.textContent = "Public badges unavailable";
+      publicBadges.append(empty);
+      return;
+    }
+    const matchingBadges = profileBadgeDefinitions.filter(({ flag }) => (Math.trunc(flags) & flag) === flag);
+    if (!matchingBadges.length) {
+      const empty = document.createElement("span");
+      empty.className = "discord-marker-empty";
+      empty.textContent = "No public badges returned";
+      publicBadges.append(empty);
+      return;
+    }
+    matchingBadges.forEach(({ label, short }) => {
+      const badge = document.createElement("span");
+      badge.className = "discord-account-badge";
+      badge.textContent = short;
+      badge.title = label;
+      badge.setAttribute("aria-label", label);
+      publicBadges.append(badge);
+    });
+  };
+
   const statusNames = { online: "ONLINE", idle: "IDLE", dnd: "DO NOT DISTURB", offline: "OFFLINE" };
   const setUnavailable = (message) => {
     activeTrack = null;
@@ -359,6 +425,7 @@ const discordPresence = (() => {
       statusDot.dataset.status = status;
       if (avatarStatus) avatarStatus.dataset.status = status;
       const user = data.discord_user || {};
+      renderProfileMarkers(user, data);
       displayName.textContent = user.global_name || user.display_name || user.username || "Pauze";
       activityText.textContent = status === "offline" ? "Currently offline" : status === "dnd" ? "Busy on Discord" : status === "idle" ? "Away on Discord" : "Active on Discord";
       if (avatar && user.id && user.avatar) {
@@ -574,7 +641,7 @@ const discordPresence = (() => {
  const cv=document.querySelector("#dino-canvas"),stage=document.querySelector("#dino-stage"),overlay=document.querySelector("#dino-overlay"),picker=document.querySelector(".arcade-game-picker"),touch=document.querySelector("#arcade-touch-controls"),start=document.querySelector("#dino-start"),restart=document.querySelector("#dino-restart");
  const heading=document.querySelector("#arcade-game-title"),status=document.querySelector("#dino-state"),scoreEl=document.querySelector("#dino-score"),bestEl=document.querySelector("#dino-best"),modeEl=document.querySelector("#arcade-mode-label"),modeVal=document.querySelector("#arcade-mode-value"),help=document.querySelector("#arcade-instructions"),overTitle=document.querySelector("#dino-overlay-title"),overCopy=document.querySelector("#dino-overlay-copy");
  if(!cv||!stage||!overlay||!picker||!start)return;const c=cv.getContext("2d");if(!c){overTitle.textContent="GAME UNAVAILABLE";start.hidden=true;return;}
- const W=900,H=260,G=218,ink="#291c3a",muted="#604187",purple="#604187",green="#9a7cc8",cactusColor="#4a3467",pink="#e6ddf5",yellow="#f8f5fd",white="#ffffff",blue="#e6ddf5",bgc="#f8f5fd";
+ const W=900,H=260,G=218,ink="#151a25",muted="#606b7c",purple="#315efb",green="#d4ff70",cactusColor="#26324a",pink="#315efb",yellow="#d4ff70",white="#ffffff",blue="#dbe4ff",bgc="#f4f6f3";
  const config={
  dino:["DINO RUN / ENDLESS MODE","Jump obstacles and beat your best score.","START RUN","SPACE / ↑ JUMP • ↓ DUCK • P PAUSE","SPEED",[["jump","JUMP ↑"],["duck","DUCK ↓"]]],
  snake:["SNAKE.EXE / SURVIVAL MODE","Eat the data. Grow the line. Avoid yourself and the walls.","START SNAKE","ARROWS / WASD MOVE • P PAUSE","PACE",[["up","UP ↑"],["left","← LEFT"],["down","DOWN ↓"],["right","RIGHT →"]]],
@@ -595,7 +662,7 @@ const discordPresence = (() => {
   modeVal.textContent=game==="dino"?(s?(s.speed/300).toFixed(1):"1.0")+"×":game==="snake"?(1+Math.floor(score/50))+"×":game==="space"?String(s?s.wave:1).padStart(2,"0"):game==="breakout"?String(s?s.level:1).padStart(2,"0"):game==="memory"?(s?s.pairs:0)+"/8":(s?s.cpu:0)+"/5";};
  const save=()=>{if(score>best){best=score;try{localStorage.setItem(storage(),String(score));}catch{}}};
  const finish=(title,copy,state)=>{running=false;paused=false;ended=true;save();stats();stat(state||"GAME OVER");show("SESSION ENDED",title,copy,"PLAY AGAIN");stage.focus({preventScroll:true});};
- const bricks=()=>{let a=[],cols=14,w=48,gap=8,left=(W-(cols*w+(cols-1)*gap))/2,rows=Math.min(3+s.level,6),colors=[pink,blue,yellow,green,"#e6ddf5",purple];for(let r=0;r<rows;r++)for(let col=0;col<cols;col++)a.push({x:left+col*(w+gap),y:34+r*19,w,h:12,on:true,col:colors[r%colors.length]});return a;};
+ const bricks=()=>{let a=[],cols=14,w=48,gap=8,left=(W-(cols*w+(cols-1)*gap))/2,rows=Math.min(3+s.level,6),colors=[pink,blue,yellow,green,"#edf1ff",purple];for(let r=0;r<rows;r++)for(let col=0;col<cols;col++)a.push({x:left+col*(w+gap),y:34+r*19,w,h:12,on:true,col:colors[r%colors.length]});return a;};
  const food=()=>{let p;do{p={x:Math.floor(rnd(0,s.cols)),y:Math.floor(rnd(0,s.rows))};}while(s.body.some(b=>b.x===p.x&&b.y===p.y));return p;};
  const reset=()=>{
   score=0;time=0;last=0;ended=false;paused=false;clearKeys();best=bestRead();
@@ -651,7 +718,7 @@ const discordPresence = (() => {
  const draw=()=>{
   if(!s)return;
   if(game==="dino"){
-   background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#9a7cc8");
+   background();rect(764,25,34,34,yellow);rect(0,G,W,3,ink);for(let x=0;x<W;x+=44)rect(x-(time*s.speed%44),230,15,3,"#d4ff70");
    s.obs.forEach(o=>{if(o.type==="bird"){const flap=Math.floor(time*10)%2?0:5;rect(o.x+7,o.y+7,20,8,ink);rect(o.x+12,o.y+flap,12,5,purple);rect(o.x+2,o.y+7,9,5,ink);rect(o.x+25,o.y+7,6,4,ink);rect(o.x+28,o.y+8,4,3,yellow);}else{rect(o.x,G-o.h,8,o.h,cactusColor);rect(o.x+8,G-o.h+7,10,5,cactusColor);rect(o.x+10,G-o.h+15,7,o.h-15,cactusColor);}});
    if(s.duck){
     const y=s.y+5;
@@ -685,19 +752,19 @@ const discordPresence = (() => {
    }
    txt("PAUZE / RUNNER",W-18,24,12,muted,"right");
   }else if(game==="snake"){
-   background("#f8f5fd");rect(0,0,W,H,"#e6ddf5");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#e6ddf5");
+   background(bgc);rect(0,0,W,H,"#edf1ff");for(let x=0;x<s.cols;x++)for(let y=0;y<s.rows;y++)rect(x*s.cell,y*s.cell,1,1,"#edf1ff");
    rect(s.food.x*s.cell+4,s.food.y*s.cell+4,12,12,pink);s.body.forEach((p,i)=>{rect(p.x*s.cell+1,p.y*s.cell+1,18,18,i?green:purple);if(!i){rect(p.x*s.cell+5,p.y*s.cell+5,3,3,white);rect(p.x*s.cell+12,p.y*s.cell+5,3,3,white);}});
   }else if(game==="space"){
-   background("#f8f5fd");for(let i=0;i<55;i++)rect((i*167+31)%W,(i*47+19)%H,2,2,"#c1afe5");s.shots.forEach(b=>rect(b.x-2,b.y-8,4,12,purple));
+   background(bgc);for(let i=0;i<55;i++)rect((i*167+31)%W,(i*47+19)%H,2,2,"#c7d2ed");s.shots.forEach(b=>rect(b.x-2,b.y-8,4,12,purple));
    s.foes.forEach(f=>{rect(f.x-f.size,f.y-f.size,f.size*2,f.size*2,pink);rect(f.x-7,f.y-2,14,5,ink);});rect(s.x-4,204,8,25,ink);rect(s.x-14,214,28,13,purple);rect(s.x-8,208,16,9,blue);txt("DEFENCE / WAVE "+s.wave,W-18,23,11,muted,"right");
   }else if(game==="breakout"){
-   background("#f8f5fd");rect(16,12,W-32,H-24,"#f8f5fd");s.bricks.forEach(b=>{if(b.on){rect(b.x,b.y,b.w,b.h,b.col);rect(b.x,b.y,b.w,2,ink);}});
+   background(bgc);rect(16,12,W-32,H-24,"#f4f6f3");s.bricks.forEach(b=>{if(b.on){rect(b.x,b.y,b.w,b.h,b.col);rect(b.x,b.y,b.w,2,ink);}});
    rect(s.paddle-58,240,116,8,ink);rect(s.paddle-16,242,32,4,yellow);rect(s.ball.x-s.ball.r,s.ball.y-s.ball.r,s.ball.r*2,s.ball.r*2,purple);txt("LIVES / "+s.lives,W-22,H-12,10,muted,"right");
   }else if(game==="memory"){
    background();txt("MEMORY / MATCH THE PAIRS",W/2,18,10,muted,"center");const cw=125,ch=40,gx=14,gy=11,left=(W-(cw*4+gx*3))/2,top=29,icons=["⌘","⌁","⟡","⌬","⏣","⎔","⧉","◈"];
-   s.cards.forEach((a,i)=>{const x=left+(i%4)*(cw+gx),y=top+Math.floor(i/4)*(ch+gy);rect(x+2,y+3,cw,ch,ink);rect(x,y,cw,ch,a.done?green:a.open?yellow:white);rect(x,y,cw,3,ink);txt(a.done||a.open?a.v:icons[i%8],x+cw/2,y+27,a.done||a.open?23:17,a.done||a.open?ink:"#9a7cc8","center");});txt("TURNS / "+s.turns,W/2,H-8,10,muted,"center");
+   s.cards.forEach((a,i)=>{const x=left+(i%4)*(cw+gx),y=top+Math.floor(i/4)*(ch+gy);rect(x+2,y+3,cw,ch,ink);rect(x,y,cw,ch,a.done?green:a.open?yellow:white);rect(x,y,cw,3,ink);txt(a.done||a.open?a.v:icons[i%8],x+cw/2,y+27,a.done||a.open?23:17,a.done||a.open?ink:"#d4ff70","center");});txt("TURNS / "+s.turns,W/2,H-8,10,muted,"center");
   }else if(game==="pong"){
-   background("#f8f5fd");for(let y=12;y<H;y+=19)rect(W/2-2,y,4,10,"#c1afe5");rect(20,s.y-s.ph/2,11,s.ph,purple);rect(W-31,s.cpuY-s.ph/2,11,s.ph,ink);rect(s.x-6,s.ballY-6,12,12,pink);txt(String(s.you),W/2-42,40,20,ink,"center");txt(String(s.cpu),W/2+42,40,20,ink,"center");txt("YOU",40,22,9,muted);txt("CPU",W-40,22,9,muted,"right");
+   background(bgc);for(let y=12;y<H;y+=19)rect(W/2-2,y,4,10,"#c7d2ed");rect(20,s.y-s.ph/2,11,s.ph,purple);rect(W-31,s.cpuY-s.ph/2,11,s.ph,ink);rect(s.x-6,s.ballY-6,12,12,pink);txt(String(s.you),W/2-42,40,20,ink,"center");txt(String(s.cpu),W/2+42,40,20,ink,"center");txt("YOU",40,22,9,muted);txt("CPU",W-40,22,9,muted,"right");
   }
  };
  const loop=t=>{if(!running||paused)return;if(!last)last=t;const dt=Math.min(.032,(t-last)/1000||0);last=t;update(dt);draw();if(running&&!paused)raf=requestAnimationFrame(loop);};
