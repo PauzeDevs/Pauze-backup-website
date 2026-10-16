@@ -138,3 +138,195 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   .project-simple { grid-template-columns: 1fr; }
   .simple-number { display: none; }
 }
+
+
+/* Apple Developer-inspired refinement: editorial hierarchy, calm spacing, crisp controls.
+   Keeps PAUZE's Black Diamond palette, text-first content, and all existing behavior. */
+:root {
+  --mono: "Exo 2", sans-serif;
+  --sans: "Exo 2", sans-serif;
+  --display: "Sora", sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); font-size: 16px; line-height: 1.65; letter-spacing: -.012em; }
+.site-header {
+  width: min(calc(100% - 40px), 1180px);
+  min-height: 64px;
+  margin-top: 10px;
+  padding-inline: 24px;
+  border-radius: 18px;
+  border-color: #2c333d;
+  background: rgba(10, 13, 18, .82);
+  backdrop-filter: saturate(150%) blur(24px);
+}
+.wordmark {
+  font-family: var(--display);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -.085em;
+  color: #f4f7fb;
+}
+.desktop-nav { gap: clamp(18px, 2.5vw, 34px); }
+.desktop-nav a {
+  font: 500 13px var(--sans);
+  text-transform: none;
+  letter-spacing: 0;
+  color: #c3cbd5;
+}
+.desktop-nav a span { display: none; }
+.availability {
+  border-radius: 999px;
+  padding: 9px 14px;
+  font: 600 10px var(--sans);
+  letter-spacing: .035em;
+}
+.hero { padding-top: 30px; }
+.hero-topline, .hero-bottomline {
+  font: 500 11px var(--sans);
+  letter-spacing: .045em;
+  color: #8f9aa8;
+}
+.hero-topline time { font-size: 12px; }
+.hero-layout { padding: clamp(82px, 11vw, 145px) 0 clamp(68px, 8vw, 105px); }
+.eyebrow, .section-index {
+  font: 600 11px var(--sans);
+  letter-spacing: .075em;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(58px, 8.4vw, 112px);
+  font-weight: 700;
+  line-height: .98;
+  letter-spacing: -.085em;
+}
+.hero-description {
+  max-width: 650px;
+  margin-top: 26px;
+  color: #b6c0cc;
+  font-size: clamp(17px, 1.8vw, 20px);
+  line-height: 1.65;
+  letter-spacing: -.018em;
+}
+.button {
+  min-height: 48px;
+  padding: 13px 18px;
+  border-radius: 999px;
+  font: 600 13px var(--sans);
+  text-transform: none;
+  letter-spacing: -.01em;
+}
+.button-primary { box-shadow: 0 0 28px #a9ddf51a; }
+.work, .about-section, .arcade-section, .build-log, .activity-section {
+  padding-top: clamp(84px, 10vw, 132px);
+  padding-bottom: clamp(84px, 10vw, 132px);
+}
+.section-heading { margin-bottom: 42px; }
+.section-heading h2, .about-heading h2 {
+  font-family: var(--display);
+  font-size: clamp(40px, 5.4vw, 70px);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -.075em;
+}
+.section-note { max-width: 440px; font-size: 16px; line-height: 1.7; }
+.project-grid { gap: 16px; }
+.project, .presence-card, .build-note, .arcade-shell {
+  border-radius: 18px;
+  border-color: #28313d;
+  overflow: hidden;
+  background: linear-gradient(145deg, #111720, #0c1016);
+}
+.project:hover { border-color: #647f91; transform: translateY(-2px); }
+.project-copy, .project-featured .project-copy { padding: clamp(24px, 4vw, 42px); }
+.project-meta, .project-state, .project-tags span, .build-note-heading,
+.build-note-tags span, .presence-card-top, .discord-account-badge,
+.discord-nitro-status {
+  font-family: var(--sans);
+  letter-spacing: .035em;
+}
+.project-meta { font-size: 11px; }
+.project h3 {
+  font-family: var(--display);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 600;
+  letter-spacing: -.065em;
+}
+.project-copy p, .build-note p, .about-content > p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: #aeb9c7;
+}
+.project-tags { gap: 7px; }
+.project-tags span, .build-note-tags span, .skill-list b {
+  border-radius: 999px;
+  padding: 7px 11px;
+  font: 500 10px var(--sans);
+  letter-spacing: .025em;
+}
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 12px var(--sans);
+  letter-spacing: .015em;
+}
+.about-content .about-lead {
+  font-family: var(--display);
+  font-size: clamp(23px, 3vw, 34px);
+  line-height: 1.3;
+  letter-spacing: -.055em;
+  color: #edf3f9;
+}
+.about-facts div { border-color: #28313d; }
+.skills-strip { border-color: #28313d; }
+.arcade-header, .arcade-game-picker, .arcade-stats,
+.arcade-stats > div, .arcade-controls { border-color: #28313d; }
+.arcade-game-option { border-radius: 12px; font-family: var(--sans); }
+.arcade-touch-controls button, .arcade-reset { border-radius: 10px; }
+.build-note { padding: clamp(25px, 4vw, 44px); }
+.build-note-heading { font-size: 11px; }
+.build-note h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -.055em;
+}
+.presence-card { padding: clamp(22px, 3vw, 32px); }
+.presence-card-top { font-size: 11px; }
+.github-card-title h3, .discord-profile-copy h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -.045em;
+}
+.github-presence li, .discord-activity-box, .discord-music-card {
+  border-radius: 12px;
+  font-family: var(--sans);
+}
+.contact h2 {
+  font-family: var(--display);
+  font-size: clamp(48px, 8vw, 100px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -.085em;
+}
+.contact-bottom p { font-size: 16px; line-height: 1.7; }
+.site-footer {
+  font: 500 11px var(--sans);
+  letter-spacing: .025em;
+}
+.site-footer small { font: 400 11px var(--sans); color: #7e8a98; }
+.menu-toggle { border-radius: 10px; }
+@media (max-width: 760px) {
+  .site-header { width: calc(100% - 20px); padding-inline: 15px; border-radius: 15px; }
+  .desktop-nav.open { border-radius: 14px; padding: 10px; }
+  .desktop-nav a { font: 500 15px var(--sans); padding: 14px 12px; }
+  .hero-layout { padding: 68px 0 52px; }
+  .hero h1 { font-size: clamp(52px, 13vw, 78px); }
+  .hero-description { font-size: 17px; }
+  .work, .about-section, .arcade-section, .build-log, .activity-section {
+    padding-top: 64px; padding-bottom: 64px;
+  }
+  .section-heading h2, .about-heading h2 { font-size: clamp(38px, 10vw, 56px); }
+  .project-copy, .project-featured .project-copy { padding: 24px; }
+  .project h3 { font-size: 29px; }
+  .button { justify-content: center; }
+}
