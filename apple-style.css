@@ -168,3 +168,35 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 @media(max-width:900px){.skill-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.skills-strip{grid-template-columns:1fr;gap:16px}.skill-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.skill-item{min-height:68px;padding:12px}}
 @media(max-width:360px){.skill-item{gap:8px;padding:10px;font-size:12px}.skill-item img{width:22px;height:22px;flex-basis:22px}}
+
+
+/* Portfolio additions: now, contact hub, real contribution graph, accessibility. */
+.skip-link{position:fixed;top:10px;left:10px;z-index:1000;padding:11px 16px;transform:translateY(-160%);border:1px solid var(--accent);border-radius:10px;background:var(--accent);color:var(--accent-ink);font-weight:700}
+.skip-link:focus{transform:translateY(0)}
+.site-header .desktop-nav.is-open{display:flex}
+.contribution-graph-link{display:block;overflow:hidden;margin-top:20px;padding:14px;border:1px solid #ffffff12;border-radius:12px;background:#0b1119}
+.contribution-graph-image{display:block;width:100%;height:auto;min-height:52px;object-fit:contain}
+.contribution-graph-fallback{color:var(--muted);font-size:12px;line-height:1.6}
+.contribution-graph-link.graph-unavailable{min-height:70px}
+.now-section{padding-top:clamp(88px,11vw,136px);padding-bottom:clamp(88px,11vw,136px);border-bottom:1px solid var(--line)}
+.now-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.now-card{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:16px;min-width:0;padding:24px;border:1px solid #ffffff16;border-radius:18px;background:var(--surface);transition:transform .2s,border-color .2s,background .2s}
+.now-card:hover{transform:translateY(-3px);border-color:#a9ddf54a;background:#121923}
+.now-number{color:var(--accent);font:500 11px var(--mono)}
+.now-card h3{margin:0 0 9px;font:600 19px/1.25 var(--display);letter-spacing:-.035em}
+.now-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.75}
+.now-arrow{color:var(--accent);font-size:17px}
+.contact-hub{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:34px}
+.contact-link-card{display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:156px;padding:19px;border:1px solid #ffffff17;border-radius:16px;background:var(--surface);transition:transform .2s,border-color .2s,background .2s}
+a.contact-link-card:hover{transform:translateY(-3px);border-color:#a9ddf54a;background:#121923}
+.contact-link-kicker{color:#9eacbb;font-size:9px;font-weight:600;letter-spacing:.09em}
+.contact-link-card strong{display:flex;align-items:center;gap:8px;margin-top:17px;font:600 17px/1.35 var(--display);overflow-wrap:anywhere}
+.contact-link-card strong span{color:var(--accent);font:500 13px var(--sans)}
+.contact-link-detail{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.6}
+.contact-email-card strong{font-size:13px;letter-spacing:-.02em}
+.copy-email-button{margin-top:14px;padding:7px 11px;border:1px solid #a9ddf54a;border-radius:999px;background:transparent;color:var(--accent);font-size:11px;font-weight:600;cursor:pointer}
+.copy-email-button:hover{background:#a9ddf512}
+.copy-email-status{margin-top:7px;color:#a9ddf5;font-size:10px;line-height:1.5}
+@media(max-width:900px){.now-grid{grid-template-columns:1fr}.contact-hub{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.now-card{padding:20px}.contact-hub{grid-template-columns:1fr}.contact-link-card{min-height:130px}.contact-link-card strong{margin-top:12px}.contribution-graph-link{padding:10px}}
+@media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
