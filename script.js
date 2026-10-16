@@ -680,7 +680,7 @@ const discordPresence = (() => {
         const commits = await response.json();
         return commits.map((commit) => ({
           repo: { name },
-          message: commit.commit?.message?.split(/\\r?\\n/)[0]?.trim() || "Updated repository",
+          message: commit.commit?.message?.split(/\r?\n/)[0]?.trim() || "Updated repository",
           url: commit.html_url,
           created_at: commit.commit?.committer?.date || commit.commit?.author?.date
         }));
