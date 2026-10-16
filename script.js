@@ -53,9 +53,9 @@ const discordPresence = (() => {
     const seconds = Math.max(0, Math.floor(milliseconds / 1000));
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
   };
-  const validTimestamp = (value) => {
+  const validTimestamp = (value, allowFuture = false) => {
     const number = Number(value);
-    return Number.isFinite(number) && number > 0 && number < Date.now() + 5000 ? number : 0;
+    return Number.isFinite(number) && number > 0 && (allowFuture || number < Date.now() + 5000) ? number : 0;
   };
   const setFallbackArtwork = (title, artist, key) => {
     if (musicArt) {
@@ -112,7 +112,8 @@ const discordPresence = (() => {
 
     if (activeTrack.mode === "spotify") {
       const start = validTimestamp(activeTrack.timestamps?.start);
-      const end = validTimestamp(activeTrack.timestamps?.end);
+      // Spotify's end timestamp is expected to be in the future while a track is playing.
+      const end = validTimestamp(activeTrack.timestamps?.end, true);
       if (start && end && end > start) {
         elapsed = Math.max(0, Math.min(end - start, now - start));
         activeTrack.durationMs = end - start;
