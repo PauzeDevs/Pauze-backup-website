@@ -58,6 +58,8 @@ const discordPresence = (() => {
   const activityText = document.querySelector("#discord-activity-text");
   const currentActivity = document.querySelector("#discord-current-activity");
   const avatar = document.querySelector("#discord-avatar");
+  const nitroStatus = document.querySelector("#discord-nitro-status");
+  const publicBadges = document.querySelector("#discord-badges");
   const note = document.querySelector("#discord-status-note");
   const musicCard = document.querySelector("#discord-music-card");
   const musicArt = document.querySelector("#discord-music-art");
@@ -321,6 +323,70 @@ const discordPresence = (() => {
   };
 
   if (!statusLabel || !statusDot || !displayName || !activityText || !currentActivity) return;
+
+  /* Render subscription details only when Lanyard actually supplies a value.
+     Standard Lanyard payloads commonly include public_flags but may omit premium_type. */
+  const profileBadgeDefinitions = [
+    { flag: 1 << 0, label: "Discord Staff", short: "STAFF" },
+    { flag: 1 << 1, label: "Partnered Server Owner", short: "PARTNER" },
+    { flag: 1 << 2, label: "HypeSquad Events", short: "HYPESQUAD" },
+    { flag: 1 << 3, label: "Bug Hunter Level 1", short: "BUG HUNTER I" },
+    { flag: 1 << 6, label: "HypeSquad House of Bravery", short: "BRAVERY" },
+    { flag: 1 << 7, label: "HypeSquad House of Brilliance", short: "BRILLIANCE" },
+    { flag: 1 << 8, label: "HypeSquad House of Balance", short: "BALANCE" },
+    { flag: 1 << 9, label: "Early Nitro Supporter", short: "EARLY SUPPORTER" },
+    { flag: 1 << 14, label: "Bug Hunter Level 2", short: "BUG HUNTER II" },
+    { flag: 1 << 17, label: "Early Verified Bot Developer", short: "EARLY DEVELOPER" },
+    { flag: 1 << 18, label: "Certified Moderator", short: "MODERATOR" },
+    { flag: 1 << 22, label: "Active Developer", short: "ACTIVE DEVELOPER" }
+  ];
+  const renderProfileMarkers = (user, presenceData) => {
+    if (nitroStatus) {
+      const rawNitro = user.premium_type ?? presenceData.premium_type ?? presenceData.kv?.nitro;
+      const token = rawNitro == null ? "" : String(rawNitro).trim().toLowerCase();
+      const nitroLabels = {
+        "0": "NO NITRO", "none": "NO NITRO", "false": "NO NITRO", "no": "NO NITRO", "inactive": "NO NITRO",
+        "1": "NITRO CLASSIC", "classic": "NITRO CLASSIC", "nitro classic": "NITRO CLASSIC",
+        "2": "NITRO", "nitro": "NITRO",
+        "3": "NITRO BASIC", "basic": "NITRO BASIC", "nitro basic": "NITRO BASIC",
+        "true": "NITRO ACTIVE", "yes": "NITRO ACTIVE", "active": "NITRO ACTIVE"
+      };
+      const label = nitroLabels[token] || (token ? "NITRO STATUS UNKNOWN" : "NITRO NOT EXPOSED");
+      nitroStatus.textContent = label;
+      nitroStatus.classList.toggle("is-active", Boolean(token) && !["0", "none", "false", "no", "inactive"].includes(token) && Boolean(nitroLabels[token]));
+      nitroStatus.classList.toggle("is-unknown", !token || !nitroLabels[token]);
+      nitroStatus.setAttribute("aria-label", "Discord Nitro: " + label.toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase()));
+    }
+
+    if (!publicBadges) return;
+    publicBadges.replaceChildren();
+    const rawFlags = user.public_flags ?? user.flags;
+    const flags = Number(rawFlags);
+    if (rawFlags == null || !Number.isFinite(flags)) {
+      const empty = document.createElement("span");
+      empty.className = "discord-marker-empty";
+      empty.textContent = "Public badges unavailable";
+      publicBadges.append(empty);
+      return;
+    }
+    const matchingBadges = profileBadgeDefinitions.filter(({ flag }) => (Math.trunc(flags) & flag) === flag);
+    if (!matchingBadges.length) {
+      const empty = document.createElement("span");
+      empty.className = "discord-marker-empty";
+      empty.textContent = "No public badges returned";
+      publicBadges.append(empty);
+      return;
+    }
+    matchingBadges.forEach(({ label, short }) => {
+      const badge = document.createElement("span");
+      badge.className = "discord-account-badge";
+      badge.textContent = short;
+      badge.title = label;
+      badge.setAttribute("aria-label", label);
+      publicBadges.append(badge);
+    });
+  };
+
   const statusNames = { online: "ONLINE", idle: "IDLE", dnd: "DO NOT DISTURB", offline: "OFFLINE" };
   const setUnavailable = (message) => {
     activeTrack = null;
@@ -359,6 +425,7 @@ const discordPresence = (() => {
       statusDot.dataset.status = status;
       if (avatarStatus) avatarStatus.dataset.status = status;
       const user = data.discord_user || {};
+      renderProfileMarkers(user, data);
       displayName.textContent = user.global_name || user.display_name || user.username || "Pauze";
       activityText.textContent = status === "offline" ? "Currently offline" : status === "dnd" ? "Busy on Discord" : status === "idle" ? "Away on Discord" : "Active on Discord";
       if (avatar && user.id && user.avatar) {
