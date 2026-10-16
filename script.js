@@ -646,7 +646,8 @@ const discordPresence = (() => {
       const copy = document.createElement("div");
       copy.className = "activity-event-copy";
       const description = document.createElement("span");
-      description.textContent = eventLabels[event.type] + " · ";
+      description.className = "activity-event-title";
+      description.append(document.createTextNode(eventLabels[event.type] + " · "));
       description.append(makeLink("https://github.com/" + event.repo.name, event.repo.name.split("/").pop()));
       if (event.type === "PushEvent" && event.payload && Array.isArray(event.payload.commits) && event.payload.commits.length) {
         const commitCount = document.createElement("span");
@@ -671,7 +672,7 @@ const discordPresence = (() => {
     ];
     try {
       const results = await Promise.allSettled(repositories.map(async (name) => {
-        const response = await fetch("https://api.github.com/repos/" + name + "/commits?per_page=5", {
+        const response = await fetch("https://api.github.com/repos/" + name + "/commits?per_page=3", {
           headers: { Accept: "application/vnd.github+json" },
           cache: "no-store"
         });
@@ -679,8 +680,7 @@ const discordPresence = (() => {
         const commits = await response.json();
         return commits.map((commit) => ({
           repo: { name },
-          type: "CommitFallback",
-          message: commit.commit?.message?.split("\\n")[0] || "Updated repository",
+          message: commit.commit?.message?.split(/\\r?\\n/)[0]?.trim() || "Updated repository",
           url: commit.html_url,
           created_at: commit.commit?.committer?.date || commit.commit?.author?.date
         }));
@@ -688,9 +688,10 @@ const discordPresence = (() => {
       const commits = results
         .filter((result) => result.status === "fulfilled")
         .flatMap((result) => result.value)
-        .filter((commit) => commit.created_at)
+        .filter((commit) => commit.created_at && commit.url)
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        .slice(0, 5);
+        .filter((commit, index, all) => all.findIndex((other) => other.repo.name === commit.repo.name) === index)
+        .slice(0, 4);
       list.replaceChildren();
       if (!commits.length) throw new Error("No public commits available");
       commits.forEach((commit) => {
@@ -701,13 +702,15 @@ const discordPresence = (() => {
         icon.textContent = "↥";
         const copy = document.createElement("div");
         copy.className = "activity-event-copy";
-        const description = document.createElement("span");
-        description.append(document.createTextNode("Recent commit · "));
-        description.append(makeLink(commit.url, commit.message));
+        const title = document.createElement("span");
+        title.className = "activity-event-title";
+        const link = makeLink(commit.url, commit.message);
+        link.className = "activity-event-link";
+        title.append(link);
         const meta = document.createElement("span");
         meta.className = "activity-event-meta";
-        meta.textContent = commit.repo.name + " · " + relativeTime(commit.created_at);
-        copy.append(description, meta);
+        meta.textContent = commit.repo.name.split("/").pop() + " · " + relativeTime(commit.created_at);
+        copy.append(title, meta);
         item.append(icon, copy);
         list.append(item);
       });
@@ -715,6 +718,7 @@ const discordPresence = (() => {
     } catch (error) {
       list.replaceChildren();
       const item = document.createElement("li");
+      item.className = "activity-feed-empty";
       item.textContent = "Public activity couldn't be loaded right now. Use the profile links below to view repositories and commits.";
       list.append(item);
       state.textContent = "OPEN GITHUB";
