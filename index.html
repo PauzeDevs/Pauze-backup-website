@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="apple-style.css?v=20261016-portfolio-upgrade1">
+  <link rel="stylesheet" href="apple-style.css?v=20261016-portfolio-upgrade2">
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to content</a>
@@ -17,12 +17,30 @@
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="PAUZE home">PAUZE</a>
     <nav class="desktop-nav" id="primary-navigation" aria-label="Main navigation">
-      <a href="#work">Work <span>01</span></a><a href="#about">About <span>02</span></a><a href="#arcade">Arcade <span>03</span></a><a href="#activity">Live <span>04</span></a><a href="#now">Now <span>06</span></a><a href="#contact">Contact <span>07</span></a>
+      <a href="#work">Work <span>01</span></a><a href="#about">About <span>02</span></a><a href="#arcade">Arcade <span>03</span></a><a href="#activity">Live <span>04</span></a><a href="#contact">Contact <span>06</span></a>
     </nav>
+    <button class="command-trigger" type="button" aria-haspopup="dialog" aria-controls="command-palette"><span class="command-trigger-label">Quick actions</span><kbd>⌘ K</kbd></button>
     <a class="availability" href="#contact"><i class="status-dot"></i> OPEN TO IDEAS</a>
     <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-navigation" aria-expanded="false"><span></span><span></span></button>
   </header>
 
+  <dialog class="command-palette" id="command-palette" aria-labelledby="command-palette-title">
+    <div class="command-palette-head"><div><p class="section-index">PAUZE / QUICK NAVIGATION</p><h2 id="command-palette-title">Where to?</h2></div><button type="button" class="command-close" data-command-close aria-label="Close command palette">×</button></div>
+    <label class="command-search-wrap"><span aria-hidden="true">⌕</span><input id="command-search" type="search" placeholder="Search pages and links…" autocomplete="off" aria-label="Search pages and links"><kbd>ESC</kbd></label>
+    <p class="command-group-label">NAVIGATE</p>
+    <div class="command-items" role="list">
+      <a class="command-item" role="listitem" data-command-item href="#work"><span class="command-item-icon" aria-hidden="true">↗</span><span><strong>Selected work</strong><small>Projects and experiments</small></span><kbd>01</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="#about"><span class="command-item-icon" aria-hidden="true">◉</span><span><strong>About</strong><small>Background and toolkit</small></span><kbd>02</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="#arcade"><span class="command-item-icon" aria-hidden="true">▶</span><span><strong>Arcade</strong><small>Play the mini-games</small></span><kbd>03</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="#activity"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Live activity</strong><small>GitHub and presence</small></span><kbd>04</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="#contact"><span class="command-item-icon" aria-hidden="true">✉</span><span><strong>Contact</strong><small>Get in touch</small></span><kbd>06</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="https://github.com/personalaaravsingh-cmd" target="_blank" rel="noreferrer"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Personal GitHub</strong><small>Profile and contributions</small></span><kbd>↗</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="https://github.com/PauzeX-Developments" target="_blank" rel="noreferrer"><span class="command-item-icon" aria-hidden="true">◇</span><span><strong>PauzeX on GitHub</strong><small>Organization projects</small></span><kbd>↗</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="mailto:githubpauze@gmail.com"><span class="command-item-icon" aria-hidden="true">@</span><span><strong>Email Pauze</strong><small>githubpauze@gmail.com</small></span><kbd>↗</kbd></a>
+    </div>
+    <p class="command-empty" id="command-empty" hidden>No matching actions. Try another search.</p>
+    <div class="command-palette-foot"><span>OPEN WITH <kbd>⌘ K</kbd> / <kbd>CTRL K</kbd></span><span>ESC TO CLOSE</span></div>
+  </dialog>
   <main id="top" tabindex="-1">
     <section class="hero section-wrap" data-reveal>
       <div class="hero-topline"><span>INDEPENDENT DEVELOPER</span><span>INDIA <b>↗</b> <time id="india-time">--:--:--</time> <small id="india-date">Loading date…</small></span></div>
@@ -100,15 +118,6 @@
       <div class="activity-grid">
         <article class="presence-card github-presence" data-reveal><div class="presence-card-top"><span>GITHUB / ACTIVITY</span><a href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">PROFILE ↗</a></div><div class="github-card-title"><span class="github-symbol">⌘</span><div><h3>Code in progress</h3><p id="github-feed-state">Connecting to GitHub activity…</p></div></div><ul id="github-event-list"><li>Loading recent public activity…</li></ul><a class="contribution-graph-link" href="https://github.com/personalaaravsingh-cmd" target="_blank" rel="noreferrer" aria-label="Open personal GitHub profile and contribution history"><img class="contribution-graph-image" src="https://ghchart.rshah.org/a9ddf5/personalaaravsingh-cmd" alt="GitHub contribution graph for personalaaravsingh-cmd" loading="lazy" decoding="async"><span class="contribution-graph-fallback" hidden>Contribution graph unavailable. Open GitHub to view the profile activity.</span></a></article>
         <article class="presence-card discord-presence" data-reveal><div class="presence-card-top"><span>DISCORD / PRESENCE</span><span id="discord-status-label">CHECKING STATUS</span></div><div class="discord-profile"><div class="discord-avatar-wrap"><img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord avatar" loading="lazy" decoding="async"><i id="discord-avatar-status" class="avatar-status-indicator"></i></div><div class="discord-profile-copy"><h3 id="discord-display-name">Pauze</h3><p id="discord-activity-text">Looking for live Discord presence…</p><span class="discord-user-id">ID / 1547264515182432398</span></div><i class="presence-dot discord-dot" id="discord-status-dot"></i></div><div class="discord-account-markers" id="discord-profile-markers" aria-label="Discord profile badges"><span class="discord-nitro-status" id="discord-nitro-status">Checking Nitro status…</span><div class="discord-badges" id="discord-badges"><span class="discord-marker-empty">Loading public badges…</span></div></div><div class="discord-activity-box"><span>CURRENT ACTIVITY</span><p id="discord-current-activity">Waiting for Discord status…</p></div><div class="discord-music-card" id="discord-music-card" hidden><div class="discord-music-heading"><span id="discord-music-heading">Listening to Spotify</span><span class="music-badge">♪</span></div><div class="discord-music-track"><div class="music-art-fallback" id="discord-music-art-fallback" hidden>♪</div><img id="discord-music-art" src="" alt="Album artwork" loading="lazy" decoding="async" hidden><div class="discord-music-copy"><h4 id="discord-music-title">Track title</h4><p id="discord-music-artist">Artist</p><span id="discord-music-album">Album</span></div></div><div class="discord-music-progress"><span id="discord-music-progress"></span></div><div class="discord-music-times"><span id="discord-music-elapsed">0:00</span><span id="discord-music-duration">0:00</span></div><p id="discord-music-timing-note" hidden></p></div><a class="discord-cta" href="https://discord.com/users/1547264515182432398" target="_blank" rel="noreferrer">OPEN DISCORD PROFILE ↗</a><p class="discord-footnote" id="discord-status-note">Live status requires your Discord presence to be available through Lanyard.</p></article>
-      </div>
-    </section>
-
-    <section class="now-section section-wrap" id="now" aria-labelledby="now-title">
-      <div class="section-heading" data-reveal><div><p class="section-index">06 / RIGHT NOW</p><h2 id="now-title">What I’m<br>focused on<span class="accent-dot">.</span></h2></div><p class="section-note">A few things guiding the work: build useful software, keep improving the details, and learn by shipping real projects.</p></div>
-      <div class="now-grid">
-        <article class="now-card" data-reveal><span class="now-number">01</span><div><h3>Useful tools</h3><p>Turning practical ideas into developer utilities and focused experiences.</p></div><span class="now-arrow" aria-hidden="true">↗</span></article>
-        <article class="now-card" data-reveal><span class="now-number">02</span><div><h3>Better interfaces</h3><p>Refining responsive layouts, accessibility, performance, and the small details that make software feel right.</p></div><span class="now-arrow" aria-hidden="true">↗</span></article>
-        <article class="now-card" data-reveal><span class="now-number">03</span><div><h3>Learning by building</h3><p>Exploring web and Android development through hands-on projects and iteration.</p></div><span class="now-arrow" aria-hidden="true">↗</span></article>
       </div>
     </section>
 
