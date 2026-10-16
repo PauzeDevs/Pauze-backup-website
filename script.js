@@ -636,15 +636,7 @@ const discordPresence = (() => {
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       .filter((event, index, all) => all.findIndex((other) => other.id === event.id) === index)
       .slice(0, 5);
-    if (!useful.length) {
-      const item = document.createElement("li");
-      item.textContent = failedCount === feeds.length
-        ? "Live activity is temporarily unavailable. Open GitHub to see the latest updates."
-        : "No recent public events to show.";
-      list.append(item);
-      state.textContent = failedCount === feeds.length ? "TEMPORARILY UNAVAILABLE" : "NO RECENT EVENTS";
-      return;
-    }
+    if (!useful.length) return false;
     useful.forEach((event) => {
       const item = document.createElement("li");
       const icon = document.createElement("span");
@@ -669,6 +661,64 @@ const discordPresence = (() => {
       list.append(item);
     });
     state.textContent = failedCount ? "LIVE · PARTIAL DATA" : "LIVE · PUBLIC API";
+    return true;
+  };
+  const renderRecentCommits = async () => {
+    const repositories = [
+      "PauzeDevs/Pauze-backup-website",
+      "PauzeDevs/PauzeControl",
+      "PauzeDevs/PauzeWeatherDeveloped"
+    ];
+    try {
+      const results = await Promise.allSettled(repositories.map(async (name) => {
+        const response = await fetch("https://api.github.com/repos/" + name + "/commits?per_page=5", {
+          headers: { Accept: "application/vnd.github+json" },
+          cache: "no-store"
+        });
+        if (!response.ok) throw new Error("Commit feed unavailable");
+        const commits = await response.json();
+        return commits.map((commit) => ({
+          repo: { name },
+          type: "CommitFallback",
+          message: commit.commit?.message?.split("\\n")[0] || "Updated repository",
+          url: commit.html_url,
+          created_at: commit.commit?.committer?.date || commit.commit?.author?.date
+        }));
+      }));
+      const commits = results
+        .filter((result) => result.status === "fulfilled")
+        .flatMap((result) => result.value)
+        .filter((commit) => commit.created_at)
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .slice(0, 5);
+      list.replaceChildren();
+      if (!commits.length) throw new Error("No public commits available");
+      commits.forEach((commit) => {
+        const item = document.createElement("li");
+        const icon = document.createElement("span");
+        icon.className = "activity-event-icon";
+        icon.setAttribute("aria-hidden", "true");
+        icon.textContent = "↥";
+        const copy = document.createElement("div");
+        copy.className = "activity-event-copy";
+        const description = document.createElement("span");
+        description.append(document.createTextNode("Recent commit · "));
+        description.append(makeLink(commit.url, commit.message));
+        const meta = document.createElement("span");
+        meta.className = "activity-event-meta";
+        meta.textContent = commit.repo.name + " · " + relativeTime(commit.created_at);
+        copy.append(description, meta);
+        item.append(icon, copy);
+        list.append(item);
+      });
+      state.textContent = "LIVE · RECENT COMMITS";
+    } catch (error) {
+      list.replaceChildren();
+      const item = document.createElement("li");
+      item.textContent = "Public activity couldn't be loaded right now. Use the profile links below to view repositories and commits.";
+      list.append(item);
+      state.textContent = "OPEN GITHUB";
+    }
   };
   const loadEvents = async () => {
     const controller = typeof AbortController === "function" ? new AbortController() : null;
@@ -689,13 +739,11 @@ const discordPresence = (() => {
         if (result.status === "fulfilled") events.push(...result.value);
         else failedCount++;
       });
-      renderEvents(events, failedCount);
+      if (!renderEvents(events, failedCount)) {
+        await renderRecentCommits();
+      }
     } catch (error) {
-      list.replaceChildren();
-      const item = document.createElement("li");
-      item.textContent = "Live activity couldn't load. Open GitHub to see the latest updates.";
-      list.append(item);
-      state.textContent = "TEMPORARILY UNAVAILABLE";
+      await renderRecentCommits();
     } finally {
       if (timeout !== null) window.clearTimeout(timeout);
     }
