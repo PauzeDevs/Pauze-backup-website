@@ -94,7 +94,10 @@ a{color:inherit;text-decoration:none}button{font:inherit}::selection{background:
 .arcade-stats{display:flex;gap:35px;padding:18px 22px}.arcade-stats div{display:grid;gap:3px}.arcade-stats span{color:#8f9eae;font-size:10px}.arcade-stats strong{font:500 19px var(--mono)}
 .dino-stage{position:relative;min-height:260px;background:#0a1017;border-top:1px solid #ffffff12;border-bottom:1px solid #ffffff12}
 #dino-canvas{display:block;width:100%;height:auto;min-height:220px}
-.dino-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;background:#080c12b8;z-index:2;pointer-events:auto}\n.dino-overlay[hidden]{display:none!important}\n#dino-canvas{position:relative;z-index:1;touch-action:none}\n.dino-stage{overflow:hidden;touch-action:pan-y}
+.dino-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;background:#080c12b8;z-index:2;pointer-events:auto}
+.dino-overlay[hidden]{display:none!important}
+#dino-canvas{position:relative;z-index:1;touch-action:none}
+.dino-stage{overflow:hidden;touch-action:pan-y}
 .dino-overlay-label{color:var(--accent);font-size:10px;font-weight:600;letter-spacing:.12em}
 .dino-overlay h3{margin:9px 0;font:600 clamp(26px,4vw,42px) var(--display);letter-spacing:-.05em}
 .dino-overlay p{margin:0 0 16px;color:#b0bdca;font-size:14px}
