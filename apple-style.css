@@ -189,8 +189,8 @@ a.contact-link-card:hover{transform:translateY(-3px);border-color:#a9ddf54a;back
 .copy-email-button{margin-top:14px;padding:7px 11px;border:1px solid #a9ddf54a;border-radius:999px;background:transparent;color:var(--accent);font-size:11px;font-weight:600;cursor:pointer}
 .copy-email-button:hover{background:#a9ddf512}
 .copy-email-status{margin-top:7px;color:#a9ddf5;font-size:10px;line-height:1.5}
-.contact-hub{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:760px){.now-card{padding:20px}.contact-hub{grid-template-columns:1fr}.contact-link-card{min-height:130px}.contact-link-card strong{margin-top:12px}.contribution-graph-link{padding:10px}}
+@media(max-width:900px){.contact-hub{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.contact-hub{grid-template-columns:1fr}.contact-link-card{min-height:130px}.contact-link-card strong{margin-top:12px}.contribution-graph-link{padding:10px}}
 @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
 
 
