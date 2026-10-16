@@ -116,7 +116,16 @@ a{color:inherit;text-decoration:none}button{font:inherit}::selection{background:
 .github-card-title{display:flex;align-items:center;gap:15px;margin:22px 0}
 .github-symbol{display:grid;place-items:center;width:46px;height:46px;border:1px solid #ffffff19;border-radius:14px;background:#171e28;font-size:22px}
 .github-card-title h3,.discord-profile-copy h3{margin:0;font:600 21px var(--display);letter-spacing:-.04em}.github-card-title p,.discord-profile-copy p{margin:4px 0 0;color:var(--muted);font-size:13px}
-#github-event-list{padding-left:18px;color:#b4c0ce;font-size:13px}#github-event-list li{margin:8px 0}
+#github-event-list{list-style:none;display:grid;gap:0;margin:18px 0 0;padding:0;color:#b4c0ce;font-size:13px}
+#github-event-list li{display:flex;align-items:flex-start;gap:12px;min-width:0;margin:0;padding:13px 0;border-bottom:1px solid #ffffff10}
+#github-event-list li:last-child{border-bottom:0}
+.activity-event-icon{display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;border:1px solid #ffffff16;border-radius:10px;background:#171e28;color:var(--accent);font-size:15px}
+.activity-event-copy{display:flex;flex:1;flex-direction:column;gap:5px;min-width:0}
+.activity-event-title{display:block;min-width:0;color:#d7dfe8;line-height:1.55;overflow-wrap:anywhere}
+.activity-event-title a{color:inherit;text-decoration:none;overflow-wrap:anywhere}
+.activity-event-title a:hover{color:var(--accent)}
+.activity-event-meta{display:block;color:#8593a3;font-size:11px;line-height:1.5;letter-spacing:.015em;overflow-wrap:anywhere}
+.activity-feed-empty{color:var(--muted);line-height:1.65}
 .contribution-graph{min-height:70px;margin-top:20px;border-radius:10px;background:#0b1119}
 .discord-profile{display:flex;align-items:center;gap:14px;margin:22px 0}
 .discord-avatar-wrap{position:relative;flex-shrink:0}.discord-avatar-wrap img{display:block;width:58px;height:58px;border-radius:18px;object-fit:cover}
@@ -227,6 +236,6 @@ a.contact-link-card:hover{transform:translateY(-3px);border-color:#a9ddf54a;back
 @media(max-width:760px){.command-trigger{padding:7px 8px}.command-trigger-label{display:none}.command-palette-head{padding:20px 20px 14px}.command-items{max-height:52vh}}
 @media(max-width:420px){.command-trigger{gap:5px}.command-trigger kbd{font-size:9px;padding:3px 4px}.command-palette-foot{font-size:8px;padding:10px 14px}}
 
-.contribution-graph-link-label{display:flex;flex-direction:column;gap:8px;padding:22px;color:var(--text);font-size:12px;letter-spacing:.08em;font-weight:600}
-.contribution-graph-link-label b{display:inline;color:var(--accent)}
-.contribution-graph-link-label small{color:var(--muted);font-size:13px;letter-spacing:0;font-weight:400}
+.contribution-graph-link-label{display:block;padding:22px;color:var(--text);font-size:12px;line-height:1.6;letter-spacing:.08em;font-weight:600}
+.contribution-graph-link-label b{display:inline;margin-left:4px;color:var(--accent)}
+.contribution-graph-link-label small{display:block;margin-top:8px;color:var(--muted);font-size:13px;letter-spacing:0;font-weight:400}
