@@ -442,3 +442,55 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* India clock — compact, readable, and aligned with the footer system. */
+.site-footer {
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+.india-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 190px;
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+.india-clock-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font: 700 9px/1.5 var(--mono);
+  letter-spacing: .08em;
+}
+.india-clock-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a36a;
+  box-shadow: 0 0 0 3px #e7f8ef;
+}
+#india-time {
+  color: var(--accent);
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -.04em;
+}
+#india-date {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+@media (max-width: 760px) {
+  .site-footer { grid-template-columns: 1fr auto; align-items: start; }
+  .india-clock { grid-column: 1 / -1; grid-row: 2; min-width: 0; width: 100%; }
+  .site-footer small { grid-column: 1 / -1; }
+}
