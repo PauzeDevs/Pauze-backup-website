@@ -558,7 +558,7 @@ const discordPresence = (() => {
   const state = document.querySelector("#github-feed-state");
   if (!list || !state) return;
   const feeds = [
-    { label: "PERSONAL", url: "https://api.github.com/users/personala aravsingh-cmd/events/public?per_page=30".replace("personala aravsingh-cmd", "personalaaravsingh-cmd") },
+    { label: "PERSONAL", url: "https://api.github.com/users/personalaaravsingh-cmd/events/public?per_page=30" },
     { label: "PAUZEDEVS", url: "https://api.github.com/orgs/PauzeDevs/events?per_page=30" }
   ];
   const eventLabels = {
