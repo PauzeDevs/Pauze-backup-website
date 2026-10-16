@@ -15,6 +15,38 @@ if (menuButton && nav) {
 const year = document.querySelector("#year");
 if (year) year.textContent = new Date().getFullYear();
 
+/* Live India Standard Time (IST), rendered locally in the visitor's browser. */
+(() => {
+  const clock = document.querySelector("#india-time");
+  const date = document.querySelector("#india-date");
+  if (!clock || !date) return;
+
+  const timeFormatter = new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  });
+  const dateFormatter = new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+
+  const updateIndiaClock = () => {
+    const now = new Date();
+    clock.textContent = timeFormatter.format(now);
+    clock.dateTime = now.toISOString();
+    date.textContent = dateFormatter.format(now);
+  };
+
+  updateIndiaClock();
+  window.setInterval(updateIndiaClock, 1000);
+})();
+
 /* Interactive technology stack markup is not present on this page. */
 /* Live Discord presence and now-playing metadata. Amazon timing is approximate unless timestamps are exposed by Discord. */
 const discordPresence = (() => {
@@ -53,9 +85,9 @@ const discordPresence = (() => {
     const seconds = Math.max(0, Math.floor(milliseconds / 1000));
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
   };
-  const validTimestamp = (value) => {
+  const validTimestamp = (value, allowFuture = false) => {
     const number = Number(value);
-    return Number.isFinite(number) && number > 0 && number < Date.now() + 5000 ? number : 0;
+    return Number.isFinite(number) && number > 0 && (allowFuture || number < Date.now() + 5000) ? number : 0;
   };
   const setFallbackArtwork = (title, artist, key) => {
     if (musicArt) {
@@ -112,7 +144,8 @@ const discordPresence = (() => {
 
     if (activeTrack.mode === "spotify") {
       const start = validTimestamp(activeTrack.timestamps?.start);
-      const end = validTimestamp(activeTrack.timestamps?.end);
+      // Spotify's end timestamp is expected to be in the future while a track is playing.
+      const end = validTimestamp(activeTrack.timestamps?.end, true);
       if (start && end && end > start) {
         elapsed = Math.max(0, Math.min(end - start, now - start));
         activeTrack.durationMs = end - start;

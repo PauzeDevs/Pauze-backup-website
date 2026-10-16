@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#faf8ff">
+  <meta name="theme-color" content="#f6f8fc">
   <meta name="description" content="Pauze — independent digital studio building software, sound, and experiments with intention.">
   <title>PAUZE® — Digital Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,9 +40,10 @@
   </style>
   <noscript><style>#pauze-intro-splash{display:none!important}</style></noscript>
   <link rel="stylesheet" href="styles.css?v=20261012-bugfix1">
+  <link rel="stylesheet" href="refresh.css?v=20261016-ui1">
 </head>
 <body>
-  <div id="pauze-intro-splash" class="pauze-intro-splash" role="status" aria-label="PAUZE street-art intro" aria-live="polite">
+  <div id="pauze-intro-splash" class="pauze-intro-splash" role="status" aria-label="PAUZE digital studio intro" aria-live="polite">
     <div class="pauze-splash-grain" aria-hidden="true"></div>
     <div class="pauze-splash-art" aria-hidden="true">
       <svg class="pauze-draw-svg" viewBox="0 0 1000 430" role="presentation">
@@ -84,7 +85,7 @@
           <circle cx="835" cy="294" r="4"/>
         </g>
       </svg>
-      <div class="pauze-splash-tag">NEW YORK ENERGY · DIGITAL STUDIO</div>
+      <div class="pauze-splash-tag">INDEPENDENT DIGITAL STUDIO</div>
     </div>
   </div>
   <div class="noise" aria-hidden="true"></div>
@@ -383,7 +384,12 @@ Results + next round</code></pre>
   </main>
   <footer class="site-footer section-wrap">
     <a class="wordmark" href="#top">PAUZE<span>®</span></a><span>INDEPENDENT BY DESIGN.</span>
-    <div><a href="https://github.com/PauzeX-Developments" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div>
+    <div class="footer-links"><a href="https://github.com/PauzeX-Developments" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div>
+    <div class="india-clock" aria-label="Current time in India">
+      <span class="india-clock-label"><span class="india-clock-dot" aria-hidden="true"></span> INDIA STANDARD TIME</span>
+      <time id="india-time" datetime="">--:--:--</time>
+      <span id="india-date">Loading India’s local date…</span>
+    </div>
     <small>© <span id="year"></span> PAUZE. MADE WITH INTENTION.</small>
   </footer>
   <script src="script.js?v=20261012-dino-birds1" defer></script>
