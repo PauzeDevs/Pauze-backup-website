@@ -155,3 +155,16 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
  .contact-bottom{align-items:flex-start;flex-direction:column;gap:12px}.site-footer{grid-template-columns:1fr auto}.site-footer>span{display:none}.footer-links{grid-column:1/-1;justify-content:flex-start}.site-footer small{grid-column:1/-1}
 }
 @media(max-width:420px){.hero-topline span:last-child{max-width:54%;text-align:right}.hero-bottomline span:last-child{display:none}.availability{padding:7px 9px;font-size:9px}.project-meta{font-size:9px}.project-state{white-space:normal;text-align:right}.arcade-game-picker{padding:12px}.arcade-game-option{padding:7px 9px}.arcade-stats{justify-content:space-between;gap:10px}.arcade-stats span{font-size:9px}.arcade-stats strong{font-size:14px}}
+
+
+/* Toolkit: spacious logo-led skill grid */
+.skills-strip{grid-template-columns:150px minmax(0,1fr);gap:30px;padding-top:32px}
+.skill-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.skill-item{display:flex;min-width:0;min-height:76px;align-items:center;gap:12px;padding:15px 16px;border:1px solid #ffffff16;border-radius:15px;background:#101720;color:#dce5ef;font:500 13px var(--sans);transition:transform .2s,border-color .2s,background .2s}
+.skill-item:hover{transform:translateY(-2px);border-color:#a9ddf55c;background:#141e29}
+.skill-item img{display:block;width:25px;height:25px;flex:0 0 25px;object-fit:contain}
+.skill-item span:last-child{overflow-wrap:anywhere}
+.skill-generic-icon{display:grid;place-items:center;flex:0 0 25px;width:25px;height:25px;border:1px solid #a9ddf552;border-radius:8px;color:var(--accent);font-size:19px;line-height:1}
+@media(max-width:900px){.skill-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.skills-strip{grid-template-columns:1fr;gap:16px}.skill-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.skill-item{min-height:68px;padding:12px}}
+@media(max-width:360px){.skill-item{gap:8px;padding:10px;font-size:12px}.skill-item img{width:22px;height:22px;flex-basis:22px}}
