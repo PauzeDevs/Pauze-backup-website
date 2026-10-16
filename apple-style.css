@@ -226,3 +226,7 @@ a.contact-link-card:hover{transform:translateY(-3px);border-color:#a9ddf54a;back
 .command-palette-foot{display:flex;justify-content:space-between;gap:12px;padding:12px 20px;border-top:1px solid #ffffff12;color:#8593a3;font-size:9px;letter-spacing:.06em}
 @media(max-width:760px){.command-trigger{padding:7px 8px}.command-trigger-label{display:none}.command-palette-head{padding:20px 20px 14px}.command-items{max-height:52vh}}
 @media(max-width:420px){.command-trigger{gap:5px}.command-trigger kbd{font-size:9px;padding:3px 4px}.command-palette-foot{font-size:8px;padding:10px 14px}}
+
+.contribution-graph-link-label{display:flex;flex-direction:column;gap:8px;padding:22px;color:var(--text);font-size:12px;letter-spacing:.08em;font-weight:600}
+.contribution-graph-link-label b{display:inline;color:var(--accent)}
+.contribution-graph-link-label small{color:var(--muted);font-size:13px;letter-spacing:0;font-weight:400}
