@@ -662,18 +662,19 @@ const discordPresence = (() => {
   });
 })();
 
-/* Real public GitHub events from the personal profile and PauzeDevs organization. */
+/* Public GitHub activity from the PauzeDevs profile (commits and pull requests). */
 (() => {
   const list = document.querySelector("#github-event-list");
   const state = document.querySelector("#github-feed-state");
   if (!list || !state) return;
   const feeds = [
-    { label: "PERSONAL", url: "https://api.github.com/users/personalaaravsingh-cmd/events/public?per_page=30" },
-    { label: "PAUZEDEVS", url: "https://api.github.com/orgs/PauzeDevs/events?per_page=30" }
+    { label: "PROFILE", url: "https://api.github.com/users/PauzeDevs/events/public?per_page=100" }
   ];
   const eventLabels = {
     PushEvent: "Pushed commits",
     PullRequestEvent: "Updated a pull request",
+    PullRequestReviewEvent: "Reviewed a pull request",
+    PullRequestReviewCommentEvent: "Commented on a pull request",
     IssuesEvent: "Opened or updated an issue",
     IssueCommentEvent: "Commented on an issue",
     CreateEvent: "Created a branch or repository",
@@ -698,26 +699,62 @@ const discordPresence = (() => {
     link.rel = "noreferrer";
     return link;
   };
+  const pullRequestAction = (event) => {
+    const pullRequest = event.payload && event.payload.pull_request;
+    const action = event.payload && event.payload.action;
+    const number = event.payload && event.payload.number || pullRequest && pullRequest.number;
+    const merged = pullRequest && (pullRequest.merged || pullRequest.merged_at);
+    const labels = {
+      opened: "Opened pull request",
+      reopened: "Reopened pull request",
+      synchronize: "Updated pull request",
+      closed: merged ? "Merged pull request" : "Closed pull request",
+      merged: "Merged pull request"
+    };
+    return {
+      number,
+      label: labels[action] || "Updated pull request",
+      url: number ? "https://github.com/" + event.repo.name + "/pull/" + number : "https://github.com/" + event.repo.name
+    };
+  };
   const renderEvents = (events, failedCount) => {
     list.replaceChildren();
+    const seen = new Set();
     const useful = events
       .filter((event) => eventLabels[event.type] && event.repo && event.repo.name && event.created_at)
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      .filter((event, index, all) => all.findIndex((other) => other.id === event.id) === index)
+      .filter((event) => {
+        const pullRequestEvent = event.type === "PullRequestEvent" || event.type === "PullRequestReviewEvent" || event.type === "PullRequestReviewCommentEvent";
+        const number = event.payload && event.payload.number || event.payload && event.payload.pull_request && event.payload.pull_request.number;
+        const key = pullRequestEvent && number ? event.repo.name + ":pr:" + number : event.id;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
       .slice(0, 5);
     if (!useful.length) return false;
     useful.forEach((event) => {
       const item = document.createElement("li");
+      const pullRequestEvent = event.type === "PullRequestEvent" || event.type === "PullRequestReviewEvent" || event.type === "PullRequestReviewCommentEvent";
+      const pullRequest = pullRequestEvent ? pullRequestAction(event) : null;
       const icon = document.createElement("span");
       icon.className = "activity-event-icon";
       icon.setAttribute("aria-hidden", "true");
-      icon.textContent = event.type === "PushEvent" ? "↥" : event.type === "PullRequestEvent" ? "⑂" : event.type === "ReleaseEvent" ? "◆" : "↗";
+      icon.textContent = event.type === "PushEvent" ? "↥" : pullRequestEvent ? "⑂" : event.type === "ReleaseEvent" ? "◆" : "↗";
       const copy = document.createElement("div");
       copy.className = "activity-event-copy";
       const description = document.createElement("span");
       description.className = "activity-event-title";
-      description.append(document.createTextNode(eventLabels[event.type] + " · "));
-      description.append(makeLink("https://github.com/" + event.repo.name, event.repo.name.split("/").pop()));
+      const label = pullRequest ? pullRequest.label : eventLabels[event.type];
+      description.append(document.createTextNode(label + " · "));
+      const repoName = event.repo.name.split("/").pop();
+      const headSha = event.payload && event.payload.head;
+      const commitUrl = typeof headSha === "string" && /^[a-f0-9]{7,40}$/i.test(headSha)
+        ? "https://github.com/" + event.repo.name + "/commit/" + headSha
+        : "https://github.com/" + event.repo.name;
+      const targetUrl = pullRequest ? pullRequest.url : commitUrl;
+      const targetLabel = pullRequest && pullRequest.number ? "#" + pullRequest.number + " · " + repoName : repoName;
+      description.append(makeLink(targetUrl, targetLabel));
       if (event.type === "PushEvent" && event.payload && Array.isArray(event.payload.commits) && event.payload.commits.length) {
         const commitCount = document.createElement("span");
         commitCount.textContent = " (" + event.payload.commits.length + " commit" + (event.payload.commits.length === 1 ? "" : "s") + ")";
@@ -730,14 +767,15 @@ const discordPresence = (() => {
       item.append(icon, copy);
       list.append(item);
     });
-    state.textContent = failedCount ? "LIVE · PARTIAL DATA" : "LIVE · PUBLIC API";
+    state.textContent = failedCount ? "LIVE · PARTIAL DATA" : "LIVE · COMMITS + PR UPDATES";
     return true;
   };
   const renderRecentCommits = async () => {
     const repositories = [
       "PauzeDevs/Pauze-backup-website",
-      "PauzeDevs/PauzeControl",
-      "PauzeDevs/PauzeWeatherDeveloped"
+      "PauzeDevs/PauzeXDevelopments-Website",
+      "PauzeDevs/PauzeChats",
+      "PauzeDevs/PauzeControl"
     ];
     try {
       const results = await Promise.allSettled(repositories.map(async (name) => {
@@ -919,7 +957,7 @@ const discordPresence = (() => {
       try {
         const options = { headers: { Accept: "application/json" }, cache: "force-cache" };
         if (controller) options.signal = controller.signal;
-        const response = await fetch("https://github-contributions-api.jogruber.de/v4/personalaaravsingh-cmd?y=last", options);
+        const response = await fetch("https://github-contributions-api.jogruber.de/v4/PauzeDevs?y=last", options);
         if (!response.ok) throw new Error(`Contribution service returned ${response.status}`);
         const payload = await response.json();
         if (!Array.isArray(payload.contributions)) throw new Error("Invalid contribution response");
