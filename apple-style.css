@@ -637,3 +637,104 @@ a.contact-link-card:hover { border-color:#d6d4cf88; background:#1a1e23; }
   .hero-topline,.hero-bottomline { font-size:8px; letter-spacing:.12em; }
   .hero-links a { padding:12px 2px; }
 }
+
+/* Animated night sky with an editorial serif and quieter UI typography. */
+:root {
+  --bg:#07080d;
+  --surface:#10131b;
+  --panel:#151923;
+  --panel2:#1c2230;
+  --ink:#f3f1ed;
+  --text:#f3f1ed;
+  --muted:#acb1bc;
+  --accent:#d7d3cc;
+  --accentInk:#101116;
+  --display:"Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans:"DM Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"DM Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+body {
+  background:
+    radial-gradient(ellipse at 48% 3%,#26374b 0,transparent 35%),
+    radial-gradient(ellipse at 88% 24%,#1d2940 0,transparent 31%),
+    linear-gradient(180deg,#0c1119 0%,#07080d 68%);
+}
+body::before {
+  opacity:.72;
+  background-size:100% 620px;
+  animation: pauze-star-drift 95s linear infinite, pauze-star-twinkle 9s ease-in-out infinite alternate;
+}
+body::after {
+  opacity:.78;
+  background:
+    radial-gradient(ellipse at 12% 28%,#30496088 0,transparent 28%),
+    radial-gradient(ellipse at 75% 25%,#3a466080 0,transparent 25%),
+    radial-gradient(ellipse at 50% 47%,#1e355088 0,transparent 32%),
+    radial-gradient(ellipse at 90% 58%,#283a4b66 0,transparent 27%),
+    linear-gradient(180deg,transparent 43%,#07080d 87%);
+  background-size:130% 120%;
+  animation:pauze-nebula-drift 54s ease-in-out infinite alternate;
+  transform-origin:center;
+}
+.hero::before {
+  background:
+    radial-gradient(ellipse at 50% 15%,#354c6488 0,transparent 34%),
+    radial-gradient(ellipse at 14% 40%,#293e5188 0,transparent 29%),
+    radial-gradient(ellipse at 88% 39%,#34435f77 0,transparent 31%),
+    linear-gradient(180deg,#0c121a00 0%,#090b0e60 69%,#080a0d 100%);
+  animation:pauze-hero-haze 22s ease-in-out infinite alternate;
+}
+.hero h1 {
+  font-family:var(--display);
+  font-size:clamp(96px,15vw,174px);
+  font-weight:600;
+  line-height:.78;
+  letter-spacing:-.055em;
+  text-shadow:0 5px 60px #b9c9e233;
+}
+.hero h1>span { font-weight:600; }
+.wordmark {
+  color:#f1f0ed;
+  font-family:var(--display);
+  font-size:30px;
+  font-weight:700;
+  letter-spacing:.025em;
+}
+.desktop-nav a,.hero-links a,.hero-topline,.hero-bottomline,
+.section-index,.project-meta,.project-tags span,.build-note-tags span,
+.presence-card-top,.site-footer>span,.site-footer small,.footer-links a {
+  font-family:var(--mono);
+}
+.hero-links a { font-size:11px; }
+.section-heading h2,.about-heading h2,.project h3,.contact h2 {
+  font-family:var(--display);
+  font-weight:600;
+  letter-spacing:-.04em;
+}
+.about-content p,.section-note,.project p,.hero-description,
+.contact-bottom p,.contact-link-detail,.discord-profile-copy p,
+.discord-activity-box p,.build-note p {
+  font-family:var(--sans);
+}
+@keyframes pauze-star-drift {
+  from { background-position:0 0; }
+  to { background-position:90px 370px; }
+}
+@keyframes pauze-star-twinkle {
+  from { opacity:.48; }
+  to { opacity:.82; }
+}
+@keyframes pauze-nebula-drift {
+  from { transform:translate3d(-1.5%,0,0) scale(1); }
+  to { transform:translate3d(1.5%,-1.2%,0) scale(1.06); }
+}
+@keyframes pauze-hero-haze {
+  from { transform:scale(1); opacity:.78; }
+  to { transform:scale(1.08) translateY(-1%); opacity:1; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body::before,body::after,.hero::before {
+    animation:none!important;
+    transform:none!important;
+  }
+}
