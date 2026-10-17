@@ -4,7 +4,6 @@
   <img src="https://readme-typing-svg.demolab.com?font=Inter&weight=600&size=22&duration=2600&pause=700&color=4C8DFF&center=true&vCenter=true&width=680&lines=PAUZE%C2%AE+%E2%80%94+Digital+Studio+Website" alt="Animated header: PAUZE® — Digital Studio Website">
 </p>
 
-
 **Live website:** https://pauze.is-a.dev
 
 A responsive, project-first portfolio for Pauze, showcasing software, developer tools, experiments, and creative work. Built with plain HTML, CSS, and JavaScript.
