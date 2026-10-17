@@ -1,5 +1,9 @@
 # PAUZE® — Digital Studio Website
 
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Inter&weight=600&size=22&duration=2600&pause=700&color=4C8DFF&center=true&vCenter=true&width=680&lines=PAUZE%C2%AE+%E2%80%94+Digital+Studio+Website" alt="Animated header: PAUZE® — Digital Studio Website">
+</p>
+
 **Live website:** https://pauze.is-a.dev
 
 A responsive, project-first portfolio for Pauze, showcasing software, developer tools, experiments, and creative work. Built with plain HTML, CSS, and JavaScript.
@@ -48,3 +52,13 @@ The website is hosted with GitHub Pages at **[pauze.is-a.dev](https://pauze.is-a
 ---
 
 Made by **PAUZE®**. All rights reserved.
+
+## Run locally
+
+This is a static site with no package manager, build step, or test script. To preview it from the repository root, use Python 3:
+
+```bash
+python3 -m http.server 4173
+```
+
+Then open `http://localhost:4173`. The deployed site is published through GitHub Pages.
