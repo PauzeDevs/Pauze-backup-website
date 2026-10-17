@@ -403,14 +403,10 @@ const discordPresence = (() => {
     publicBadges.replaceChildren();
     const rawFlags = user.public_flags ?? user.flags;
     const flags = Number(rawFlags);
-    if (rawFlags == null || !Number.isFinite(flags)) {
-      const empty = document.createElement("span");
-      empty.className = "discord-marker-empty";
-      empty.textContent = "Public badges unavailable";
-      publicBadges.append(empty);
-      return;
-    }
-    const matchingBadges = profileBadgeDefinitions.filter(({ flag }) => (Math.trunc(flags) & flag) === flag);
+    const flagsAvailable = rawFlags != null && Number.isFinite(flags);
+    const matchingBadges = flagsAvailable
+      ? profileBadgeDefinitions.filter(({ flag }) => (Math.trunc(flags) & flag) === flag)
+      : [];
     matchingBadges.forEach(({ label, short }) => {
       const badge = document.createElement("span");
       badge.className = "discord-account-badge";
@@ -446,7 +442,7 @@ const discordPresence = (() => {
     if (!matchingBadges.length && !guild?.identity_enabled) {
       const empty = document.createElement("span");
       empty.className = "discord-marker-empty";
-      empty.textContent = "No public profile badges";
+      empty.textContent = flagsAvailable ? "No public profile badges" : "Public badges unavailable";
       publicBadges.append(empty);
     }
   };
