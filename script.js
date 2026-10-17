@@ -411,13 +411,6 @@ const discordPresence = (() => {
       return;
     }
     const matchingBadges = profileBadgeDefinitions.filter(({ flag }) => (Math.trunc(flags) & flag) === flag);
-    if (!matchingBadges.length) {
-      const empty = document.createElement("span");
-      empty.className = "discord-marker-empty";
-      empty.textContent = "No public badges returned";
-      publicBadges.append(empty);
-      return;
-    }
     matchingBadges.forEach(({ label, short }) => {
       const badge = document.createElement("span");
       badge.className = "discord-account-badge";
@@ -426,6 +419,36 @@ const discordPresence = (() => {
       badge.setAttribute("aria-label", label);
       publicBadges.append(badge);
     });
+
+    const guild = user.primary_guild;
+    const guildId = typeof guild?.identity_guild_id === "string" ? guild.identity_guild_id : "";
+    const guildBadgeHash = typeof guild?.badge === "string" ? guild.badge : "";
+    if (guild?.identity_enabled && guildId && guildBadgeHash) {
+      const serverBadge = document.createElement("span");
+      serverBadge.className = "discord-account-badge discord-server-badge";
+      serverBadge.title = guild.tag ? `Server identity: ${guild.tag}` : "Discord server identity badge";
+      serverBadge.setAttribute("aria-label", serverBadge.title);
+      const icon = document.createElement("img");
+      icon.src = `https://cdn.discordapp.com/clan-badges/${encodeURIComponent(guildId)}/${encodeURIComponent(guildBadgeHash)}.png?size=64`;
+      icon.alt = "";
+      icon.loading = "lazy";
+      icon.decoding = "async";
+      icon.onerror = () => serverBadge.classList.add("discord-server-badge-fallback");
+      serverBadge.append(icon);
+      if (typeof guild.tag === "string" && guild.tag.trim()) {
+        const tag = document.createElement("span");
+        tag.textContent = guild.tag.trim();
+        serverBadge.append(tag);
+      }
+      publicBadges.append(serverBadge);
+    }
+
+    if (!matchingBadges.length && !guild?.identity_enabled) {
+      const empty = document.createElement("span");
+      empty.className = "discord-marker-empty";
+      empty.textContent = "No public profile badges";
+      publicBadges.append(empty);
+    }
   };
 
   const statusNames = { online: "ONLINE", idle: "IDLE", dnd: "DO NOT DISTURB", offline: "OFFLINE" };
