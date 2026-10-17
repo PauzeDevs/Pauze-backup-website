@@ -1062,3 +1062,21 @@ html.site-entered .hero h1 .hero-title-line {
 
 /* The hero is focused for screen readers after entry; keep the title free of a large focus frame. */
 #hero-title:focus-visible { outline:none; }
+
+
+/* A programmatically focused heading is not an interactive control. Keep it unclipped and frameless. */
+#hero-title,
+#hero-title:focus,
+#hero-title:focus-visible {
+  outline: 0 !important;
+  outline-offset: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.hero h1 {
+  line-height: .94;
+  padding-block: .045em .12em;
+}
+@media (max-width: 760px) {
+  .hero h1 { line-height: .98; }
+}
