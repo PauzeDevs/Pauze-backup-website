@@ -658,8 +658,7 @@ const discordPresence = (() => {
   const state = document.querySelector("#github-feed-state");
   if (!list || !state) return;
   const feeds = [
-    { label: "PERSONAL", url: "https://api.github.com/users/personalaaravsingh-cmd/events/public?per_page=30" },
-    { label: "PAUZEDEVS", url: "https://api.github.com/orgs/PauzeDevs/events?per_page=30" }
+    { label: "PAUZE", url: "https://api.github.com/users/PauzeDevs/events/public?per_page=30" }
   ];
   const eventLabels = {
     PushEvent: "Pushed commits",
@@ -814,16 +813,7 @@ const discordPresence = (() => {
   loadEvents();
   window.setInterval(loadEvents, 300000);
 
-  const graph = document.querySelector(".contribution-graph-link");
-  const graphImage = document.querySelector(".contribution-graph-image");
-  const graphFallback = document.querySelector(".contribution-graph-fallback");
-  if (graphImage && graphFallback) {
-    graphImage.addEventListener("error", () => {
-      graphImage.hidden = true;
-      graphFallback.hidden = false;
-      if (graph) graph.classList.add("graph-unavailable");
-    }, { once: true });
-  }
+
 })();
 
 
@@ -991,4 +981,176 @@ const discordPresence = (() => {
   stage.addEventListener("pointerdown",e=>{if(!cv.contains(e.target)||!running||paused||ended)return;if(game==="dino")jump();if(game==="space")fire();if(game==="memory")memoryClick(e);});
   document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!paused)pause();});window.addEventListener("blur",clearKeys);window.addEventListener("resize",draw);
   choose("dino");
+})();
+
+/* Accessible click-to-enter intro and type-on hero title. */
+(() => {
+  const entry = document.querySelector("#entry-screen");
+  const enterButton = document.querySelector("#enter-site");
+  const title = document.querySelector("#hero-title");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!entry || !enterButton || prefersReducedMotion || typeof entry.showModal !== "function") return;
+
+  const titleLines = title ? title.querySelectorAll(".hero-title-line") : [];
+  titleLines.forEach((line, index) => {
+    const steps = Array.from(line.textContent.trim()).length;
+    line.style.setProperty("--type-steps", String(steps));
+    line.style.setProperty("--type-duration", steps * 0.085 + "s");
+    line.style.setProperty("--type-delay", (index ? 0.82 : 0.08) + "s");
+  });
+
+  const enterSite = () => {
+    if (entry.classList.contains("is-exiting")) return;
+    entry.classList.add("is-exiting");
+    document.documentElement.classList.add("site-entered");
+    window.setTimeout(() => {
+      if (entry.open) entry.close();
+      entry.classList.remove("is-exiting");
+      if (title) title.focus({ preventScroll: true });
+    }, 560);
+  };
+
+  entry.showModal();
+  enterButton.focus({ preventScroll: true });
+  enterButton.addEventListener("click", enterSite, { once: true });
+  entry.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    enterSite();
+  }, { once: true });
+})();
+
+/* Draw the verified public GitHub contribution calendar only when it nears view. */
+(() => {
+  const host = document.querySelector("#github-contribution-calendar");
+  const totalLabel = document.querySelector("#github-contribution-total");
+  const state = document.querySelector("#github-contribution-state");
+  if (!host || !totalLabel || !state) return;
+
+  const endpoint = "https://github-contributions-api.jogruber.de/v4/PauzeDevs?y=last";
+  const palette = ["#18212c", "#23414d", "#286779", "#358ba0", "#a9ddf5"];
+  const svgNS = "http://www.w3.org/2000/svg";
+  const monthFormat = new Intl.DateTimeFormat("en", { month: "short", timeZone: "UTC" });
+  const dateFormat = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+
+  const svgElement = (name, attributes, textContent) => {
+    const element = document.createElementNS(svgNS, name);
+    Object.entries(attributes || {}).forEach(([key, value]) => element.setAttribute(key, String(value)));
+    if (textContent !== undefined) element.textContent = textContent;
+    return element;
+  };
+  const showUnavailable = () => {
+    totalLabel.textContent = "Contribution history unavailable";
+    state.textContent = "The chart could not load. Open the GitHub profile to view contributions.";
+    host.setAttribute("aria-label", "GitHub contribution calendar unavailable. Use the profile link to view contributions.");
+    host.replaceChildren();
+  };
+  const render = (payload) => {
+    if (!payload || !Array.isArray(payload.contributions) || !payload.contributions.length) throw new Error("Contribution data is missing");
+
+    const days = payload.contributions.filter((day) =>
+      day && /^\d{4}-\d{2}-\d{2}$/.test(day.date) && Number.isFinite(Number(day.count))
+    );
+    if (!days.length) throw new Error("Contribution dates are invalid");
+
+    const firstDate = new Date(days[0].date + "T00:00:00Z");
+    const leadingDays = firstDate.getUTCDay();
+    const weeks = Math.ceil((leadingDays + days.length) / 7);
+    const cellSize = 8;
+    const gap = 2;
+    const step = cellSize + gap;
+    const gridLeft = 34;
+    const gridTop = 20;
+    const width = gridLeft + weeks * step + 3;
+    const height = gridTop + 6 * step + cellSize + 7;
+    const total = Number(payload.total && payload.total.lastYear);
+    const sum = days.reduce((amount, day) => amount + Math.max(0, Number(day.count) || 0), 0);
+    const contributions = Number.isFinite(total) ? total : sum;
+    const svg = svgElement("svg", {
+      viewBox: "0 0 " + width + " " + height,
+      role: "img",
+      "aria-labelledby": "github-contribution-svg-title github-contribution-svg-description",
+      focusable: "false"
+    });
+    svg.append(
+      svgElement("title", { id: "github-contribution-svg-title" }, "GitHub contributions in the last year"),
+      svgElement("desc", { id: "github-contribution-svg-description" }, contributions.toLocaleString() + " contributions shown as a day-by-day calendar. Each square has a date and contribution count.")
+    );
+
+    const weekdayLabels = [[0, "Sun"], [3, "Wed"], [6, "Sat"]];
+    weekdayLabels.forEach(([row, label]) => {
+      svg.append(svgElement("text", {
+        x: 0,
+        y: gridTop + Number(row) * step + cellSize,
+        fill: "#8f9ba8",
+        "font-size": 9,
+        "font-family": "DM Mono, monospace"
+      }, label));
+    });
+
+    let previousMonthX = -100;
+    days.forEach((day, index) => {
+      const date = new Date(day.date + "T00:00:00Z");
+      const offset = leadingDays + index;
+      const column = Math.floor(offset / 7);
+      const row = date.getUTCDay();
+      const x = gridLeft + column * step;
+      const y = gridTop + row * step;
+      if (date.getUTCDate() === 1 && x - previousMonthX >= 22) {
+        svg.append(svgElement("text", {
+          x,
+          y: 10,
+          fill: "#a7b1bd",
+          "font-size": 9,
+          "font-family": "DM Mono, monospace"
+        }, monthFormat.format(date)));
+        previousMonthX = x;
+      }
+
+      const count = Math.max(0, Number(day.count) || 0);
+      const level = Math.max(0, Math.min(4, Math.round(Number(day.level) || 0)));
+      const cell = svgElement("rect", {
+        x,
+        y,
+        width: cellSize,
+        height: cellSize,
+        rx: 2,
+        fill: palette[level],
+        "aria-hidden": "true"
+      });
+      cell.append(svgElement("title", {}, count.toLocaleString() + (count === 1 ? " contribution on " : " contributions on ") + dateFormat.format(date)));
+      svg.append(cell);
+    });
+
+    totalLabel.textContent = contributions.toLocaleString() + " contributions in the past year";
+    state.textContent = "Updated daily · last 365 days";
+    host.setAttribute("aria-label", "GitHub contribution calendar for the past year");
+    host.replaceChildren(svg);
+  };
+
+  const load = async () => {
+    const controller = typeof AbortController === "function" ? new AbortController() : null;
+    const timeout = controller ? window.setTimeout(() => controller.abort(), 10000) : null;
+    try {
+      const options = { headers: { Accept: "application/json" }, cache: "force-cache" };
+      if (controller) options.signal = controller.signal;
+      const response = await fetch(endpoint, options);
+      if (!response.ok) throw new Error("Contribution service returned " + response.status);
+      render(await response.json());
+    } catch (error) {
+      showUnavailable();
+    } finally {
+      if (timeout !== null) window.clearTimeout(timeout);
+    }
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries, currentObserver) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      currentObserver.disconnect();
+      load();
+    }, { rootMargin: "160px 0px" });
+    observer.observe(host);
+  } else {
+    load();
+  }
 })();
