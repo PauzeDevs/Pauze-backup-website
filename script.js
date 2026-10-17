@@ -12,6 +12,40 @@ if (menuButton && nav) {
     menuButton.setAttribute("aria-label", "Open menu");
   }));
 }
+
+/* Lazy-load real space footage after the first paint; keep the still image/starfield on reduced-motion or constrained devices. */
+(() => {
+  const video = document.querySelector("#space-background-video");
+  if (!video || !window.matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
+
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const slowConnection = Boolean(connection?.saveData) || /^(slow-2g|2g|3g)$/.test(connection?.effectiveType || "");
+  const deviceMemory = Number(navigator.deviceMemory) || 0;
+  if (slowConnection || (deviceMemory > 0 && deviceMemory < 4)) return;
+
+  const startVideo = () => {
+    if (video.dataset.started === "true" || document.visibilityState !== "visible") return;
+    const source = video.dataset.src;
+    if (!source) return;
+    video.dataset.started = "true";
+    video.addEventListener("canplay", () => {
+      video.play().catch(() => {});
+    }, { once: true });
+    video.src = source;
+    video.load();
+  };
+  const scheduleVideo = () => {
+    if (window.requestIdleCallback) window.requestIdleCallback(startVideo, { timeout: 2500 });
+    else window.setTimeout(startVideo, 1200);
+  };
+
+  if (document.visibilityState === "visible") scheduleVideo();
+  else document.addEventListener("visibilitychange", scheduleVideo, { once: true });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) video.pause();
+    else if (video.currentSrc) video.play().catch(() => {});
+  });
+})();
 /* Accessible command palette: keyboard shortcut, live filtering, and safe dismissal. */
 (() => {
   const dialog = document.querySelector("#command-palette");
@@ -100,6 +134,8 @@ const discordPresence = (() => {
   const currentActivity = document.querySelector("#discord-current-activity");
   const avatar = document.querySelector("#discord-avatar");
   const nitroStatus = document.querySelector("#discord-nitro-status");
+  const nitroIcon = nitroStatus?.querySelector(".discord-nitro-icon");
+  if (nitroIcon) nitroIcon.addEventListener("error", () => nitroIcon.classList.add("is-unavailable"), { once: true });
   const publicBadges = document.querySelector("#discord-badges");
   const note = document.querySelector("#discord-status-note");
   const musicCard = document.querySelector("#discord-music-card");
@@ -395,7 +431,9 @@ const discordPresence = (() => {
       const label = nitroLabels[token] || (token ? "NITRO STATUS UNKNOWN" : "NITRO NOT EXPOSED");
       const isActive = Boolean(token) && !["0", "none", "false", "no", "inactive"].includes(token) && Boolean(nitroLabels[token]);
       const displayLabel = isActive && !label.endsWith("ACTIVE") ? label + " ACTIVE" : label;
-      nitroStatus.textContent = displayLabel;
+      const nitroLabel = nitroStatus.querySelector(".discord-nitro-label");
+      if (nitroLabel) nitroLabel.textContent = displayLabel;
+      else nitroStatus.textContent = displayLabel;
       nitroStatus.classList.toggle("is-active", isActive);
       nitroStatus.classList.toggle("is-unknown", !token || !nitroLabels[token]);
       nitroStatus.setAttribute("aria-label", "Discord Nitro status: " + displayLabel.toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase()));

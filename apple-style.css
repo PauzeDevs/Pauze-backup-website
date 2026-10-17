@@ -830,3 +830,34 @@ html.reveal-ready [data-reveal].is-revealed {
     transition-delay:0s;
   }
 }
+
+
+/* Real 1080p Milky Way timelapse, loaded after the first paint. */
+.space-film {
+  position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none;
+  background:#07080d;
+}
+.space-film video {
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  object-position:center 34%; opacity:.44; transform:translateZ(0) scale(1.03);
+}
+.space-film-shade {
+  position:absolute; inset:0;
+  background:
+    linear-gradient(180deg,#07080d70 0%,#07080d78 38%,#07080dd9 76%,#07080d 100%),
+    linear-gradient(90deg,#07080d5c 0%,transparent 30%,transparent 70%,#07080d5c 100%);
+}
+.discord-nitro-status::before { content:none; }
+.discord-nitro-status { gap:8px; }
+.discord-nitro-icon {
+  display:none; width:18px; height:18px; flex:0 0 18px;
+  object-fit:contain; border-radius:3px;
+}
+.discord-nitro-status.is-active .discord-nitro-icon:not(.is-unavailable) { display:block; }
+.discord-nitro-label { display:inline-block; }
+@media(max-width:760px) {
+  .space-film video { object-position:center center; opacity:.34; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .space-film video { display:none; }
+}
