@@ -825,25 +825,112 @@ const discordPresence = (() => {
   window.setInterval(loadEvents, 300000);
 
   const graph = document.querySelector(".contribution-graph-link");
-  const graphImage = document.querySelector(".contribution-graph-image");
+  const graphDisplay = document.querySelector("#contribution-graph-display");
   const graphFallback = document.querySelector(".contribution-graph-fallback");
-  if (graphImage && graphFallback) {
-    const showGraph = () => {
-      graphFallback.hidden = true;
-      if (graph) graph.classList.remove("graph-unavailable");
-    };
+  const graphTotal = document.querySelector("#contribution-graph-total");
+  if (graph && graphDisplay && graphFallback) {
+    const svgNamespace = "http://www.w3.org/2000/svg";
     const showFallback = () => {
-      graphImage.hidden = true;
+      graphDisplay.hidden = true;
       graphFallback.hidden = false;
-      graphFallback.textContent = "Live contribution calendar unavailable right now. Open the profile for current activity.";
-      if (graph) graph.classList.add("graph-unavailable");
+      graphFallback.textContent = "Contribution calendar unavailable right now. Open the profile for current activity.";
+      graph.classList.add("graph-unavailable");
     };
-    graphImage.addEventListener("load", showGraph, { once: true });
-    graphImage.addEventListener("error", showFallback, { once: true });
-    if (graphImage.complete) {
-      if (graphImage.naturalWidth > 0) showGraph();
-      else showFallback();
-    }
+    const renderContributions = (contributions) => {
+      const dayMs = 86400000;
+      const entries = contributions.map((item) => {
+        const date = new Date(`${item.date}T00:00:00Z`);
+        if (!Number.isFinite(date.getTime())) return null;
+        return {
+          date,
+          count: Math.max(0, Number(item.count) || 0),
+          level: Math.max(0, Math.min(4, Number(item.level) || 0))
+        };
+      }).filter(Boolean);
+      if (!entries.length) throw new Error("No contribution days returned");
+      const first = entries[0].date;
+      const last = entries[entries.length - 1].date;
+      const start = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth(), first.getUTCDate() - first.getUTCDay()));
+      const columns = Math.ceil((Math.floor((last.getTime() - start.getTime()) / dayMs) + 1) / 7);
+      const step = 12, cell = 9, left = 27, top = 17;
+      const width = left + columns * step;
+      const height = top + 7 * step + 5;
+      const total = entries.reduce((sum, item) => sum + item.count, 0);
+      const colors = ["#171d25", "#35404b", "#66727d", "#a5adb5", "#e1e4e7"];
+      const svg = document.createElementNS(svgNamespace, "svg");
+      svg.setAttribute("class", "contribution-calendar-svg");
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.setAttribute("role", "img");
+      svg.setAttribute("aria-label", `${total.toLocaleString()} GitHub contributions in the last year`);
+      svg.setAttribute("focusable", "false");
+      const title = document.createElementNS(svgNamespace, "title");
+      title.textContent = `${total.toLocaleString()} GitHub contributions in the last year`;
+      svg.appendChild(title);
+      const labels = ["", "Mon", "", "Wed", "", "Fri", ""];
+      labels.forEach((label, row) => {
+        if (!label) return;
+        const text = document.createElementNS(svgNamespace, "text");
+        text.setAttribute("x", "0");
+        text.setAttribute("y", String(top + row * step + 8));
+        text.setAttribute("class", "contribution-calendar-label");
+        text.textContent = label;
+        svg.appendChild(text);
+      });
+      let lastMonth = "";
+      let lastMonthColumn = -5;
+      const monthFormat = new Intl.DateTimeFormat(undefined, { month: "short", timeZone: "UTC" });
+      for (const item of entries) {
+        const offset = Math.floor((item.date.getTime() - start.getTime()) / dayMs);
+        const column = Math.floor(offset / 7);
+        const row = item.date.getUTCDay();
+        const monthKey = `${item.date.getUTCFullYear()}-${item.date.getUTCMonth()}`;
+        if (monthKey !== lastMonth && column - lastMonthColumn >= 2) {
+          const month = document.createElementNS(svgNamespace, "text");
+          month.setAttribute("x", String(left + column * step));
+          month.setAttribute("y", "10");
+          month.setAttribute("class", "contribution-calendar-label");
+          month.textContent = monthFormat.format(item.date).toUpperCase();
+          svg.appendChild(month);
+          lastMonth = monthKey;
+          lastMonthColumn = column;
+        }
+        const rect = document.createElementNS(svgNamespace, "rect");
+        rect.setAttribute("x", String(left + column * step));
+        rect.setAttribute("y", String(top + row * step));
+        rect.setAttribute("width", String(cell));
+        rect.setAttribute("height", String(cell));
+        rect.setAttribute("rx", "2");
+        rect.setAttribute("fill", colors[item.level]);
+        const detail = document.createElementNS(svgNamespace, "title");
+        detail.textContent = `${item.count} contribution${item.count === 1 ? "" : "s"} on ${item.date.toISOString().slice(0, 10)}`;
+        rect.appendChild(detail);
+        svg.appendChild(rect);
+      }
+      graphDisplay.replaceChildren(svg);
+      graphDisplay.hidden = false;
+      graphFallback.hidden = true;
+      graph.classList.remove("graph-unavailable");
+      if (graphTotal) graphTotal.textContent = `${total.toLocaleString()} / LAST YEAR`;
+      graphDisplay.setAttribute("aria-label", `${total.toLocaleString()} GitHub contributions in the last year`);
+    };
+    const loadContributions = async () => {
+      const controller = typeof AbortController === "function" ? new AbortController() : null;
+      const timeout = controller ? window.setTimeout(() => controller.abort(), 9000) : null;
+      try {
+        const options = { headers: { Accept: "application/json" }, cache: "force-cache" };
+        if (controller) options.signal = controller.signal;
+        const response = await fetch("https://github-contributions-api.jogruber.de/v4/personalaaravsingh-cmd?y=last", options);
+        if (!response.ok) throw new Error(`Contribution service returned ${response.status}`);
+        const payload = await response.json();
+        if (!Array.isArray(payload.contributions)) throw new Error("Invalid contribution response");
+        renderContributions(payload.contributions);
+      } catch (error) {
+        showFallback();
+      } finally {
+        if (timeout !== null) window.clearTimeout(timeout);
+      }
+    };
+    void loadContributions();
   }
 })();
 
