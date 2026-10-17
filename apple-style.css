@@ -1093,3 +1093,26 @@ html.site-entered .hero h1 .hero-title-line {
 @media (max-width: 760px) {
   .hero h1#hero-title { line-height: 1.08; }
 }
+
+/* Keep the entry screen opaque so the page underneath cannot show through. */
+.entry-screen {
+  background-color: #05070b !important;
+  background-image:
+    radial-gradient(ellipse at 50% 38%, #131b26 0%, #080b11 48%, #05070b 100%) !important;
+}
+.entry-screen::backdrop { background: #05070b; }
+
+/* Preserve the type-on reveal while leaving room for the title's descenders. */
+html.site-entered .hero h1#hero-title .hero-title-line {
+  clip-path: inset(-.18em 100% -.28em 0);
+  animation-name: pauze-type-on-safe;
+}
+@keyframes pauze-type-on-safe {
+  to { clip-path: inset(-.18em 0 -.28em 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.site-entered .hero h1#hero-title .hero-title-line {
+    clip-path: none;
+    animation: none;
+  }
+}
