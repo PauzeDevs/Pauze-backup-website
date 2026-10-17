@@ -818,11 +818,22 @@ const discordPresence = (() => {
   const graphImage = document.querySelector(".contribution-graph-image");
   const graphFallback = document.querySelector(".contribution-graph-fallback");
   if (graphImage && graphFallback) {
-    graphImage.addEventListener("error", () => {
+    const showGraph = () => {
+      graphFallback.hidden = true;
+      if (graph) graph.classList.remove("graph-unavailable");
+    };
+    const showFallback = () => {
       graphImage.hidden = true;
       graphFallback.hidden = false;
+      graphFallback.textContent = "Live contribution calendar unavailable right now. Open the profile for current activity.";
       if (graph) graph.classList.add("graph-unavailable");
-    }, { once: true });
+    };
+    graphImage.addEventListener("load", showGraph, { once: true });
+    graphImage.addEventListener("error", showFallback, { once: true });
+    if (graphImage.complete) {
+      if (graphImage.naturalWidth > 0) showGraph();
+      else showFallback();
+    }
   }
 })();
 
