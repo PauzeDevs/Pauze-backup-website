@@ -194,7 +194,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 .contribution-graph-image[hidden]{display:none!important}
 .contribution-calendar-svg{display:block;width:100%;height:auto;overflow:visible}
 .contribution-calendar-label{fill:#9ca7b2;font:8px var(--mono)}
-.contribution-graph-fallback{display:block;color:var(--muted);font-size:12px;line-height:1.6}
+.contribution-graph-fallback{display:block;color:var(--muted);font-size:12px;line-height:1.6}.contribution-graph-fallback[hidden]{display:none!important}
 .contribution-graph-profile-link{display:block;margin-top:10px;color:var(--accent);font:500 9px var(--mono);letter-spacing:.09em}
 .contribution-graph-profile-link b{margin-left:4px}
 .music-art-fallback[hidden]{display:none!important}

@@ -720,7 +720,7 @@ const discordPresence = (() => {
   const renderEvents = (events, failedCount) => {
     list.replaceChildren();
     const seen = new Set();
-    const useful = events
+    const uniqueEvents = events
       .filter((event) => eventLabels[event.type] && event.repo && event.repo.name && event.created_at)
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       .filter((event) => {
@@ -730,9 +730,17 @@ const discordPresence = (() => {
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
-      })
-      .slice(0, 5);
-    if (!useful.length) return false;
+      });
+    if (!uniqueEvents.length) return false;
+    const isPullRequestEvent = (event) => event.type === "PullRequestEvent" || event.type === "PullRequestReviewEvent" || event.type === "PullRequestReviewCommentEvent";
+    const latestPush = uniqueEvents.find((event) => event.type === "PushEvent");
+    const pullRequestEvents = uniqueEvents.filter(isPullRequestEvent);
+    const otherEvents = uniqueEvents.filter((event) => event.type !== "PushEvent" && !isPullRequestEvent(event));
+    const useful = [];
+    if (latestPush) useful.push(latestPush);
+    useful.push(...pullRequestEvents.slice(0, 5 - useful.length));
+    useful.push(...otherEvents.slice(0, 5 - useful.length));
+    useful.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     useful.forEach((event) => {
       const item = document.createElement("li");
       const pullRequestEvent = event.type === "PullRequestEvent" || event.type === "PullRequestReviewEvent" || event.type === "PullRequestReviewCommentEvent";
