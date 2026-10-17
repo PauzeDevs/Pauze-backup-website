@@ -1059,3 +1059,6 @@ html.site-entered .hero h1 .hero-title-line {
   .github-contribution-panel { padding-inline:10px; }
   #github-contribution-total { font-size:11px; }
 }
+
+/* The hero is focused for screen readers after entry; keep the title free of a large focus frame. */
+#hero-title:focus-visible { outline:none; }
