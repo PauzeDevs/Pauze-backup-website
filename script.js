@@ -271,28 +271,31 @@ const discordPresence = (() => {
   };
   const findBestItunesMatch = (results, title, artist) => {
     const wantedTitle = normalize(title);
-    const artists = String(artist || "").split(/[,/&+]+/).map(normalize).filter(Boolean);
+    const artists = String(artist || "")
+      .split(/\s*(?:\[[^\]]*\]|\([^)]*\)|\b(?:feat|ft)\.?\b|[,/&+])\s*/i)
+      .map(normalize).filter((name) => name.length > 2);
     let winner = null;
     let winnerScore = -1;
     for (const item of results) {
       if (!item || !item.trackName) continue;
       const foundTitle = normalize(item.trackName);
-      let score = 0;
-      if (foundTitle === wantedTitle) score += 100;
-      else if (foundTitle.includes(wantedTitle) || wantedTitle.includes(foundTitle)) score += 45;
-      else continue;
+      const exactTitle = foundTitle === wantedTitle;
+      const titleMatches = exactTitle || foundTitle.startsWith(wantedTitle + " ") || wantedTitle.startsWith(foundTitle + " ");
+      if (!titleMatches) continue;
       const foundArtist = normalize(item.artistName);
-      if (foundArtist && artists.some((name) => name === foundArtist)) score += 35;
-      else if (foundArtist && artists.some((name) => name.length > 3 && (foundArtist.includes(name) || name.includes(foundArtist)))) score += 24;
-      else if (foundArtist && artists.some((name) => name.split(" ").some((token) => token.length > 3 && foundArtist.includes(token)))) score += 8;
-      if (item.trackTimeMillis) score += 2;
-      if (item.artworkUrl100) score += 2;
+      const exactArtist = artists.some((name) => name === foundArtist);
+      const artistMatches = exactArtist || artists.some((name) =>
+        name.length > 3 && (foundArtist.startsWith(name + " ") || name.startsWith(foundArtist + " "))
+      );
+      if (!artistMatches) continue;
+      const score = (exactTitle ? 100 : 65) + (exactArtist ? 35 : 25)
+        + (item.trackTimeMillis ? 2 : 0) + (item.artworkUrl100 ? 2 : 0);
       if (score > winnerScore) {
         winner = item;
         winnerScore = score;
       }
     }
-    return winnerScore >= 100 ? winner : null;
+    return winnerScore >= 90 ? winner : null;
   };
   const resolveAmazonMetadata = async (track) => {
     if (metadataCache.has(track.key)) {
@@ -304,20 +307,27 @@ const discordPresence = (() => {
     const request = (async () => {
       try {
         const term = [track.title, track.artist].filter(Boolean).join(" ");
-        const endpoint = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=15&country=IN`;
         const controller = typeof AbortController === "function" ? new AbortController() : null;
         const timeout = controller ? window.setTimeout(() => controller.abort(), 9000) : null;
-        let payload;
+        let winner = null;
         try {
           const requestOptions = { headers: { Accept: "application/json" }, cache: "force-cache" };
           if (controller) requestOptions.signal = controller.signal;
-          const response = await fetch(endpoint, requestOptions);
-          if (!response.ok) throw new Error(`Music catalogue returned ${response.status}`);
-          payload = await response.json();
+          for (const country of ["IN", "US"]) {
+            try {
+              const endpoint = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=15&country=${country}`;
+              const response = await fetch(endpoint, requestOptions);
+              if (!response.ok) throw new Error(`Music catalogue returned ${response.status}`);
+              const payload = await response.json();
+              winner = findBestItunesMatch(Array.isArray(payload.results) ? payload.results : [], track.title, track.artist);
+              if (winner) break;
+            } catch (error) {
+              if (country === "US") throw error;
+            }
+          }
         } finally {
           if (timeout !== null) window.clearTimeout(timeout);
         }
-        const winner = findBestItunesMatch(Array.isArray(payload.results) ? payload.results : [], track.title, track.artist);
         const metadata = winner ? {
           album: winner.collectionName || "Amazon Music",
           durationMs: Number(winner.trackTimeMillis) || 0,
