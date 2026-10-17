@@ -1080,3 +1080,16 @@ html.site-entered .hero h1 .hero-title-line {
 @media (max-width: 760px) {
   .hero h1 { line-height: .98; }
 }
+
+/* Keep the hero heading crisp and fully visible after the intro focuses it. */
+.hero h1#hero-title,
+.hero h1#hero-title:focus,
+.hero h1#hero-title:focus-visible {
+  text-shadow: none !important;
+  line-height: 1.06;
+  padding-block: .06em .16em;
+  overflow: visible;
+}
+@media (max-width: 760px) {
+  .hero h1#hero-title { line-height: 1.08; }
+}
