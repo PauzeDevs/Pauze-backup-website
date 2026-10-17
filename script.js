@@ -393,10 +393,12 @@ const discordPresence = (() => {
         "true": "NITRO ACTIVE", "yes": "NITRO ACTIVE", "active": "NITRO ACTIVE"
       };
       const label = nitroLabels[token] || (token ? "NITRO STATUS UNKNOWN" : "NITRO NOT EXPOSED");
-      nitroStatus.textContent = label;
-      nitroStatus.classList.toggle("is-active", Boolean(token) && !["0", "none", "false", "no", "inactive"].includes(token) && Boolean(nitroLabels[token]));
+      const isActive = Boolean(token) && !["0", "none", "false", "no", "inactive"].includes(token) && Boolean(nitroLabels[token]);
+      const displayLabel = isActive && !label.endsWith("ACTIVE") ? label + " ACTIVE" : label;
+      nitroStatus.textContent = displayLabel;
+      nitroStatus.classList.toggle("is-active", isActive);
       nitroStatus.classList.toggle("is-unknown", !token || !nitroLabels[token]);
-      nitroStatus.setAttribute("aria-label", "Discord Nitro: " + label.toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase()));
+      nitroStatus.setAttribute("aria-label", "Discord Nitro status: " + displayLabel.toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase()));
     }
 
     if (!publicBadges) return;
