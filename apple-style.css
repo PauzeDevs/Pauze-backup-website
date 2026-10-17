@@ -738,3 +738,23 @@ body::after {
     transform:none!important;
   }
 }
+
+/* Clean text-first project cards without decorative artwork. */
+.project-featured { display:block; }
+.project-featured .project-copy {
+  width:min(100%,860px);
+  margin-inline:auto;
+  padding:clamp(26px,5vw,60px);
+}
+.project-grid { align-items:stretch; }
+.project {
+  border-radius:4px;
+  background:linear-gradient(145deg,#151a22ed,#0d1117f2);
+  box-shadow:0 12px 36px #0003;
+}
+.project:hover { background:linear-gradient(145deg,#1a2029f2,#10151cf7); }
+.project-copy { min-height:100%; }
+.project-simple { min-height:100%; }
+@media(max-width:760px) {
+  .project-featured .project-copy { padding:24px; }
+}
