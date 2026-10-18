@@ -62,10 +62,3 @@ python3 -m http.server 4173
 ```
 
 Then open `http://localhost:4173`. The deployed site is published through GitHub Pages.
-
-
-## Human verification gateway
-
-Source for the optional Cloudflare Pages + Turnstile gateway is in [security-gateway/README.md](./security-gateway/README.md). It is designed to gate requests on **pauze.is-a.dev** and **pauze.devs.surf** before serving the site.
-
-**This gateway is prepared but not live.** It still needs a Cloudflare Pages deployment, production Turnstile/session secrets, and custom-domain DNS changes. The existing GitHub Pages site has not been redirected, so there is no live verification gate yet. The public GitHub repository and raw source files remain accessible.
