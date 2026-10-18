@@ -75,7 +75,7 @@ async function issueSession(hostname, secret) {
 
 async function hasValidSession(request, hostname, secret) {
   const cookieHeader = request.headers.get("Cookie") || "";
-  const match = cookieHeader.match(new RegExp("(?:^|;\\\\s*)" + COOKIE_NAME + "=([^;]+)"));
+  const match = cookieHeader.match(new RegExp("(?:^|;\\s*)" + COOKIE_NAME + "=([^;]+)"));
   if (!match) return false;
   const parts = match[1].split(".");
   if (parts.length !== 2) return false;
