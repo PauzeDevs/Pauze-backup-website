@@ -1,7 +1,0 @@
-name = "pauze-human-verification"
-compatibility_date = "2026-10-18"
-pages_build_output_dir = "./pages"
-
-[vars]
-TURNSTILE_SITE_KEY = "REPLACE_WITH_CLOUDFLARE_TURNSTILE_SITE_KEY"
-SITE_REPOS_JSON = '{"pauze.is-a.dev":{"owner":"PauzeDevs","repo":"Pauze-backup-website","branch":"main"},"pauze.devs.surf":{"owner":"PauzeDevs","repo":"Pauze-backup-website","branch":"main"},"pauze-human-verification.pages.dev":{"owner":"PauzeDevs","repo":"Pauze-backup-website","branch":"main"}}'
