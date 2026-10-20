@@ -1146,3 +1146,80 @@ const discordPresence = (() => {
   document.addEventListener("visibilitychange",()=>{if(document.hidden&&running&&!paused)pause();});window.addEventListener("blur",clearKeys);window.addEventListener("resize",draw);
   choose("dino");
 })();
+
+
+/* Website cost estimator: transparent indicative ranges, calculated locally. */
+(() => {
+  const form = document.querySelector("#webdev-estimator-form");
+  const typeSelect = document.querySelector("#webdev-type");
+  const pagesSelect = document.querySelector("#webdev-pages");
+  const estimate = document.querySelector("#webdev-estimate");
+  const summary = document.querySelector("#webdev-estimate-summary");
+  if (!form || !typeSelect || !pagesSelect || !estimate || !summary) return;
+
+  const siteTypes = {
+    landing: { label: "Landing page", low: 3500, high: 6000, included: 1 },
+    portfolio: { label: "Portfolio / personal brand", low: 4500, high: 8000, included: 4 },
+    business: { label: "Business website", low: 6500, high: 12000, included: 5 },
+    store: { label: "Online store / e-commerce", low: 15000, high: 30000, included: 5 }
+  };
+  const features = {
+    contact: { label: "Contact form", low: 800, high: 1800 },
+    booking: { label: "Booking / appointment requests", low: 1500, high: 3500 },
+    cms: { label: "Editable content / CMS", low: 2500, high: 5000 },
+    motion: { label: "Custom animations", low: 800, high: 2000 },
+    seo: { label: "SEO basics", low: 1000, high: 2500 },
+    payments: { label: "Online payments", low: 2000, high: 4500 }
+  };
+  const money = (amount) => new Intl.NumberFormat("en-IN", {
+    style: "currency", currency: "INR", maximumFractionDigits: 0
+  }).format(amount);
+  const selectedFeatures = () => [...form.querySelectorAll('input[name="feature"]:checked')]
+    .map((input) => features[input.value] ? input.value : null).filter(Boolean);
+
+  const calculate = () => {
+    const site = siteTypes[typeSelect.value] || siteTypes.landing;
+    const pages = Math.max(1, Number(pagesSelect.value) || 1);
+    const extraPages = Math.max(0, pages - site.included);
+    let low = site.low + extraPages * 700;
+    let high = site.high + extraPages * 1200;
+    const selected = selectedFeatures();
+    selected.forEach((key) => { low += features[key].low; high += features[key].high; });
+    estimate.textContent = low === high ? money(low) : money(low) + " – " + money(high);
+    const pageLabel = pages === 1 ? "1 page" : pages === 3 ? "2–3 pages" : pages === 5 ? "4–5 pages" : pages === 8 ? "6–8 pages" : "9–10 pages";
+    summary.textContent = site.label + " · " + pageLabel + (selected.length ? " · " + selected.length + " extra feature" + (selected.length > 1 ? "s" : "") : " · core responsive design");
+    return { site, pages, pageLabel, selected, low, high };
+  };
+
+  typeSelect.addEventListener("change", calculate);
+  pagesSelect.addEventListener("change", calculate);
+  form.querySelectorAll('input[name="feature"]').forEach((input) => input.addEventListener("change", calculate));
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const result = calculate();
+    const selectedLabels = result.selected.length
+      ? result.selected.map((key) => features[key].label).join(", ")
+      : "No extra features selected";
+    const subject = "Website project enquiry — Pauze";
+    const body = [
+      "Hi Pauze,",
+      "",
+      "I'd like to discuss getting a website made.",
+      "",
+      "Website type: " + result.site.label,
+      "Pages: " + result.pageLabel,
+      "Extra features: " + selectedLabels,
+      "Current estimate: " + money(result.low) + " – " + money(result.high),
+      "",
+      "My business / idea:",
+      "",
+      "Preferred timeline:",
+      "",
+      "Please let me know the next steps and a tailored quote.",
+      "",
+      "I understand this is an indicative estimate; final scope and price will be agreed before work begins."
+    ].join("\n");
+    window.location.href = "mailto:githubpauze@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  });
+  calculate();
+})();
