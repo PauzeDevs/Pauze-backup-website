@@ -24,7 +24,7 @@
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="PAUZE home">PAUZE</a>
     <nav class="desktop-nav" id="primary-navigation" aria-label="Main navigation">
-      <a href="#work">Work <span>01</span></a><a href="#about">About <span>02</span></a><a href="#arcade">Arcade <span>03</span></a><a href="#activity">Live <span>04</span></a><a href="#contact">Contact <span>06</span></a>
+      <a href="#work">Work <span>01</span></a><a href="#about">About <span>02</span></a><a href="#arcade">Arcade <span>03</span></a><a href="#activity">Live <span>04</span></a><a href="#web-development">Websites <span>06</span></a><a href="#contact">Contact <span>07</span></a>
     </nav>
     <button class="command-trigger" type="button" aria-haspopup="dialog" aria-controls="command-palette"><span class="command-trigger-label">Quick actions</span><kbd>⌘ K</kbd></button>
     <a class="availability" href="#contact"><i class="status-dot"></i> OPEN TO IDEAS</a>
@@ -40,7 +40,8 @@
       <a class="command-item" role="listitem" data-command-item href="#about"><span class="command-item-icon" aria-hidden="true">◉</span><span><strong>About</strong><small>Background and toolkit</small></span><kbd>02</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="#arcade"><span class="command-item-icon" aria-hidden="true">▶</span><span><strong>Arcade</strong><small>Play the mini-games</small></span><kbd>03</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="#activity"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Live activity</strong><small>GitHub and presence</small></span><kbd>04</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="#contact"><span class="command-item-icon" aria-hidden="true">✉</span><span><strong>Contact</strong><small>Get in touch</small></span><kbd>06</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="#web-development"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Website development</strong><small>Explore services and estimate a budget</small></span><kbd>06</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="#contact"><span class="command-item-icon" aria-hidden="true">✉</span><span><strong>Contact</strong><small>Get in touch</small></span><kbd>07</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Personal GitHub</strong><small>Profile and contributions</small></span><kbd>↗</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer"><span class="command-item-icon" aria-hidden="true">◇</span><span><strong>PauzeDevs on GitHub</strong><small>Projects and tools</small></span><kbd>↗</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="mailto:githubpauze@gmail.com"><span class="command-item-icon" aria-hidden="true">@</span><span><strong>Email Pauze</strong><small>githubpauze@gmail.com</small></span><kbd>↗</kbd></a>
@@ -122,6 +123,66 @@
       <div class="activity-grid">
         <article class="presence-card github-presence" data-reveal><div class="presence-card-top"><span>GITHUB / ACTIVITY</span><a href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">PROFILE ↗</a></div><div class="github-card-title"><span class="github-symbol">⌘</span><div><h3>Code in progress</h3><p id="github-feed-state">Connecting to GitHub activity…</p></div></div><ul id="github-event-list"><li>Loading recent public activity…</li></ul><a class="contribution-graph-link" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer" aria-label="View personal GitHub contribution activity"><span class="contribution-graph-caption"><span>PERSONAL GITHUB / CONTRIBUTIONS</span><span id="contribution-graph-total">LAST YEAR</span></span><div class="contribution-graph-image" id="contribution-graph-display" role="img" aria-label="Loading GitHub contribution calendar" hidden></div><span class="contribution-graph-fallback contribution-graph-link-label" role="status" aria-live="polite">Loading live contribution calendar…</span><span class="contribution-graph-profile-link">OPEN FULL PROFILE <b aria-hidden="true">↗</b></span></a></article>
         <article class="presence-card discord-presence" data-reveal><div class="presence-card-top"><span>DISCORD / PRESENCE</span><span id="discord-status-label">CHECKING STATUS</span></div><div class="discord-profile"><div class="discord-avatar-wrap"><img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord avatar" loading="lazy" decoding="async"><i id="discord-avatar-status" class="avatar-status-indicator"></i></div><div class="discord-profile-copy"><h3 id="discord-display-name">Pauze</h3><p id="discord-activity-text">Looking for live Discord presence…</p><span class="discord-user-id">ID / 1547264515182432398</span></div><i class="presence-dot discord-dot" id="discord-status-dot"></i></div><div class="discord-account-markers" id="discord-profile-markers" aria-label="Discord profile badges and server identity"><span class="discord-nitro-status" id="discord-nitro-status" aria-live="polite"><img class="discord-nitro-icon" src="https://support.discord.com/hc/article_attachments/23085036411415" alt="" width="18" height="18" loading="lazy" decoding="async"><span class="discord-nitro-label">Checking Nitro status…</span></span><div class="discord-badges" id="discord-badges"><span class="discord-marker-empty">Loading Discord badges…</span></div></div><div class="discord-activity-box"><span>CURRENT ACTIVITY</span><p id="discord-current-activity">Waiting for Discord status…</p></div><div class="discord-music-card" id="discord-music-card" hidden><div class="discord-music-heading"><span id="discord-music-heading">Listening to Spotify</span><span class="music-badge">♪</span></div><div class="discord-music-track"><div class="music-art-fallback" id="discord-music-art-fallback" hidden>♪</div><img id="discord-music-art" src="" alt="Album artwork" loading="lazy" decoding="async" hidden><div class="discord-music-copy"><h4 id="discord-music-title">Track title</h4><p id="discord-music-artist">Artist</p><span id="discord-music-album">Album</span></div></div><div class="discord-music-progress"><span id="discord-music-progress"></span></div><div class="discord-music-times"><span id="discord-music-elapsed">0:00</span><span id="discord-music-duration">0:00</span></div><p id="discord-music-timing-note" hidden></p></div><a class="discord-cta" href="https://discord.com/users/1547264515182432398" target="_blank" rel="noreferrer">OPEN DISCORD PROFILE ↗</a><p class="discord-footnote" id="discord-status-note">Live status requires your Discord presence to be available through Lanyard.</p></article>
+      </div>
+    </section>
+
+    
+    <section class="webdev-section section-wrap" id="web-development" aria-labelledby="webdev-title">
+      <div class="section-heading" data-reveal>
+        <div><p class="section-index">06 / WEBSITE DEVELOPMENT</p><h2 id="webdev-title">Your idea,<br>made real<span class="accent-dot">.</span></h2></div>
+        <p class="section-note">Need a website for your business, café, portfolio, or new idea? Explore what I can build and get a quick budget estimate before reaching out.</p>
+      </div>
+      <div class="webdev-intro-grid" data-reveal>
+        <article class="webdev-service-card"><span class="webdev-card-index">01 / START SIMPLE</span><div class="webdev-service-symbol" aria-hidden="true">↗</div><h3>Landing pages</h3><p>A focused, responsive page for a launch, personal brand, event, or one clear call to action.</p><strong>₹3,500–₹6,000 <small>indicative</small></strong></article>
+        <article class="webdev-service-card"><span class="webdev-card-index">02 / SHOW YOUR WORK</span><div class="webdev-service-symbol" aria-hidden="true">◫</div><h3>Portfolio websites</h3><p>A clean online home for your work, services, projects, and contact details.</p><strong>₹4,500–₹8,000 <small>indicative</small></strong></article>
+        <article class="webdev-service-card"><span class="webdev-card-index">03 / GROW ONLINE</span><div class="webdev-service-symbol" aria-hidden="true">⌘</div><h3>Business websites</h3><p>Multi-page websites for cafés, shops, creators, and local businesses that need a stronger web presence.</p><strong>₹6,500–₹12,000 <small>indicative</small></strong></article>
+        <article class="webdev-service-card"><span class="webdev-card-index">04 / SELL ONLINE</span><div class="webdev-service-symbol" aria-hidden="true">◇</div><h3>Online stores</h3><p>Product pages and a shopping flow, with payment and catalogue requirements scoped to your project.</p><strong>₹15,000–₹30,000+ <small>indicative</small></strong></article>
+      </div>
+      <div class="webdev-estimator" data-reveal>
+        <div class="webdev-estimator-copy">
+          <p class="section-index">PROJECT PLANNER / 001</p>
+          <h3>What might your website cost?</h3>
+          <p>Choose what you need. The estimate updates as you customise your project—no sign-up required.</p>
+          <div class="webdev-estimate-output" aria-live="polite" aria-atomic="true">
+            <span class="webdev-estimate-label">YOUR ESTIMATED PROJECT RANGE</span>
+            <output id="webdev-estimate">₹3,500 – ₹6,000</output>
+            <span id="webdev-estimate-summary">Landing page · 1 page · core responsive design</span>
+          </div>
+          <p class="webdev-estimate-note">Planning estimate only, not a fixed quote. Final pricing depends on the brief and agreed scope. Domain, hosting, paid themes, and third-party subscriptions are not included.</p>
+        </div>
+        <form class="webdev-estimator-form" id="webdev-estimator-form">
+          <div class="webdev-form-field">
+            <label for="webdev-type">What kind of website?</label>
+            <select id="webdev-type" name="websiteType">
+              <option value="landing">Landing page</option>
+              <option value="portfolio">Portfolio / personal brand</option>
+              <option value="business">Business website</option>
+              <option value="store">Online store / e-commerce</option>
+            </select>
+          </div>
+          <div class="webdev-form-field">
+            <label for="webdev-pages">How many pages do you need?</label>
+            <select id="webdev-pages" name="pages">
+              <option value="1">1 page</option><option value="3">2–3 pages</option><option value="5">4–5 pages</option><option value="8">6–8 pages</option><option value="10">9–10 pages</option>
+            </select>
+          </div>
+          <fieldset class="webdev-features">
+            <legend>Any extra features?</legend>
+            <label class="webdev-check"><input type="checkbox" name="feature" value="contact"><span><strong>Contact form</strong><small>Let visitors send enquiries</small></span><b>+₹800–₹1,800</b></label>
+            <label class="webdev-check"><input type="checkbox" name="feature" value="booking"><span><strong>Booking / appointment requests</strong><small>For services, cafés, or consultations</small></span><b>+₹1,500–₹3,500</b></label>
+            <label class="webdev-check"><input type="checkbox" name="feature" value="cms"><span><strong>Editable content</strong><small>Update text, posts, or products yourself</small></span><b>+₹2,500–₹5,000</b></label>
+            <label class="webdev-check"><input type="checkbox" name="feature" value="motion"><span><strong>Custom animations</strong><small>Motion and polished interactions</small></span><b>+₹800–₹2,000</b></label>
+            <label class="webdev-check"><input type="checkbox" name="feature" value="seo"><span><strong>SEO basics</strong><small>Metadata, structure, and indexing setup</small></span><b>+₹1,000–₹2,500</b></label>
+            <label class="webdev-check"><input type="checkbox" name="feature" value="payments"><span><strong>Online payments</strong><small>Payment gateway integration, where suitable</small></span><b>+₹2,000–₹4,500</b></label>
+          </fieldset>
+          <button class="button button-primary webdev-quote-button" id="webdev-quote-button" type="submit">Request a tailored quote <span aria-hidden="true">↗</span></button>
+          <p class="webdev-form-footnote">This opens an email draft with your selections and estimate. You can review it before sending.</p>
+        </form>
+      </div>
+      <div class="webdev-process" data-reveal>
+        <div><span>01</span><strong>Tell me the goal</strong><p>What the website is for, who it serves, and what it needs to do.</p></div>
+        <div><span>02</span><strong>Agree on the scope</strong><p>We confirm pages, features, timeline, and a final quote before work begins.</p></div>
+        <div><span>03</span><strong>Build and refine</strong><p>I develop the site, share progress, and make the agreed revisions.</p></div>
       </div>
     </section>
 
