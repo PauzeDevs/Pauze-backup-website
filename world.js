@@ -105,7 +105,6 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
   const clock=new THREE.Clock();
   function render(){
     const elapsed=clock.getElapsedTime();
-    const dt=Math.min(clock.getDelta(),.04);
     pointer.x+=(pointer.tx-pointer.x)*.035;
     pointer.y+=(pointer.ty-pointer.y)*.035;
     scroll+=(targetScroll-scroll)*.045;
@@ -130,8 +129,12 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     architecture.position.z=-travel*.12;
 
     renderer.render(scene,camera);
-    requestAnimationFrame(render);
+    if (!reduced) requestAnimationFrame(render);
   }
-  requestAnimationFrame(render);
+  if (reduced) renderer.render(scene,camera);
+  else requestAnimationFrame(render);
 
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && !reduced) requestAnimationFrame(render);
+  });
 })();
