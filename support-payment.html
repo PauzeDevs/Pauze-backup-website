@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07090d">
+  <meta name="description" content="Support Pauze directly through UPI.">
+  <title>Support Pauze / UPI Payment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="apple-style.css?v=20261031-support-payment">
+  <link rel="stylesheet" href="support-payment.css?v=1">
+</head>
+<body class="pauze-world support-payment-page">
+  <div class="noise" aria-hidden="true"></div>
+  <div class="world-grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="wordmark" href="index.html#top" aria-label="PAUZE home">PAUZE</a>
+    <a class="command-trigger" href="index.html#support"><span class="command-trigger-label">Back to support</span><kbd>←</kbd></a>
+  </header>
+  <main class="payment-shell">
+    <div class="payment-back-row">
+      <a class="payment-back-link" href="index.html#support"><span aria-hidden="true">←</span> Back to amount selection</a>
+      <p class="section-index">08 / SUPPORT PAUZE</p>
+    </div>
+    <div class="payment-layout">
+      <section class="payment-intro">
+        <p class="eyebrow"><i></i> DIRECT UPI / INR</p>
+        <h1>Fuel the<br><span>next build.</span></h1>
+        <p>Thanks for supporting independent projects, tools, and experiments by Pauze. Scan the QR code or open your UPI app to contribute.</p>
+        <div class="payment-details">
+          <div class="payment-detail-row"><span>PAYEE</span><strong>Pauze</strong></div>
+          <div class="payment-detail-row"><span>UPI ID</span><strong>prodbyaarav@fam</strong></div>
+          <div class="payment-detail-row"><span>PAYMENT TYPE</span><strong>Direct UPI transfer</strong></div>
+        </div>
+      </section>
+      <section class="payment-glass-card" aria-labelledby="payment-title">
+        <div class="payment-card-top"><span id="payment-title">PAYMENT REQUEST</span><span class="payment-card-chip">UPI / INDIA</span></div>
+        <p class="payment-amount-kicker">You're contributing</p>
+        <output class="payment-amount" id="payment-amount" aria-live="polite">₹99</output>
+        <div class="payment-qr-frame"><div id="payment-qr" aria-label="UPI payment QR code"></div></div>
+        <p class="payment-scan-note">Scan with any UPI app. Check that the payee is <strong>Pauze</strong> before confirming the payment.</p>
+        <a class="payment-upi-link" id="payment-upi-link" href="#">Open UPI app <span aria-hidden="true">↗</span></a>
+        <p class="payment-warning">Only approve the payment in your UPI app after checking the amount and recipient.</p>
+        <div class="payment-divider"></div>
+        <button class="payment-done" id="payment-done" type="button">Payment Done ✓</button>
+        <p class="payment-thanks" id="payment-thanks" role="status" aria-live="polite" hidden>🎉 Thanks for supporting Pauze! This page cannot independently verify the transaction, so please rely on the successful status shown in your UPI app.</p>
+        <div class="payment-timer" id="payment-timer" role="timer">03:00</div>
+        <p class="payment-expiry-note" id="payment-expiry-note">The QR is displayed for 3 minutes. This timer only hides the QR on this page; it does not expire or cancel a payment.</p>
+        <div class="payment-expired" id="payment-expired" hidden>That QR display has ended. <a href="index.html#support">Return to support</a> to generate another one.</div>
+      </section>
+    </div>
+    <p class="payment-footer-note">Every contribution is optional and appreciated. Payments go directly through your UPI app.</p>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <script src="support-payment.js?v=1" defer></script>
+</body>
+</html>
