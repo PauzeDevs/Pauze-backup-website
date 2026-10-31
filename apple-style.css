@@ -945,6 +945,13 @@ main#top{position:relative;z-index:1}
   .world-route-links a{width:25px;height:25px;font-size:8px}
   .world-route-progress{width:28px;height:2px}.world-route-progress i{transform:scaleX(var(--route-progress,0));transform-origin:left center}
 }
+@media(max-height:600px) and (min-width:761px){
+  .world-route-hud{right:8px;top:auto;bottom:calc(14px + env(safe-area-inset-bottom));translate:0 0;grid-auto-flow:column;grid-template-columns:auto auto auto;align-items:center;gap:8px;padding:7px 9px}
+  .world-route-label{writing-mode:horizontal-tb;rotate:0deg;font-size:7px}
+  .world-route-links{grid-auto-flow:column;gap:4px}
+  .world-route-links a{width:25px;height:25px;font-size:8px}
+  .world-route-progress{width:28px;height:2px}.world-route-progress i{transform:scaleX(var(--route-progress,0));transform-origin:left center}
+}
 @media(prefers-reduced-motion:reduce){.world-route-links a{transition:none}}
 
 
