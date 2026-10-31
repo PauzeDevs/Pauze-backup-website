@@ -1236,7 +1236,7 @@ const discordPresence = (() => {
       custom.focus();
       return;
     }
-    window.location.href = "support-payment.html?amount=" + encodeURIComponent(String(amount));
+    window.location.href = "/support-payment.html?amount=" + encodeURIComponent(String(amount));
   });
 
   selectAmount(99);
