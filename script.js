@@ -1206,7 +1206,7 @@ const discordPresence = (() => {
   const amountLabel = section.querySelector("#support-qr-amount");
   const countdown = section.querySelector("#support-countdown");
   const upiLink = section.querySelector("#support-upi-link");
-  const reset = section.querySelector("#support-reset");
+  const reset = section.querySelector("#support-reset");\n  const done = section.querySelector("#support-done");\n  const thanks = section.querySelector("#support-thanks");
   const presets = [...section.querySelectorAll("[data-support-amount]")];
   let selectedAmount = 99;
   let interval = null;
@@ -1265,7 +1265,7 @@ const discordPresence = (() => {
     generate.textContent = "Generate payment QR ↗";
     payment.scrollIntoView({behavior:"smooth",block:"nearest"});
   });
-  reset.addEventListener("click", () => {
+  done.addEventListener("click", () => {\n    if (interval) window.clearInterval(interval);\n    interval = null;\n    thanks.hidden = false;\n    done.textContent = "Payment marked as done ✓";\n    done.disabled = true;\n    thanks.scrollIntoView({behavior:"smooth",block:"nearest"});\n  });\n  reset.addEventListener("click", () => {\n    done.disabled = false;\n    done.textContent = "Payment Done ✓";
     closeQR();
     generate.textContent = "Generate payment QR ↗";
     section.querySelector("#support-custom").focus();
