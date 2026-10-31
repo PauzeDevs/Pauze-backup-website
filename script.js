@@ -1001,7 +1001,15 @@ const discordPresence = (() => {
         if (timeout !== null) window.clearTimeout(timeout);
       }
     };
-    const contributionObserver = "IntersectionObserver" in window\n      ? new IntersectionObserver(([entry], observer) => {\n          if (!entry || !entry.isIntersecting) return;\n          observer.disconnect();\n          void loadContributions();\n        }, { rootMargin: "180px 0px" })\n      : null;\n    if (contributionObserver) contributionObserver.observe(graph);\n    else void loadContributions();
+    const contributionObserver = "IntersectionObserver" in window
+      ? new IntersectionObserver(([entry], observer) => {
+          if (!entry || !entry.isIntersecting) return;
+          observer.disconnect();
+          void loadContributions();
+        }, { rootMargin: "180px 0px" })
+      : null;
+    if (contributionObserver) contributionObserver.observe(graph);
+    else void loadContributions();
   }
 })();
 
