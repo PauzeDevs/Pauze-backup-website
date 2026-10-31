@@ -56,8 +56,6 @@
   },1000);
 
   doneButton.addEventListener("click", () => {
-    thanks.hidden = false;
-    doneButton.textContent = "Marked as done ✓";
-    doneButton.disabled = true;
+    window.location.href = "support-thanks.html?amount=" + encodeURIComponent(String(amount));
   });
 })();
