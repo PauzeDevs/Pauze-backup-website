@@ -75,6 +75,31 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     makeMonolith(side*(4.2+(i%3)*.65),-1.1,z,2.2+(i%4)*.65,.12+(i%2)*.08);
   }
 
+  // Section gateways are positioned from the real page layout. The 3D route
+  // therefore follows the actual content instead of an arbitrary scroll distance.
+  const sectionIds = ["work","about","arcade","activity","web-development","contact"];
+  const gateways = [];
+  const gatewayMat = new THREE.MeshStandardMaterial({color:0x6fabc5,metalness:.72,roughness:.28,emissive:0x16394a,emissiveIntensity:.45});
+  const gatewayDark = new THREE.MeshStandardMaterial({color:0x17232d,metalness:.82,roughness:.32});
+  sectionIds.forEach((id,index)=>{
+    const group = new THREE.Group();
+    const width = coarse ? 3.4 : 4.8;
+    const height = coarse ? 3.1 : 4.1;
+    const depth = .16;
+    const postGeo = new THREE.BoxGeometry(.055,height,depth);
+    const beamGeo = new THREE.BoxGeometry(width,.055,depth);
+    const left = new THREE.Mesh(postGeo,gatewayDark); left.position.x=-width/2; group.add(left);
+    const right = new THREE.Mesh(postGeo,gatewayDark); right.position.x=width/2; group.add(right);
+    const top = new THREE.Mesh(beamGeo,gatewayMat); top.position.y=height/2; group.add(top);
+    const bottom = new THREE.Mesh(beamGeo,gatewayDark); bottom.position.y=-height/2; group.add(bottom);
+    const inner = new THREE.Mesh(new THREE.TorusGeometry(.13,.018,8,32),gatewayMat);
+    inner.position.set(index%2 ? width*.34 : -width*.34, -height*.25, .12); group.add(inner);
+    const marker = new THREE.Mesh(new THREE.BoxGeometry(.025,height*.62,.025),gatewayMat);
+    marker.position.set(index%2 ? -width*.28 : width*.28,0,.12); group.add(marker);
+    world.add(group);
+    gateways.push({id,group,index});
+  });
+
   // Fine particles are generated locally, not fetched imagery.
   const count=coarse?420:900, positions=new Float32Array(count*3);
   for(let i=0;i<count;i++){
@@ -89,8 +114,8 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
 
   const pointer={x:0,y:0,tx:0,ty:0};
   let scroll=0, targetScroll=0, last=0;
-  const maxScroll=()=>Math.max(1,document.documentElement.scrollHeight-innerHeight);
-  const onScroll=()=>targetScroll=scrollY/maxScroll();
+  const maxScroll=()=>Math.max(1,document.documentElement.scrollHeight-innerHeight);\n  const maxTravel=()=>Math.min(68,Math.max(31,(maxScroll()/Math.max(1,innerHeight))*5.4));\n  const placeGateways=()=>{\n    const range=maxTravel();\n    gateways.forEach(({id,group,index})=>{\n      const section=document.getElementById(id);\n      if(!section) { group.visible=false; return; }\n      const progress=Math.min(1,Math.max(0,section.offsetTop/maxScroll()));\n      group.visible=true;\n      group.position.set((index%2 ? 1 : -1)*(coarse?3.0:4.4),-.25,12-progress*range-5.5);\n      group.rotation.z=(index%2 ? 1 : -1)*.025;\n    });\n  };
+  const onScroll=()=>{targetScroll=scrollY/maxScroll();placeGateways();};
   addEventListener("scroll",onScroll,{passive:true}); onScroll();
   addEventListener("pointermove",e=>{
     pointer.tx=(e.clientX/innerWidth-.5)*2;
@@ -110,14 +135,14 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     scroll+=(targetScroll-scroll)*.045;
 
     // The camera travels through one continuous corridor as the real page scrolls.
-    const travel=scroll*31;
+    const travel=scroll*maxTravel();
     camera.position.x=pointer.x*(coarse?.22:.58);
     camera.position.y=1.05+pointer.y*-.28+Math.sin(elapsed*.18)*.12;
     camera.position.z=12-travel;
     camera.rotation.x=pointer.y*.018;
     camera.rotation.y=-pointer.x*.025;
     camera.rotation.z=Math.sin(elapsed*.11)*.006;
-    hero.position.set(pointer.x*.18, .25+Math.sin(elapsed*.5)*.12, 1.3-travel*.13);
+    hero.position.set(pointer.x*.18, .25+Math.sin(elapsed*.5)*.12, 1.3);
     hero.rotation.y=elapsed*(reduced?0:.16)+pointer.x*.13;
     hero.rotation.x=Math.sin(elapsed*.3)*.08+pointer.y*.08;
     ringA.rotation.z=elapsed*(reduced?0:.12);
@@ -126,7 +151,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     core.rotation.y=elapsed*(reduced?0:.12);
     particles.position.z=(travel*.22)%18;
     key.position.x=2.5+pointer.x*2;
-    architecture.position.z=-travel*.12;
+    architecture.position.z=-travel*.12;\n    gateways.forEach(({group,index})=>{ group.rotation.y=Math.sin(elapsed*.22+index)*.025; });
 
     renderer.render(scene,camera);
     if (!reduced) requestAnimationFrame(render);
