@@ -127,6 +127,60 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     gateways.push({ id, group, index });
   });
 
+  // Four original project installations, mapped to the real project cards.
+  const projectInstallations = [];
+  const installMaterials = {
+    shell: new THREE.MeshStandardMaterial({ color: 0x1b2b37, metalness: .86, roughness: .24 }),
+    glow: new THREE.MeshStandardMaterial({ color: 0x9ddcf4, metalness: .55, roughness: .2, emissive: 0x2b7898, emissiveIntensity: .8 }),
+    core: new THREE.MeshStandardMaterial({ color: 0x36566b, metalness: .78, roughness: .28, emissive: 0x102d3b, emissiveIntensity: .35 })
+  };
+  const addInstallPart = (group, geometry, material, x=0, y=0, z=0) => {
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x,y,z);
+    mesh.userData.projectInstall = true;
+    group.add(mesh);
+    return mesh;
+  };
+  const installSpecs = [
+    { id:"project-weather", type:"weather", x:-2.05, y:.05 },
+    { id:"project-pulse", type:"pulse", x:2.05, y:.05 },
+    { id:"project-control", type:"control", x:-2.05, y:.05 },
+    { id:"project-experiments", type:"experiments", x:2.05, y:.05 }
+  ];
+  installSpecs.forEach((spec,index) => {
+    const group = new THREE.Group();
+    group.userData.targetId = spec.id;
+    const halo = addInstallPart(group, new THREE.TorusGeometry(.78,.018,8,72), installMaterials.glow);
+    halo.rotation.x = Math.PI * .5;
+    if (spec.type === "weather") {
+      addInstallPart(group,new THREE.SphereGeometry(.43,28,20),installMaterials.core);
+      const radar = addInstallPart(group,new THREE.TorusGeometry(.57,.025,8,64),installMaterials.glow);
+      radar.rotation.set(.8,.2,.1);
+      addInstallPart(group,new THREE.BoxGeometry(.9,.025,.025),installMaterials.glow,0,.48,0);
+      addInstallPart(group,new THREE.SphereGeometry(.075,16,12),installMaterials.glow,.55,.12,.12);
+    } else if (spec.type === "pulse") {
+      addInstallPart(group,new THREE.IcosahedronGeometry(.48,1),installMaterials.core);
+      for(let i=0;i<3;i++){
+        const orbit=addInstallPart(group,new THREE.TorusGeometry(.62+i*.12,.014,6,64),i===1?installMaterials.shell:installMaterials.glow);
+        orbit.rotation.set(.5+i*.55,.25+i*.4,.2);
+      }
+      addInstallPart(group,new THREE.BoxGeometry(.09,.9,.09),installMaterials.glow,.0,0,.0).rotation.z=.65;
+    } else if (spec.type === "control") {
+      addInstallPart(group,new THREE.BoxGeometry(.72,.72,.72),installMaterials.shell);
+      addInstallPart(group,new THREE.BoxGeometry(.78,.12,.12),installMaterials.glow,0,.0,.42);
+      addInstallPart(group,new THREE.BoxGeometry(.12,.78,.12),installMaterials.glow,.0,.0,.42);
+      for(let i=0;i<4;i++) addInstallPart(group,new THREE.SphereGeometry(.075,12,10),installMaterials.glow,Math.cos(i*Math.PI/2)*.62,Math.sin(i*Math.PI/2)*.62,.12);
+    } else {
+      for(let i=0;i<5;i++){
+        const node=addInstallPart(group,new THREE.IcosahedronGeometry(.16+(i%2)*.06,1),i%2?installMaterials.shell:installMaterials.glow,(i-2)*.32,Math.sin(i*1.7)*.3,Math.cos(i*1.3)*.22);
+        node.rotation.set(i*.3,i*.6,0);
+      }
+      addInstallPart(group,new THREE.TorusGeometry(.48,.018,8,56),installMaterials.glow).rotation.set(.8,.2,.5);
+    }
+    world.add(group);
+    projectInstallations.push({ ...spec, group, halo });
+  });
+
   const particleCount = coarse ? 260 : 650;
   const positions = new Float32Array(particleCount * 3);
   for (let i = 0; i < particleCount; i++) {
@@ -163,6 +217,17 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
   let activeSection = -1;
   const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
   const maxTravel = () => Math.min(68, Math.max(31, (maxScroll() / Math.max(1, innerHeight)) * 5.4));
+  const placeProjectInstallations = () => {
+    const range = maxTravel();
+    projectInstallations.forEach(({id,group,x,y}) => {
+      const card = document.getElementById(id);
+      if (!card) { group.visible = false; return; }
+      const progress = Math.min(1,Math.max(0,card.offsetTop / maxScroll()));
+      group.visible = true;
+      group.position.set(coarse ? x*.62 : x,y,12-progress*range-4.6);
+      group.scale.setScalar(coarse ? .78 : 1);
+    });
+  };
 
   const placeGateways = () => {
     const range = maxTravel();
@@ -222,11 +287,39 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     observer.observe(document.querySelector("main"));
   }
 
+
+  // Raycast the installation meshes without blocking normal page controls.
+  const raycaster = new THREE.Raycaster();
+  const pointerNdc = new THREE.Vector2();
+  let hoveredInstall = null;
+  const hitInstallation = event => {
+    pointerNdc.x = (event.clientX / innerWidth) * 2 - 1;
+    pointerNdc.y = -(event.clientY / innerHeight) * 2 + 1;
+    raycaster.setFromCamera(pointerNdc,camera);
+    const hits = raycaster.intersectObjects(projectInstallations.map(item=>item.group),true);
+    const hit = hits.find(item=>item.object.userData.projectInstall);
+    return hit ? projectInstallations.find(item=>item.group===hit.object.parent || item.group===hit.object.parent?.parent || item.group===hit.object.parent?.parent?.parent) : null;
+  };
+  addEventListener("pointermove",event=>{
+    if (coarse) return;
+    const found=hitInstallation(event);
+    hoveredInstall=found;
+    document.body.classList.toggle("world-install-hover",Boolean(found));
+    document.querySelectorAll(".project.is-world-active").forEach(card=>card.classList.remove("is-world-active"));
+    if(found) document.getElementById(found.id)?.classList.add("is-world-active");
+  },{passive:true});
+  addEventListener("pointerdown",event=>{
+    if(event.target.closest("a,button,input,textarea,select,summary")) return;
+    const found=hitInstallation(event);
+    if(!found) return;
+    document.getElementById(found.id)?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"center"});
+  });
+
   const clock = new THREE.Clock();
   function draw(elapsed) {
     pointer.x += (pointer.tx - pointer.x) * .035;
     pointer.y += (pointer.ty - pointer.y) * .035;
-    scroll += (targetScroll - scroll) * .045;
+    scroll = reduced ? targetScroll : scroll + (targetScroll - scroll) * .045;
     const travel = scroll * maxTravel();
     camera.position.x = pointer.x * (coarse ? .16 : .5);
     camera.position.y = 1.05 + pointer.y * -.24 + (reduced ? 0 : Math.sin(elapsed * .18) * .1);
@@ -246,6 +339,13 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     architecture.position.z = -travel * .12;
     gateways.forEach(({ group, index }) => {
       group.rotation.y = reduced ? 0 : Math.sin(elapsed * .22 + index) * .025;
+    });
+    projectInstallations.forEach(({group,halo,type},index) => {
+      if (!reduced) {
+        group.rotation.y = Math.sin(elapsed*.38+index)*.16;
+        group.rotation.x = Math.sin(elapsed*.24+index)*.08;
+        halo.rotation.z = elapsed*(type==="weather"?.18:.12)*(index%2?-1:1);
+      }
     });
     renderer.render(scene, camera);
   }
@@ -267,6 +367,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
   }
 
   placeGateways();
+  placeProjectInstallations();
   onScroll();
   if (reduced) draw(0);
   else start();
