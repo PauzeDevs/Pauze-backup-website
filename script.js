@@ -1195,7 +1195,7 @@ const discordPresence = (() => {
   calculate();
 })();
 
-/* Pauze direct UPI QR support. The countdown is a display timer, not payment expiry. */
+/* Pauze direct UPI QR support. The timer is a display window, not payment expiry. */
 (() => {
   const section = document.querySelector("#support");
   if (!section) return;
@@ -1206,7 +1206,9 @@ const discordPresence = (() => {
   const amountLabel = section.querySelector("#support-qr-amount");
   const countdown = section.querySelector("#support-countdown");
   const upiLink = section.querySelector("#support-upi-link");
-  const reset = section.querySelector("#support-reset");\n  const done = section.querySelector("#support-done");\n  const thanks = section.querySelector("#support-thanks");
+  const reset = section.querySelector("#support-reset");
+  const done = section.querySelector("#support-done");
+  const thanks = section.querySelector("#support-thanks");
   const presets = [...section.querySelectorAll("[data-support-amount]")];
   let selectedAmount = 99;
   let interval = null;
@@ -1228,6 +1230,7 @@ const discordPresence = (() => {
     interval = null;
     payment.hidden = true;
     qr.replaceChildren();
+    thanks.hidden = true;
   };
   const tick = () => {
     const minutes = Math.floor(remaining / 60);
@@ -1262,13 +1265,25 @@ const discordPresence = (() => {
     remaining = 180;
     tick();
     interval = window.setInterval(tick,1000);
+    done.disabled = false;
+    done.textContent = "Payment Done ✓";
     generate.textContent = "Generate payment QR ↗";
     payment.scrollIntoView({behavior:"smooth",block:"nearest"});
   });
-  done.addEventListener("click", () => {\n    if (interval) window.clearInterval(interval);\n    interval = null;\n    thanks.hidden = false;\n    done.textContent = "Payment marked as done ✓";\n    done.disabled = true;\n    thanks.scrollIntoView({behavior:"smooth",block:"nearest"});\n  });\n  reset.addEventListener("click", () => {\n    done.disabled = false;\n    done.textContent = "Payment Done ✓";
+  done.addEventListener("click", () => {
+    if (interval) window.clearInterval(interval);
+    interval = null;
+    thanks.hidden = false;
+    done.textContent = "Payment marked as done ✓";
+    done.disabled = true;
+    thanks.scrollIntoView({behavior:"smooth",block:"nearest"});
+  });
+  reset.addEventListener("click", () => {
     closeQR();
+    done.disabled = false;
+    done.textContent = "Payment Done ✓";
     generate.textContent = "Generate payment QR ↗";
-    section.querySelector("#support-custom").focus();
+    custom.focus();
   });
   selectAmount(99);
 })();
