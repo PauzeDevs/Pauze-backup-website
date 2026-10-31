@@ -1,6 +1,4 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js";
-
-(() => {
+const bootWorld = () => import("https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js").then((THREE) => {
   const canvas = document.querySelector("#pauze-world");
   if (!canvas || !window.WebGLRenderingContext) return;
 
@@ -18,7 +16,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     return;
   }
 
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, coarse || lowMemory ? 1.2 : 1.65));
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, coarse || lowMemory ? 1 : 1.35));
   renderer.setSize(innerWidth, innerHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -181,7 +179,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     projectInstallations.push({ ...spec, group, halo });
   });
 
-  const particleCount = coarse ? 260 : 650;
+  const particleCount = coarse ? 120 : 260;
   const positions = new Float32Array(particleCount * 3);
   for (let i = 0; i < particleCount; i++) {
     positions[i * 3] = (Math.random() - .5) * 34;
@@ -300,9 +298,16 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     const hit = hits.find(item=>item.object.userData.projectInstall);
     return hit ? projectInstallations.find(item=>item.group===hit.object.parent || item.group===hit.object.parent?.parent || item.group===hit.object.parent?.parent?.parent) : null;
   };
+  let lastRaycastAt = 0;
+  let lastHoveredInstallation = null;
   addEventListener("pointermove",event=>{
     if (coarse) return;
+    const now = performance.now();
+    if (now - lastRaycastAt < 80) return;
+    lastRaycastAt = now;
     const found=hitInstallation(event);
+    if (found === lastHoveredInstallation) return;
+    lastHoveredInstallation = found;
     document.body.classList.toggle("world-install-hover",Boolean(found));
     document.querySelectorAll(".project.is-world-active").forEach(card=>card.classList.remove("is-world-active"));
     if(found) document.getElementById(found.id)?.classList.add("is-world-active");
@@ -374,5 +379,19 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     if (document.hidden) stop();
     else start();
   });
+  if ("IntersectionObserver" in window) {
+    const visibilityObserver = new IntersectionObserver(([entry]) => {
+      if (entry && entry.isIntersecting) start();
+      else stop();
+    }, { threshold: 0 });
+    visibilityObserver.observe(canvas);
+  }
   canvas.dataset.state = "ready";
-})();
+}).catch(() => {
+  const canvas = document.querySelector("#pauze-world");
+  if (canvas) canvas.dataset.state = "fallback";
+});
+
+// Let the browser paint the page before loading the decorative 3D scene.
+if ("requestIdleCallback" in window) requestIdleCallback(bootWorld, { timeout: 1800 });
+else setTimeout(bootWorld, 350);
