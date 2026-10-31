@@ -130,14 +130,12 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     architecture.position.z=-travel*.12;
 
     renderer.render(scene,camera);
-    if(!reduced) requestAnimationFrame(render);
+    requestAnimationFrame(render);
   }
-  if(reduced) { renderer.render(scene,camera); }
-  else requestAnimationFrame(render);
+  requestAnimationFrame(render);
 
-  // Pause GPU work when the tab is hidden.
+  // Keep the renderer asleep while the tab is hidden, then resume one frame loop.
   document.addEventListener("visibilitychange",()=>{
-    if(document.hidden) return;
-    if(!reduced) requestAnimationFrame(render);
+    if(!document.hidden && !reduced) requestAnimationFrame(render);
   });
 })();
