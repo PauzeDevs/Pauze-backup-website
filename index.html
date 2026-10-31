@@ -5,13 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#07090d">
   <meta name="description" content="PAUZE — independent developer building software, tools, games, and experiments.">
-  <title>PAUZE — Independent Developer</title>
+  <title>PAUZE — A New Experience Is Taking Shape</title>
+  <meta name="description" content="PAUZE is getting a new look. A major website redesign is underway. Check back soon.">
+  <style>
+    html,body{min-height:100%;margin:0}
+    body.pauze-maintenance{overflow:hidden;background:#080b10;color:#f4f6f8;font-family:"DM Sans",Inter,system-ui,sans-serif}
+    .maintenance-screen{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:auto;padding:32px 22px;background:radial-gradient(ellipse at 50% 42%,rgba(39,76,91,.23),transparent 52%),linear-gradient(145deg,#080b10 0%,#0b1017 58%,#080b10 100%);isolation:isolate}
+    .maintenance-screen:before{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(153,190,205,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(153,190,205,.055) 1px,transparent 1px);background-size:54px 54px;mask-image:radial-gradient(ellipse at center,#000 12%,transparent 78%);content:""}
+    .maintenance-screen:after{position:absolute;inset:18px;border:1px solid rgba(185,211,222,.12);pointer-events:none;content:""}
+    .maintenance-card{width:min(100%,720px);padding:clamp(28px,6vw,62px);border:1px solid rgba(175,207,220,.2);background:linear-gradient(145deg,rgba(19,28,37,.88),rgba(10,15,22,.92));box-shadow:0 30px 120px rgba(0,0,0,.42);backdrop-filter:blur(18px)}
+    .maintenance-top,.maintenance-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;color:#8c9eaa;font:10px/1.5 "DM Mono",monospace;letter-spacing:.13em;text-transform:uppercase}
+    .maintenance-brand{color:#f4f6f8;font:800 19px/1 "Sora",Inter,sans-serif;letter-spacing:-.09em}
+    .maintenance-brand span{color:#9dd7e6}
+    .maintenance-status{display:inline-flex;align-items:center;gap:9px;color:#b9dce5}
+    .maintenance-status i{width:7px;height:7px;border-radius:50%;background:#9dd7e6;box-shadow:0 0 16px #9dd7e6;animation:maintenance-pulse 1.8s ease-in-out infinite}
+    .maintenance-rule{height:1px;margin:28px 0;background:linear-gradient(90deg,rgba(157,215,230,.55),rgba(157,215,230,.04))}
+    .maintenance-kicker{margin:0 0 18px;color:#9dd7e6;font:10px "DM Mono",monospace;letter-spacing:.2em;text-transform:uppercase}
+    .maintenance-card h1{max-width:590px;margin:0;font:600 clamp(42px,8vw,76px)/.98 "Sora",Inter,sans-serif;letter-spacing:-.075em}
+    .maintenance-card h1 span{color:#9dd7e6}
+    .maintenance-copy{max-width:510px;margin:24px 0 0;color:#a9b5bf;font-size:15px;line-height:1.85}
+    .maintenance-progress{display:flex;align-items:center;gap:14px;margin-top:38px;color:#9aaab5;font:10px "DM Mono",monospace;letter-spacing:.1em}
+    .maintenance-progress-track{height:2px;flex:1;background:#263541;overflow:hidden}
+    .maintenance-progress-track span{display:block;width:38%;height:100%;background:#9dd7e6;box-shadow:0 0 12px #9dd7e6}
+    .maintenance-bottom{margin-top:42px;padding-top:18px;border-top:1px solid rgba(175,207,220,.14);font-size:9px;letter-spacing:.1em}
+    .maintenance-bottom strong{color:#dce8ed;font-weight:500}
+    @keyframes maintenance-pulse{50%{opacity:.35;transform:scale(.8)}}
+    @media(max-width:520px){.maintenance-screen{padding:22px 16px}.maintenance-screen:after{inset:9px}.maintenance-card{padding:27px 22px}.maintenance-top,.maintenance-bottom{align-items:flex-start;flex-direction:column}.maintenance-bottom{gap:8px}.maintenance-progress{gap:9px;font-size:8px}}
+    @media(prefers-reduced-motion:reduce){.maintenance-status i{animation:none}}
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="apple-style.css?v=20261018-github-activity">
 </head>
-<body>
+<body class="pauze-maintenance">
+  <main class="maintenance-screen" role="dialog" aria-modal="true" aria-labelledby="maintenance-title">
+    <section class="maintenance-card">
+      <div class="maintenance-top"><a class="maintenance-brand" href="https://pauze.is-a.dev" aria-label="Pauze home">PAUZE<span>®</span></a><span class="maintenance-status"><i aria-hidden="true"></i> REBUILD IN PROGRESS</span></div>
+      <div class="maintenance-rule"></div>
+      <p class="maintenance-kicker">A new chapter is loading / 2026</p>
+      <h1 id="maintenance-title">Something<br><span>better is taking shape.</span></h1>
+      <p class="maintenance-copy">We’re rebuilding the PAUZE experience from the ground up. A sharper identity, a cleaner interface, and a whole new way to explore what’s being made. The site will be back soon.</p>
+      <div class="maintenance-progress" aria-label="Redesign in progress"><span>DESIGN / ENGINEERING</span><div class="maintenance-progress-track" aria-hidden="true"><span></span></div><span>IN PROGRESS</span></div>
+      <div class="maintenance-bottom"><span>THANK YOU FOR YOUR PATIENCE</span><strong>PAUZE® · INDEPENDENT BY DESIGN</strong></div>
+    </section>
+  </main>
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="noise" aria-hidden="true"></div>
   <!-- Real Milky Way timelapse by Erhan Dayı via Pexels. -->
