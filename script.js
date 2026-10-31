@@ -548,9 +548,43 @@ const discordPresence = (() => {
     }
   };
 
-  void loadPresence();
-  window.setInterval(() => { void loadPresence(); }, 20000);
-  window.setInterval(updateMusicProgress, 1000);
+  const presenceCard = document.querySelector(".discord-presence");
+  let presenceInterval = null;
+  let progressInterval = null;
+  let presenceVisible = false;
+  const stopPresenceTimers = () => {
+    if (presenceInterval !== null) window.clearInterval(presenceInterval);
+    if (progressInterval !== null) window.clearInterval(progressInterval);
+    presenceInterval = null;
+    progressInterval = null;
+  };
+  const startPresenceTimers = () => {
+    if (!presenceVisible || document.hidden) return;
+    if (presenceInterval === null) {
+      void loadPresence();
+      presenceInterval = window.setInterval(() => { void loadPresence(); }, 20000);
+    }
+    if (progressInterval === null) {
+      updateMusicProgress();
+      progressInterval = window.setInterval(updateMusicProgress, 1000);
+    }
+  };
+  const presenceObserver = presenceCard && "IntersectionObserver" in window
+    ? new IntersectionObserver(([entry]) => {
+        presenceVisible = Boolean(entry && entry.isIntersecting);
+        if (presenceVisible) startPresenceTimers();
+        else stopPresenceTimers();
+      }, { rootMargin: "180px 0px" })
+    : null;
+  if (presenceObserver) presenceObserver.observe(presenceCard);
+  else {
+    presenceVisible = true;
+    startPresenceTimers();
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopPresenceTimers();
+    else startPresenceTimers();
+  });
   return { refresh: loadPresence };
 })();
 
@@ -828,8 +862,38 @@ const discordPresence = (() => {
       if (timeout !== null) window.clearTimeout(timeout);
     }
   };
-  loadEvents();
-  window.setInterval(loadEvents, 300000);
+  const githubCard = list.closest(".github-presence");
+  let githubVisible = false;
+  let githubInterval = null;
+  let githubStarted = false;
+  const stopGithubRefresh = () => {
+    if (githubInterval !== null) window.clearInterval(githubInterval);
+    githubInterval = null;
+  };
+  const startGithubRefresh = () => {
+    if (!githubVisible || document.hidden) return;
+    if (!githubStarted) {
+      githubStarted = true;
+      void loadEvents();
+    }
+    if (githubInterval === null) githubInterval = window.setInterval(loadEvents, 300000);
+  };
+  const githubObserver = githubCard && "IntersectionObserver" in window
+    ? new IntersectionObserver(([entry]) => {
+        githubVisible = Boolean(entry && entry.isIntersecting);
+        if (githubVisible) startGithubRefresh();
+        else stopGithubRefresh();
+      }, { rootMargin: "180px 0px" })
+    : null;
+  if (githubObserver) githubObserver.observe(githubCard);
+  else {
+    githubVisible = true;
+    startGithubRefresh();
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopGithubRefresh();
+    else startGithubRefresh();
+  });
 
   const graph = document.querySelector(".contribution-graph-link");
   const graphDisplay = document.querySelector("#contribution-graph-display");
@@ -937,7 +1001,7 @@ const discordPresence = (() => {
         if (timeout !== null) window.clearTimeout(timeout);
       }
     };
-    void loadContributions();
+    const contributionObserver = "IntersectionObserver" in window\n      ? new IntersectionObserver(([entry], observer) => {\n          if (!entry || !entry.isIntersecting) return;\n          observer.disconnect();\n          void loadContributions();\n        }, { rootMargin: "180px 0px" })\n      : null;\n    if (contributionObserver) contributionObserver.observe(graph);\n    else void loadContributions();
   }
 })();
 
@@ -950,7 +1014,7 @@ const discordPresence = (() => {
   const loadArcade = () => {
     if (loaded) return;
     loaded = true;
-    import("./arcade.js").catch(() => {
+    import("/arcade.js").catch(() => {
       const state = document.querySelector("#dino-state");
       if (state) state.textContent = "ARCADE TEMPORARILY UNAVAILABLE";
     });
