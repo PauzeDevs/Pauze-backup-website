@@ -19,7 +19,7 @@
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="PAUZE home">PAUZE</a>
     <nav class="desktop-nav" id="primary-navigation" aria-label="Main navigation">
-      <a href="#work">Projects <span>01</span></a><a href="#about">About <span>02</span></a><a href="#arcade">Arcade <span>03</span></a><a href="#build-log">Build log <span>04</span></a><a href="#activity">Live <span>05</span></a><a href="#web-development">Websites <span>06</span></a><a href="#contact">Contact <span>07</span></a>
+      <a href="#work">Projects <span>01</span></a><a href="#about">About <span>02</span></a><a href="#arcade">Arcade <span>03</span></a><a href="#build-log">Build log <span>04</span></a><a href="#activity">Live <span>05</span></a><a href="#web-development">Websites <span>06</span></a><a href="#support">Support <span>07</span></a><a href="#contact">Contact <span>08</span></a>
     </nav>
     <button class="command-trigger" type="button" aria-haspopup="dialog" aria-controls="command-palette"><span class="command-trigger-label">Quick actions</span><kbd>⌘ K</kbd></button>
     <a class="availability" href="#contact"><i class="status-dot"></i> OPEN TO IDEAS</a>
@@ -37,7 +37,7 @@
       <a class="command-item" role="listitem" data-command-item href="#build-log"><span class="command-item-icon" aria-hidden="true">⌁</span><span><strong>Build log</strong><small>Development notes and project updates</small></span><kbd>04</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="#activity"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Live activity</strong><small>GitHub and presence</small></span><kbd>05</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="#web-development"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Website development</strong><small>Explore services and estimate a budget</small></span><kbd>06</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="#contact"><span class="command-item-icon" aria-hidden="true">✉</span><span><strong>Contact</strong><small>Get in touch</small></span><kbd>07</kbd></a>
+      <a class="command-item" role="listitem" data-command-item href="#support"><span class="command-item-icon" aria-hidden="true">♡</span><span><strong>Support Pauze</strong><small>Contribute through UPI</small></span><kbd>07</kbd></a>\n      <a class="command-item" role="listitem" data-command-item href="#contact"><span class="command-item-icon" aria-hidden="true">✉</span><span><strong>Contact</strong><small>Get in touch</small></span><kbd>07</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Personal GitHub</strong><small>Profile and contributions</small></span><kbd>↗</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer"><span class="command-item-icon" aria-hidden="true">◇</span><span><strong>PauzeDevs on GitHub</strong><small>Projects and tools</small></span><kbd>↗</kbd></a>
       <a class="command-item" role="listitem" data-command-item href="mailto:githubpauze@gmail.com"><span class="command-item-icon" aria-hidden="true">@</span><span><strong>Email Pauze</strong><small>githubpauze@gmail.com</small></span><kbd>↗</kbd></a>
@@ -182,7 +182,39 @@
       </div>
     </section>
 
-    <section class="contact section-wrap" id="contact" data-reveal><p class="section-index">07 / CONTACT PAUZE</p><h2>Website, app,<br><span>or Discord tool?</span></h2><div class="contact-bottom"><p>For website, Android, Discord bot, and automation enquiries, send me an email.</p><a class="button button-primary contact-button" href="mailto:githubpauze@gmail.com">Get in touch <span>↗</span></a></div>
+
+    <section class="support-section section-wrap" id="support" data-reveal>
+      <div class="support-copy">
+        <p class="section-index">08 / SUPPORT PAUZE</p>
+        <h2>Fuel the<br><span>next build.</span></h2>
+        <p>If you enjoy what I make, you can chip in towards the tools, time, and experiments behind Pauze.</p>
+        <div class="support-note"><span aria-hidden="true">☕</span><span>Every contribution is optional and appreciated.</span></div>
+      </div>
+      <div class="support-panel">
+        <div class="support-panel-top"><span>COFFEE FUND / INR</span><span>DIRECT UPI</span></div>
+        <p class="support-prompt">Choose an amount</p>
+        <div class="support-presets" role="group" aria-label="Choose a contribution amount">
+          <button type="button" class="support-amount" data-support-amount="49">₹49</button>
+          <button type="button" class="support-amount" data-support-amount="99">₹99</button>
+          <button type="button" class="support-amount" data-support-amount="199">₹199</button>
+          <button type="button" class="support-amount" data-support-amount="499">₹499</button>
+        </div>
+        <label class="support-custom-label" for="support-custom">Or enter a custom amount (₹)</label>
+        <input id="support-custom" class="support-custom" type="number" inputmode="numeric" min="1" max="100000" step="1" placeholder="e.g. 150">
+        <button type="button" class="button button-primary support-generate" id="support-generate">Generate payment QR <span aria-hidden="true">↗</span></button>
+        <div class="support-payment" id="support-payment" hidden aria-live="polite">
+          <div class="support-qr" id="support-qr" aria-label="UPI payment QR code"></div>
+          <strong class="support-qr-amount" id="support-qr-amount"></strong>
+          <p>Scan with any UPI app. Check the payee name <strong>Pauze</strong> before paying.</p>
+          <a class="support-upi-link" id="support-upi-link" href="#">Open UPI app ↗</a>
+          <div class="support-countdown" id="support-countdown" role="timer">03:00</div>
+          <p class="support-expiry-note" id="support-expiry-note">This QR is displayed for 3 minutes. The timer only closes this page's QR; it does not expire or cancel a payment.</p>
+          <button type="button" class="support-reset" id="support-reset">Generate another QR</button>
+        </div>
+        <p class="support-footnote">UPI ID: <strong>prodbyaarav@fam</strong> · Payments are made directly through your UPI app. This website cannot verify whether a payment was completed.</p>
+      </div>
+    </section>
+\n    <section class="contact section-wrap" id="contact" data-reveal><p class="section-index">07 / CONTACT PAUZE</p><h2>Website, app,<br><span>or Discord tool?</span></h2><div class="contact-bottom"><p>For website, Android, Discord bot, and automation enquiries, send me an email.</p><a class="button button-primary contact-button" href="mailto:githubpauze@gmail.com">Get in touch <span>↗</span></a></div>
       <div class="contact-hub" aria-label="Contact and social links">
         <a class="contact-link-card" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="contact-link-kicker">PERSONAL PROFILE</span><strong>GitHub <span aria-hidden="true">↗</span></strong><span class="contact-link-detail">Personal projects and contributions</span></a>
         <a class="contact-link-card" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="contact-link-kicker">DEVELOPER SPACE</span><strong>PauzeDevs <span aria-hidden="true">↗</span></strong><span class="contact-link-detail">Projects and experiments</span></a>
@@ -192,7 +224,7 @@
     </section>
   </main>
   <footer class="site-footer section-wrap"><a class="wordmark" href="#top">PAUZE</a><span>WEB / ANDROID / DISCORD</span><div class="footer-links"><a href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div><small>© <span id="year"></span> PAUZE / PAUZEDEVS.</small></footer>
-  <script type="module" src="world.js?v=4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>\n  <script type="module" src="world.js?v=4"></script>
   <script src="script.js?v=20261031-wired" defer></script>
 </body>
 </html>
