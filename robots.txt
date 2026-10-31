@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
+Allow: /projects/
+Allow: /about/
+Allow: /arcade/
+Allow: /build/
+Allow: /activity/
+Allow: /websites/
+Allow: /support/
+Allow: /contact/
+Allow: /support-payment.html
 
 Sitemap: https://pauze.is-a.dev/sitemap.xml
