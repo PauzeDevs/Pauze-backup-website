@@ -1195,95 +1195,49 @@ const discordPresence = (() => {
   calculate();
 })();
 
-/* Pauze direct UPI QR support. The timer is a display window, not payment expiry. */
+/* Pauze direct UPI support: amount selection opens a dedicated payment page. */
 (() => {
   const section = document.querySelector("#support");
   if (!section) return;
   const custom = section.querySelector("#support-custom");
   const generate = section.querySelector("#support-generate");
-  const payment = section.querySelector("#support-payment");
-  const qr = section.querySelector("#support-qr");
-  const amountLabel = section.querySelector("#support-qr-amount");
-  const countdown = section.querySelector("#support-countdown");
-  const upiLink = section.querySelector("#support-upi-link");
-  const reset = section.querySelector("#support-reset");
-  const done = section.querySelector("#support-done");
-  const thanks = section.querySelector("#support-thanks");
   const presets = [...section.querySelectorAll("[data-support-amount]")];
   let selectedAmount = 99;
-  let interval = null;
-  let remaining = 180;
-  const payee = "Pauze";
-  const upiId = "prodbyaarav@fam";
+
   const selectAmount = (amount) => {
     selectedAmount = amount;
     custom.value = "";
-    presets.forEach(button => button.classList.toggle("is-selected", Number(button.dataset.supportAmount) === amount));
+    presets.forEach((button) => {
+      const selected = Number(button.dataset.supportAmount) === amount;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
   };
-  presets.forEach(button => button.addEventListener("click", () => selectAmount(Number(button.dataset.supportAmount))));
+
+  presets.forEach((button) => button.addEventListener("click", () => {
+    selectAmount(Number(button.dataset.supportAmount));
+  }));
+
   custom.addEventListener("input", () => {
     selectedAmount = null;
-    presets.forEach(button => button.classList.remove("is-selected"));
+    presets.forEach((button) => {
+      button.classList.remove("is-selected");
+      button.setAttribute("aria-pressed", "false");
+    });
   });
-  const closeQR = () => {
-    if (interval) window.clearInterval(interval);
-    interval = null;
-    payment.hidden = true;
-    qr.replaceChildren();
-    thanks.hidden = true;
-  };
-  const tick = () => {
-    const minutes = Math.floor(remaining / 60);
-    const seconds = remaining % 60;
-    countdown.textContent = String(minutes).padStart(2,"0") + ":" + String(seconds).padStart(2,"0");
-    if (remaining <= 0) {
-      closeQR();
-      generate.textContent = "QR expired · Generate again ↗";
-      return;
-    }
-    remaining -= 1;
-  };
+
   generate.addEventListener("click", () => {
-    const amount = custom.value.trim() ? Number(custom.value) : selectedAmount;
-    if (!Number.isInteger(amount) || amount < 1 || amount > 100000) {
+    const raw = custom.value.trim();
+    const amount = raw ? Number(raw) : selectedAmount;
+    if (!Number.isSafeInteger(amount) || amount < 1 || amount > 100000) {
       custom.setCustomValidity("Enter a whole amount between ₹1 and ₹1,00,000.");
       custom.reportValidity();
       custom.setCustomValidity("");
+      custom.focus();
       return;
     }
-    closeQR();
-    const uri = "upi://pay?" + new URLSearchParams({pa:upiId,pn:payee,am:String(amount),cu:"INR",tn:"Support Pauze"}).toString();
-    payment.hidden = false;
-    amountLabel.textContent = "₹" + amount.toLocaleString("en-IN");
-    upiLink.href = uri;
-    upiLink.setAttribute("aria-label", "Open UPI app to pay ₹" + amount);
-    if (typeof window.QRCode !== "function") {
-      qr.textContent = "QR generator unavailable. Use the Open UPI app link below.";
-    } else {
-      new window.QRCode(qr, {text:uri,width:220,height:220,colorDark:"#071018",colorLight:"#ffffff",correctLevel:window.QRCode.CorrectLevel.M});
-    }
-    remaining = 180;
-    tick();
-    interval = window.setInterval(tick,1000);
-    done.disabled = false;
-    done.textContent = "Payment Done ✓";
-    generate.textContent = "Generate payment QR ↗";
-    payment.scrollIntoView({behavior:"smooth",block:"nearest"});
+    window.location.href = "support-payment.html?amount=" + encodeURIComponent(String(amount));
   });
-  done.addEventListener("click", () => {
-    if (interval) window.clearInterval(interval);
-    interval = null;
-    thanks.hidden = false;
-    done.textContent = "Payment marked as done ✓";
-    done.disabled = true;
-    thanks.scrollIntoView({behavior:"smooth",block:"nearest"});
-  });
-  reset.addEventListener("click", () => {
-    closeQR();
-    done.disabled = false;
-    done.textContent = "Payment Done ✓";
-    generate.textContent = "Generate payment QR ↗";
-    custom.focus();
-  });
+
   selectAmount(99);
 })();
