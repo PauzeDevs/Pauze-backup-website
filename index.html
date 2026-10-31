@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="apple-style.css?v=20261031-overlay-cleanup">
+  <link rel="stylesheet" href="apple-style.css?v=20261031-wired">
 </head>
 <body class="pauze-world">
   <a class="skip-link" href="#top">Skip to content</a>
@@ -19,7 +19,7 @@
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="PAUZE home">PAUZE</a>
     <nav class="desktop-nav" id="primary-navigation" aria-label="Main navigation">
-      <a href="#work">Work <span>01</span></a><a href="#about">About <span>02</span></a><a href="#arcade">Arcade <span>03</span></a><a href="#activity">Live <span>04</span></a><a href="#web-development">Websites <span>06</span></a><a href="#contact">Contact <span>07</span></a>
+      <a href="#work">Projects <span>01</span></a><a href="#about">About <span>02</span></a><a href="#arcade">Arcade <span>03</span></a><a href="#build-log">Build log <span>04</span></a><a href="#activity">Live <span>05</span></a><a href="#web-development">Websites <span>06</span></a><a href="#contact">Contact <span>07</span></a>
     </nav>
     <button class="command-trigger" type="button" aria-haspopup="dialog" aria-controls="command-palette"><span class="command-trigger-label">Quick actions</span><kbd>⌘ K</kbd></button>
     <a class="availability" href="#contact"><i class="status-dot"></i> OPEN TO IDEAS</a>
@@ -52,7 +52,7 @@
           <p class="eyebrow"><i></i> WEB DEVELOPMENT / ANDROID / DISCORD TOOLS</p>
           <h1>hey, i’m<br><span>Pauze<span class="hero-period">.</span></span></h1>
           <p class="hero-description">I build websites, Android apps, Discord bots, and developer tools under PauzeDevs.</p>
-          <nav class="hero-actions hero-links" aria-label="Explore the site"><a href="#about"><span>01</span> ABOUT ME <b>▶</b></a><a href="#work"><span>02</span> PROJECTS <b>▶</b></a><a href="#contact"><span>03</span> CONTACT <b>▶</b></a><a href="#activity"><span>04</span> LIVE PRESENCE <b>▶</b></a><a href="#arcade"><span>05</span> ARCADE <b>▶</b></a></nav>
+          <nav class="hero-actions hero-links" aria-label="Explore the site"><a href="#work"><span>01</span> PROJECTS <b>▶</b></a><a href="#about"><span>02</span> ABOUT <b>▶</b></a><a href="#arcade"><span>03</span> ARCADE <b>▶</b></a><a href="#build-log"><span>04</span> BUILD LOG <b>▶</b></a><a href="#activity"><span>05</span> LIVE STATUS <b>▶</b></a><a href="#web-development"><span>06</span> WEBSITES <b>▶</b></a><a href="#contact"><span>07</span> CONTACT <b>▶</b></a></nav>
         </div>
         <div class="hero-art" aria-label="PAUZE design mark">
           <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="art-cross cross-one"></div><div class="art-cross cross-two"></div>
@@ -109,7 +109,7 @@
     </section>
 
     <section class="build-log section-wrap" id="build-log">
-      <div class="section-heading" data-reveal><div><p class="section-index">BEHIND THE BUILD</p><h2>Notes from<br>the process<span class="accent-dot">.</span></h2></div><p class="section-note">Development notes for Pauze projects, starting with Pauze Pulse.</p></div>
+      <div class="section-heading" data-reveal><div><p class="section-index">04 / BUILD LOG</p><h2>Notes from<br>the process<span class="accent-dot">.</span></h2></div><p class="section-note">Development notes for Pauze projects, starting with Pauze Pulse.</p></div>
       <article class="build-note" id="pauzepulse-build" data-reveal><div class="build-note-heading"><span>BUILD NOTE / 001</span><span>PAUZE PULSE</span></div><h3>One phone. Multiple players. No internet required.</h3><p>Pauze Pulse is being developed as an offline-first Android arcade. The focus is on responsive touch controls, clear player modes, locally saved results, and mini-games that feel distinct rather than reskinned copies.</p><div class="build-note-tags"><span>KOTLIN</span><span>JETPACK COMPOSE</span><span>LOCAL STATE</span><span>GAMEPLAY SYSTEMS</span></div><a class="text-link" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">FOLLOW DEVELOPMENT <b>↗</b></a></article>
     </section>
 
@@ -117,15 +117,15 @@
       <div class="section-heading" data-reveal><div><p class="section-index">05 / CURRENTLY ONLINE</p><h2>Live status<span class="accent-dot">.</span></h2></div><p class="section-note">Live GitHub activity and Discord presence, including the current Spotify track when Discord shares it.</p></div>
       <div class="activity-grid">
         <article class="presence-card github-presence" data-reveal><div class="presence-card-top"><span>GITHUB / ACTIVITY</span><a href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">PROFILE ↗</a></div><div class="github-card-title"><span class="github-symbol">⌘</span><div><h3>Code in progress</h3><p id="github-feed-state">Connecting to GitHub activity…</p></div></div><ul id="github-event-list"><li>Loading recent public activity…</li></ul><a class="contribution-graph-link" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer" aria-label="View personal GitHub contribution activity"><span class="contribution-graph-caption"><span>PERSONAL GITHUB / CONTRIBUTIONS</span><span id="contribution-graph-total">LAST YEAR</span></span><div class="contribution-graph-image" id="contribution-graph-display" role="img" aria-label="Loading GitHub contribution calendar" hidden></div><span class="contribution-graph-fallback contribution-graph-link-label" role="status" aria-live="polite">Loading live contribution calendar…</span><span class="contribution-graph-profile-link">OPEN FULL PROFILE <b aria-hidden="true">↗</b></span></a></article>
-        <article class="presence-card discord-presence" data-reveal><div class="presence-card-top"><span>DISCORD / PRESENCE</span><span id="discord-status-label">CHECKING STATUS</span></div><div class="discord-profile"><div class="discord-avatar-wrap"><img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord avatar" loading="lazy" decoding="async"><i id="discord-avatar-status" class="avatar-status-indicator"></i></div><div class="discord-profile-copy"><h3 id="discord-display-name">Pauze</h3><p id="discord-activity-text">Looking for live Discord presence…</p><span class="discord-user-id">ID / 1547264515182432398</span></div><i class="presence-dot discord-dot" id="discord-status-dot"></i></div><div class="discord-account-markers" id="discord-profile-markers" aria-label="Discord profile badges and server identity"><span class="discord-nitro-status" id="discord-nitro-status" aria-live="polite"><img class="discord-nitro-icon" src="https://support.discord.com/hc/article_attachments/23085036411415" alt="" width="18" height="18" loading="lazy" decoding="async"><span class="discord-nitro-label">Checking Nitro status…</span></span><div class="discord-badges" id="discord-badges"><span class="discord-marker-empty">Loading Discord badges…</span></div></div><div class="discord-activity-box"><span>CURRENT ACTIVITY</span><p id="discord-current-activity">Waiting for Discord status…</p></div><div class="discord-music-card" id="discord-music-card" hidden><div class="discord-music-heading"><span id="discord-music-heading">Listening to Spotify</span><span class="music-badge">♪</span></div><div class="discord-music-track"><div class="music-art-fallback" id="discord-music-art-fallback" hidden>♪</div><img id="discord-music-art" src="" alt="Album artwork" loading="lazy" decoding="async" hidden><div class="discord-music-copy"><h4 id="discord-music-title">Track title</h4><p id="discord-music-artist">Artist</p><span id="discord-music-album">Album</span></div></div><div class="discord-music-progress"><span id="discord-music-progress"></span></div><div class="discord-music-times"><span id="discord-music-elapsed">0:00</span><span id="discord-music-duration">0:00</span></div><p id="discord-music-timing-note" hidden></p></div><a class="discord-cta" href="https://discord.com/users/1547264515182432398" target="_blank" rel="noreferrer">OPEN DISCORD PROFILE ↗</a><p class="discord-footnote" id="discord-status-note">Live status requires your Discord presence to be available through Lanyard.</p></article>
+        <article class="presence-card discord-presence" data-reveal><div class="presence-card-top"><span>DISCORD / PRESENCE</span><span id="discord-status-label">CHECKING STATUS</span></div><div class="discord-profile"><div class="discord-avatar-wrap"><span class="discord-avatar-fallback" aria-hidden="true">P</span><img id="discord-avatar" alt="Pauze Discord avatar" loading="lazy" decoding="async"><i id="discord-avatar-status" class="avatar-status-indicator"></i></div><div class="discord-profile-copy"><h3 id="discord-display-name">Pauze</h3><p id="discord-activity-text">Looking for live Discord presence…</p><span class="discord-user-id">ID / 1547264515182432398</span></div><i class="presence-dot discord-dot" id="discord-status-dot"></i></div><div class="discord-account-markers" id="discord-profile-markers" aria-label="Discord profile badges and server identity"><span class="discord-nitro-status" id="discord-nitro-status" aria-live="polite"><img class="discord-nitro-icon" src="https://support.discord.com/hc/article_attachments/23085036411415" alt="" width="18" height="18" loading="lazy" decoding="async"><span class="discord-nitro-label">Checking Nitro status…</span></span><div class="discord-badges" id="discord-badges"><span class="discord-marker-empty">Loading Discord badges…</span></div></div><div class="discord-activity-box"><span>CURRENT ACTIVITY</span><p id="discord-current-activity">Waiting for Discord status…</p></div><div class="discord-music-card" id="discord-music-card" hidden><div class="discord-music-heading"><span id="discord-music-heading">Listening to Spotify</span><span class="music-badge">♪</span></div><div class="discord-music-track"><div class="music-art-fallback" id="discord-music-art-fallback" hidden>♪</div><img id="discord-music-art" src="" alt="Album artwork" loading="lazy" decoding="async" hidden><div class="discord-music-copy"><h4 id="discord-music-title">Track title</h4><p id="discord-music-artist">Artist</p><span id="discord-music-album">Album</span></div></div><div class="discord-music-progress"><span id="discord-music-progress"></span></div><div class="discord-music-times"><span id="discord-music-elapsed">0:00</span><span id="discord-music-duration">0:00</span></div><p id="discord-music-timing-note" hidden></p></div><a class="discord-cta" href="https://discord.com/users/1547264515182432398" target="_blank" rel="noreferrer">OPEN DISCORD PROFILE ↗</a><p class="discord-footnote" id="discord-status-note">Live status requires your Discord presence to be available through Lanyard.</p></article>
       </div>
     </section>
 
     
     <section class="webdev-section section-wrap" id="web-development" aria-labelledby="webdev-title">
       <div class="section-heading" data-reveal>
-        <div><p class="section-index">06 / WEBSITE DEVELOPMENT</p><h2 id="webdev-title">Your idea,<br>made real<span class="accent-dot">.</span></h2></div>
-        <p class="section-note">Need a website for your business, café, portfolio, or new idea? Explore what I can build and get a quick budget estimate before reaching out.</p>
+        <div><p class="section-index">06 / WEBSITE DEVELOPMENT</p><h2 id="webdev-title">Websites<br>by Pauze<span class="accent-dot">.</span></h2></div>
+        <p class="section-note">Website design and development for businesses, creators, and personal projects. Configure pages and features below to get an indicative estimate.</p>
       </div>
       <div class="webdev-intro-grid" data-reveal>
         <article class="webdev-service-card"><span class="webdev-card-index">01 / START SIMPLE</span><div class="webdev-service-symbol" aria-hidden="true">↗</div><h3>Landing pages</h3><p>A focused, responsive page for a launch, personal brand, event, or one clear call to action.</p><strong>₹3,500–₹6,000 <small>indicative</small></strong></article>
@@ -181,7 +181,7 @@
       </div>
     </section>
 
-    <section class="contact section-wrap" id="contact" data-reveal><p class="section-index">07 / YOUR TURN</p><h2>Have an idea?<br><span>Let’s build it.</span></h2><div class="contact-bottom"><p>Have a project in mind, found something interesting, or just want to talk code?</p><a class="button button-primary contact-button" href="mailto:githubpauze@gmail.com">Get in touch <span>↗</span></a></div>
+    <section class="contact section-wrap" id="contact" data-reveal><p class="section-index">07 / CONTACT PAUZE</p><h2>Website, app,<br><span>or Discord tool?</span></h2><div class="contact-bottom"><p>For website, Android, Discord bot, and automation enquiries, send me an email.</p><a class="button button-primary contact-button" href="mailto:githubpauze@gmail.com">Get in touch <span>↗</span></a></div>
       <div class="contact-hub" aria-label="Contact and social links">
         <a class="contact-link-card" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="contact-link-kicker">PERSONAL PROFILE</span><strong>GitHub <span aria-hidden="true">↗</span></strong><span class="contact-link-detail">Personal projects and contributions</span></a>
         <a class="contact-link-card" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="contact-link-kicker">DEVELOPER SPACE</span><strong>PauzeDevs <span aria-hidden="true">↗</span></strong><span class="contact-link-detail">Projects and experiments</span></a>
@@ -190,8 +190,8 @@
       </div>
     </section>
   </main>
-  <footer class="site-footer section-wrap"><a class="wordmark" href="#top">PAUZE</a><span>INDEPENDENT BY DESIGN.</span><div class="footer-links"><a href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div><small>© <span id="year"></span> PAUZE. MADE WITH CURIOSITY.</small></footer>
-  <script type="module" src="world.js?v=3"></script>
-  <script src="script.js?v=20261018-profile-activity-mixed" defer></script>
+  <footer class="site-footer section-wrap"><a class="wordmark" href="#top">PAUZE</a><span>WEB / ANDROID / DISCORD</span><div class="footer-links"><a href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div><small>© <span id="year"></span> PAUZE / PAUZEDEVS.</small></footer>
+  <script type="module" src="world.js?v=4"></script>
+  <script src="script.js?v=20261031-wired" defer></script>
 </body>
 </html>

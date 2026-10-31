@@ -96,8 +96,8 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
     architecture.add(pillar);
   }
 
-  const sectionIds = ["work", "about", "arcade", "activity", "web-development", "contact"];
-  const sectionNames = ["Work", "About", "Arcade", "Live", "Websites", "Contact"];
+  const sectionIds = ["work", "about", "arcade", "build-log", "activity", "web-development", "contact"];
+  const sectionNames = ["Projects", "About", "Arcade", "Build log", "Live status", "Websites", "Contact"];
   const gateways = [];
   const gatewayMat = new THREE.MeshStandardMaterial({ color: 0x6fabc5, metalness: .72, roughness: .28, emissive: 0x16394a, emissiveIntensity: .45 });
   const gatewayDark = new THREE.MeshStandardMaterial({ color: 0x17232d, metalness: .82, roughness: .32 });
@@ -261,9 +261,10 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
 
   const onScroll = () => {
     targetScroll = scrollY / maxScroll();
-    hud.querySelector(".world-route-progress i").style.transform = "scaleX(" + targetScroll + ")";
+    hud.querySelector(".world-route-progress i").style.setProperty("--route-progress", targetScroll);
     updateRoute();
     placeGateways();
+    placeProjectInstallations();
   };
   addEventListener("scroll", onScroll, { passive: true });
   addEventListener("pointermove", event => {
@@ -283,7 +284,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
   };
   addEventListener("resize", resize, { passive: true });
   if ("ResizeObserver" in window) {
-    const observer = new ResizeObserver(() => placeGateways());
+    const observer = new ResizeObserver(() => { placeGateways(); placeProjectInstallations(); });
     observer.observe(document.querySelector("main"));
   }
 
@@ -291,7 +292,6 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
   // Raycast the installation meshes without blocking normal page controls.
   const raycaster = new THREE.Raycaster();
   const pointerNdc = new THREE.Vector2();
-  let hoveredInstall = null;
   const hitInstallation = event => {
     pointerNdc.x = (event.clientX / innerWidth) * 2 - 1;
     pointerNdc.y = -(event.clientY / innerHeight) * 2 + 1;
@@ -303,13 +303,12 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
   addEventListener("pointermove",event=>{
     if (coarse) return;
     const found=hitInstallation(event);
-    hoveredInstall=found;
     document.body.classList.toggle("world-install-hover",Boolean(found));
     document.querySelectorAll(".project.is-world-active").forEach(card=>card.classList.remove("is-world-active"));
     if(found) document.getElementById(found.id)?.classList.add("is-world-active");
   },{passive:true});
   addEventListener("pointerdown",event=>{
-    if(event.target.closest("a,button,input,textarea,select,summary")) return;
+    if(event.target.closest("a,button,input,textarea,select,summary,.project")) return;
     const found=hitInstallation(event);
     if(!found) return;
     document.getElementById(found.id)?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"center"});

@@ -128,7 +128,7 @@ a{color:inherit;text-decoration:none}button{font:inherit}::selection{background:
 .activity-feed-empty{color:var(--muted);line-height:1.65}
 .contribution-graph{min-height:70px;margin-top:20px;border-radius:10px;background:#0b1119}
 .discord-profile{display:flex;align-items:center;gap:14px;margin:22px 0}
-.discord-avatar-wrap{position:relative;flex-shrink:0}.discord-avatar-wrap img{display:block;width:58px;height:58px;border-radius:18px;object-fit:cover}
+.discord-avatar-wrap{position:relative;display:grid;place-items:center;flex-shrink:0;width:58px;height:58px;overflow:hidden;border:1px solid #a9ddf54a;border-radius:18px;background:linear-gradient(145deg,#1b3444,#0c151e)}.discord-avatar-wrap img{position:relative;z-index:1;display:block;width:58px;height:58px;border-radius:18px;object-fit:cover}.discord-avatar-fallback{display:grid;place-items:center;color:var(--accent);font:700 24px var(--display)}.discord-avatar-wrap.has-avatar .discord-avatar-fallback{display:none}
 .avatar-status-indicator{position:absolute;right:-3px;bottom:-3px;width:15px;height:15px;border:3px solid var(--surface);border-radius:50%;background:#8be0ad}
 .discord-profile-copy{min-width:0}.discord-user-id{display:block;margin-top:5px;color:#8593a3;font-size:10px}
 .discord-status-dot{margin-left:auto}.discord-account-markers{padding:15px 0;border-top:1px solid #ffffff12;border-bottom:1px solid #ffffff12}
@@ -842,36 +842,8 @@ html.reveal-ready [data-reveal].is-revealed {
 }
 
 
-/* Real 1080p Milky Way timelapse, loaded after the first paint. */
-.space-film {
-  position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none;
-  background:#07080d;
-}
-.space-film video {
-  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-  object-position:center 34%; opacity:.44; transform:translateZ(0) scale(1.03);
-}
-.space-film-shade {
-  position:absolute; inset:0;
-  background:
-    linear-gradient(180deg,#07080d70 0%,#07080d78 38%,#07080dd9 76%,#07080d 100%),
-    linear-gradient(90deg,#07080d5c 0%,transparent 30%,transparent 70%,#07080d5c 100%);
-}
-.discord-nitro-status::before { content:none; }
-.discord-nitro-status { gap:8px; }
-.discord-nitro-icon {
-  display:none; width:18px; height:18px; flex:0 0 18px;
-  object-fit:contain; border-radius:3px;
-}
-.discord-nitro-status.is-active .discord-nitro-icon:not(.is-unavailable) { display:block; }
-.discord-nitro-label { display:inline-block; }
-@media(max-width:760px) {
-  .space-film video { object-position:center center; opacity:.34; }
-}
-@media(prefers-reduced-motion:reduce) {
-  .space-film video { display:none; }
-}
-
+/* Discord Nitro status is rendered from connected presence data. */
+.discord-nitro-status::before{content:none}.discord-nitro-status{gap:8px}.discord-nitro-icon{display:none;width:18px;height:18px;flex:0 0 18px;object-fit:contain;border-radius:3px}.discord-nitro-status.is-active .discord-nitro-icon:not(.is-unavailable){display:block}.discord-nitro-label{display:inline-block}
 
 /* Website development services and interactive budget estimator */
 .webdev-section{padding-top:clamp(88px,11vw,136px);padding-bottom:clamp(88px,11vw,136px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -939,7 +911,7 @@ main#top{position:relative;z-index:1}
 .project:hover,.contact-link-card:hover{border-color:#a9ddf555}
 .site-footer{position:relative;z-index:1;margin-top:80px;padding-top:28px;padding-bottom:40px;border-top:1px solid #c5e4f020}
 .section-index,.hero-topline,.hero-bottomline,.project-meta,.presence-card-top,.webdev-card-index,.build-note-heading{color:#a7bac7}
-body.pauze-world .space-film{display:none}
+
 @media(max-width:760px){
  .work,.about-section,.arcade-section,.build-log,.activity-section,.webdev-section,.contact{padding:22px 16px;border-radius:16px;backdrop-filter:blur(10px)}
  .hero{min-height:calc(100svh - 58px)}
@@ -965,13 +937,13 @@ body.pauze-world .space-film{display:none}
   color:#e8f6fc;border-color:#a9ddf5a0;background:#a9ddf51c
 }
 .world-route-progress{width:2px;height:38px;overflow:hidden;border-radius:3px;background:#a9ddf51c}
-.world-route-progress i{display:block;width:100%;height:100%;background:#a9ddf5;transform:scaleY(0);transform-origin:center top}
+.world-route-progress i{display:block;width:100%;height:100%;background:#a9ddf5;transform:scaleY(var(--route-progress,0));transform-origin:center top}
 @media(max-width:760px){
   .world-route-hud{right:8px;top:auto;bottom:calc(14px + env(safe-area-inset-bottom));translate:0 0;grid-auto-flow:column;grid-template-columns:auto auto auto;align-items:center;gap:8px;padding:7px 9px}
   .world-route-label{writing-mode:initial;rotate:0;font-size:7px}
   .world-route-links{grid-auto-flow:column;gap:4px}
   .world-route-links a{width:25px;height:25px;font-size:8px}
-  .world-route-progress{width:28px;height:2px}.world-route-progress i{transform:scaleX(0);transform-origin:left center}
+  .world-route-progress{width:28px;height:2px}.world-route-progress i{transform:scaleX(var(--route-progress,0));transform-origin:left center}
 }
 @media(prefers-reduced-motion:reduce){.world-route-links a{transition:none}}
 

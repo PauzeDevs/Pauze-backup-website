@@ -1,64 +1,57 @@
-# PAUZE® — Digital Studio Website
+# PAUZE | Independent Developer
 
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Inter&weight=600&size=22&duration=2600&pause=700&color=4C8DFF&center=true&vCenter=true&width=680&lines=PAUZE%C2%AE+%E2%80%94+Digital+Studio+Website" alt="Animated header: PAUZE® — Digital Studio Website">
-</p>
+**Live website:** https://pauze.is-a.dev  
+**Repository:** https://github.com/PauzeDevs/Pauze-backup-website
 
-**Live website:** https://pauze.is-a.dev
+A personal website for Pauze, built around existing PauzeDevs projects and a custom procedural 3D environment. The 3D scene is an overlay behind the real page content: it follows the site's sections and maps its project installations to the actual project cards.
 
-A responsive, project-first portfolio for Pauze, showcasing software, developer tools, experiments, and creative work. Built with plain HTML, CSS, and JavaScript.
+## What's on the site
 
-> **Proprietary project — All Rights Reserved.** This repository is public for viewing, but its source code and creative assets are not licensed for reuse. See [LICENSE](./LICENSE).
+- Custom Three.js environment with a P/Z-inspired central sculpture, architectural forms, particles, and section gateways.
+- Scroll-linked camera movement and a route navigator connected to the page's real sections.
+- Four interactive 3D project installations mapped to Pauze Weather, Pauze Pulse, Pauze Control, and Other experiments.
+- Existing project cards, About section, build notes, and contact links.
+- Six playable browser games.
+- GitHub public activity and contribution calendar.
+- Discord presence, account details, and currently shared music activity when available.
+- Website development services and an interactive INR estimate calculator.
+- Responsive navigation, keyboard quick navigation, and reduced-motion support.
 
-## Visit the website
+## Source files
 
-Open **[pauze.is-a.dev](https://pauze.is-a.dev)** to explore the live portfolio.
+| File | Purpose |
+|---|---|
+| `index.html` | Page structure, project content, navigation, and section anchors |
+| `apple-style.css` | Active site styling, responsive layouts, and 3D overlay presentation |
+| `world.js` | Three.js scene, camera movement, section gateways, project installations, and route HUD |
+| `script.js` | Page interactions, arcade games, GitHub/Discord integrations, and website estimator |
+| `CNAME` | Custom domain for GitHub Pages |
+| `sitemap.xml`, `robots.txt` | Search engine discovery and crawling |
 
-## Features
+`styles.css` and `refresh.css` remain as legacy stylesheets; the current page loads `apple-style.css`.
 
-- Responsive portfolio layout for desktop and mobile
-- Animated PAUZE graffiti intro splash with a spray-painting character
-- Project cards for PauzeWeather, PauzeControl, and other experiments
-- About, skills, music, activity, build log, and contact sections
-- CSS-generated interface visuals and decorative effects
-- Mobile navigation and scroll-reveal effects
-- Reduced-motion support for visitors who prefer less animation
+## Technology
 
-## Tech stack
+- HTML5, CSS3, and vanilla JavaScript
+- Three.js 0.161.0, loaded as an ES module from jsDelivr
+- GitHub Pages and the custom domain `pauze.is-a.dev`
 
-- HTML5
-- CSS3 and CSS animations
-- Vanilla JavaScript
-- GitHub Pages for hosting
-- Custom domain: `pauze.is-a.dev`
+The 3D layer requires WebGL and an internet connection for the Three.js module. If WebGL is unavailable, the page content remains usable with the CSS background fallback. Reduced-motion preferences disable continuous scene animation.
 
-## Project structure
+## Preview locally
 
-- `index.html` — page structure and content
-- `styles.css` — styling, layout, and animations
-- `script.js` — interactive behavior
-- `LICENSE` — proprietary usage restrictions
-
-## Usage and permissions
-
-Viewing this public repository does **not** grant permission to copy, republish, modify, redistribute, sell, or create derivative works from its code or creative assets. Written permission from the copyright holder is required, except where applicable law provides otherwise.
-
-GitHub does not offer a way to disable cloning or downloading for a public repository. The license states the reuse restrictions, but it cannot technically prevent someone from accessing public source code. Do not place API keys, passwords, tokens, or other secrets in this repository.
-
-## Deployment
-
-The website is hosted with GitHub Pages at **[pauze.is-a.dev](https://pauze.is-a.dev)**.
-
----
-
-Made by **PAUZE®**. All rights reserved.
-
-## Run locally
-
-This is a static site with no package manager, build step, or test script. To preview it from the repository root, use Python 3:
+No build step or package manager is required. From the repository root:
 
 ```bash
 python3 -m http.server 4173
 ```
 
-Then open `http://localhost:4173`. The deployed site is published through GitHub Pages.
+Then open http://localhost:4173.
+
+## Deployment
+
+This is a static GitHub Pages site with its custom domain configured through `CNAME`. Updates committed to the configured publishing branch are published by GitHub Pages.
+
+## Usage
+
+**Proprietary project. All rights reserved.** See [LICENSE](./LICENSE) for usage restrictions. Do not commit API keys, passwords, tokens, or other secrets.
