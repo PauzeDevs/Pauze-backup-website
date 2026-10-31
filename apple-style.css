@@ -965,12 +965,12 @@ body.pauze-world .space-film{display:none}
   color:#e8f6fc;border-color:#a9ddf5a0;background:#a9ddf51c
 }
 .world-route-progress{width:2px;height:38px;overflow:hidden;border-radius:3px;background:#a9ddf51c}
-.world-route-progress i{display:block;width:100%;height:100%;background:#a9ddf5;transform:scaleX(0);transform-origin:left center}
+.world-route-progress i{display:block;width:100%;height:100%;background:#a9ddf5;transform:scaleY(0);transform-origin:center top}
 @media(max-width:760px){
   .world-route-hud{right:8px;top:auto;bottom:calc(14px + env(safe-area-inset-bottom));translate:0 0;grid-auto-flow:column;grid-template-columns:auto auto auto;align-items:center;gap:8px;padding:7px 9px}
   .world-route-label{writing-mode:initial;rotate:0;font-size:7px}
   .world-route-links{grid-auto-flow:column;gap:4px}
   .world-route-links a{width:25px;height:25px;font-size:8px}
-  .world-route-progress{width:28px;height:2px}
+  .world-route-progress{width:28px;height:2px}.world-route-progress i{transform:scaleX(0);transform-origin:left center}
 }
 @media(prefers-reduced-motion:reduce){.world-route-links a{transition:none}}
