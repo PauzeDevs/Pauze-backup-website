@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://pauze.is-a.dev/</loc>
-  </url>
+  <url><loc>https://pauze.is-a.dev/</loc></url>
+  <url><loc>https://pauze.is-a.dev/projects/</loc></url>
+  <url><loc>https://pauze.is-a.dev/about/</loc></url>
+  <url><loc>https://pauze.is-a.dev/arcade/</loc></url>
+  <url><loc>https://pauze.is-a.dev/build/</loc></url>
+  <url><loc>https://pauze.is-a.dev/activity/</loc></url>
+  <url><loc>https://pauze.is-a.dev/websites/</loc></url>
+  <url><loc>https://pauze.is-a.dev/support/</loc></url>
+  <url><loc>https://pauze.is-a.dev/contact/</loc></url>
+  <url><loc>https://pauze.is-a.dev/support-payment.html</loc></url>
 </urlset>
