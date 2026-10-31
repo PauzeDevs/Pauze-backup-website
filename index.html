@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="apple-style.css?v=20261031-wired">
+  <link rel="stylesheet" href="apple-style.css?v=20261031-support-payment">
 </head>
 <body class="pauze-world">
   <a class="skip-link" href="#top">Skip to content</a>
@@ -202,19 +202,11 @@
         <label class="support-custom-label" for="support-custom">Or enter a custom amount (₹)</label>
         <input id="support-custom" class="support-custom" type="number" inputmode="numeric" min="1" max="100000" step="1" placeholder="e.g. 150">
         <button type="button" class="button button-primary support-generate" id="support-generate">Generate payment QR <span aria-hidden="true">↗</span></button>
-        <div class="support-payment" id="support-payment" hidden aria-live="polite">
-          <div class="support-qr" id="support-qr" aria-label="UPI payment QR code"></div>
-          <strong class="support-qr-amount" id="support-qr-amount"></strong>
-          <p>Scan with any UPI app. Check the payee name <strong>Pauze</strong> before paying.</p>
-          <a class="support-upi-link" id="support-upi-link" href="#">Open UPI app ↗</a>\n          <button type="button" class="button button-primary support-done" id="support-done">Payment Done ✓</button>\n          <p class="support-thanks" id="support-thanks" role="status" aria-live="polite" hidden>🎉 Thank you for supporting Pauze! If your UPI app showed a successful payment, you’re all set. This website cannot independently verify the transaction.</p>
-          <div class="support-countdown" id="support-countdown" role="timer">03:00</div>
-          <p class="support-expiry-note" id="support-expiry-note">This QR is displayed for 3 minutes. The timer only closes this page's QR; it does not expire or cancel a payment.</p>
-          <button type="button" class="support-reset" id="support-reset">Generate another QR</button>
-        </div>
+        <p class="support-redirect-note">Your amount and payment QR will open on a dedicated page.</p>
         <p class="support-footnote">UPI ID: <strong>prodbyaarav@fam</strong> · Payments are made directly through your UPI app. This website cannot verify whether a payment was completed.</p>
       </div>
     </section>
-\n    <section class="contact section-wrap" id="contact" data-reveal><p class="section-index">07 / CONTACT PAUZE</p><h2>Website, app,<br><span>or Discord tool?</span></h2><div class="contact-bottom"><p>For website, Android, Discord bot, and automation enquiries, send me an email.</p><a class="button button-primary contact-button" href="mailto:githubpauze@gmail.com">Get in touch <span>↗</span></a></div>
+<section class="contact section-wrap" id="contact" data-reveal><p class="section-index">07 / CONTACT PAUZE</p><h2>Website, app,<br><span>or Discord tool?</span></h2><div class="contact-bottom"><p>For website, Android, Discord bot, and automation enquiries, send me an email.</p><a class="button button-primary contact-button" href="mailto:githubpauze@gmail.com">Get in touch <span>↗</span></a></div>
       <div class="contact-hub" aria-label="Contact and social links">
         <a class="contact-link-card" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="contact-link-kicker">PERSONAL PROFILE</span><strong>GitHub <span aria-hidden="true">↗</span></strong><span class="contact-link-detail">Personal projects and contributions</span></a>
         <a class="contact-link-card" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="contact-link-kicker">DEVELOPER SPACE</span><strong>PauzeDevs <span aria-hidden="true">↗</span></strong><span class="contact-link-detail">Projects and experiments</span></a>
@@ -225,6 +217,6 @@
   </main>
   <footer class="site-footer section-wrap"><a class="wordmark" href="#top">PAUZE</a><span>WEB / ANDROID / DISCORD</span><div class="footer-links"><a href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div><small>© <span id="year"></span> PAUZE / PAUZEDEVS.</small></footer>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>\n  <script type="module" src="world.js?v=4"></script>
-  <script src="script.js?v=20261031-wired" defer></script>
+  <script src="script.js?v=20261031-support-payment" defer></script>
 </body>
 </html>
