@@ -974,3 +974,11 @@ body.pauze-world .space-film{display:none}
   .world-route-progress{width:28px;height:2px}.world-route-progress i{transform:scaleX(0);transform-origin:left center}
 }
 @media(prefers-reduced-motion:reduce){.world-route-links a{transition:none}}
+
+
+/* Project installations: responsive 3D hover and focus feedback */
+.project{position:relative;transition:border-color .22s,background .22s,transform .22s}
+.project.is-world-active{border-color:#a9ddf5a0;background:linear-gradient(145deg,#172735f2,#0d151ef5);box-shadow:0 0 0 1px #a9ddf526,0 18px 54px #0005}
+body.world-install-hover{cursor:pointer}
+.project:focus-within{outline:1px solid #a9ddf580;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.project{transition:none}}
