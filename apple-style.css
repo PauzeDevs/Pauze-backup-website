@@ -927,7 +927,7 @@ main#top{position:relative;z-index:1}
   border:1px solid #b5d7e52b;border-radius:999px;background:#080d13b8;
   box-shadow:0 12px 40px #0005;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
 }
-.world-route-label{writing-mode:vertical-rl;rotate:180deg;color:#9fb7c5;font:500 8px var(--mono);letter-spacing:.12em}
+.world-route-label{writing-mode:vertical-rl;rotate:0deg;color:#9fb7c5;font:500 8px var(--mono);letter-spacing:.12em}
 .world-route-links{display:grid;gap:7px}
 .world-route-links a{
   display:grid;place-items:center;width:27px;height:27px;border:1px solid #b5d7e51e;border-radius:50%;
@@ -969,3 +969,17 @@ body.world-install-hover{cursor:pointer}
 @media(max-width:760px){.support-section{grid-template-columns:1fr;gap:25px;padding:22px 16px;border-radius:16px}.support-presets{grid-template-columns:repeat(2,1fr)}}
 
 .support-done{display:block;width:100%;justify-content:center;margin:12px auto 0}.support-thanks{margin:14px auto 0;padding:13px;border:1px solid #8ed9b855;border-radius:12px;background:#8ed9b812;color:#c9f4dc!important;font-size:13px!important;line-height:1.65;text-align:center}
+
+
+/* Support amount chooser: frosted Apple-glass finish. */
+.support-panel{
+  background:linear-gradient(145deg,rgba(21,34,48,.78),rgba(7,13,21,.88));
+  border-color:rgba(169,221,245,.24);
+  box-shadow:0 22px 70px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(24px) saturate(145%);
+  -webkit-backdrop-filter:blur(24px) saturate(145%);
+}
+.support-amount:focus-visible,.support-custom:focus-visible,.support-generate:focus-visible{
+  outline:2px solid #a9ddf5;outline-offset:3px;
+}
+.support-redirect-note{margin:12px 0 0;color:#90a8b8;font-size:11px;line-height:1.6}
