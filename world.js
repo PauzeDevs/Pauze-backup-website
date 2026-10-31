@@ -134,8 +134,4 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.m
   }
   requestAnimationFrame(render);
 
-  // Keep the renderer asleep while the tab is hidden, then resume one frame loop.
-  document.addEventListener("visibilitychange",()=>{
-    if(!document.hidden && !reduced) requestAnimationFrame(render);
-  });
 })();
