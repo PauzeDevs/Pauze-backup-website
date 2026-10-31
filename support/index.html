@@ -50,7 +50,7 @@
           <button type="button" class="support-amount" data-support-amount="499">₹499</button>
         </div>
         <label class="support-custom-label" for="support-custom">Or enter a custom amount (₹)</label>
-        <input id="support-custom" class="support-custom" type="number" inputmode="numeric" min="1" max="100000" step="1" placeholder="e.g. 150">
+        <input id="support-custom" class="support-custom" type="number" inputmode="numeric" min="10" max="10000" step="1" placeholder="₹10–₹10,000">
         <button type="button" class="button button-primary support-generate" id="support-generate">Generate payment QR <span aria-hidden="true">↗</span></button>
         <p class="support-redirect-note">Your amount and payment QR will open on a dedicated page.</p>
         <p class="support-footnote">UPI ID: <strong>prodbyaarav@fam</strong> · Payments are made directly through your UPI app. This website cannot verify whether a payment was completed.</p>
@@ -63,5 +63,6 @@
     <small>© <span id="year"></span> PAUZE / PAUZEDEVS.</small>
   </footer>
   <script src="../script.js?v=20261031-performance-2" defer></script>
+  <script src="../support-limit.js?v=1" defer></script>
 </body>
 </html>
