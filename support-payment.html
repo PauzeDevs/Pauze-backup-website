@@ -55,6 +55,14 @@
     </div>
     <p class="payment-footer-note">Every contribution is optional and appreciated. Payments go directly through your UPI app.</p>
   </main>
+  <script>
+    (() => {
+      const amount = Number(new URLSearchParams(window.location.search).get("amount") || "99");
+      if (!Number.isSafeInteger(amount) || amount < 10 || amount > 10000) {
+        window.location.replace("index.html#support");
+      }
+    })();
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
   <script src="support-payment.js?v=20261031-performance-2" defer></script>
 </body>
