@@ -11,7 +11,8 @@
     countdownNode.textContent = String(remaining);
     if (remaining <= 0) {
       window.clearInterval(timer);
-      window.location.replace("index.html#top");
+      window.close();
+      window.setTimeout(() => window.location.replace("index.html#top"), 150);
     }
   }, 1000);
 })();
