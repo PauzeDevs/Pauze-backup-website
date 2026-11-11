@@ -79,4 +79,8 @@ else fail('Mobile menu outside-close handling is missing');
 if (js.includes("window.addEventListener('resize', scheduleProgressUpdate")) pass('Scroll progress recalculates after resize');
 else fail('Scroll progress does not recalculate after resize');
 
+
+if (js.includes("document.documentElement.classList.add('js')") && css.includes('.js .reveal') && css.includes('.reveal{opacity:1;transform:none}')) pass('Reveal animation degrades safely without JavaScript');
+else fail('Reveal animation can hide content when JavaScript is unavailable');
+
 if (process.exitCode) process.exit(process.exitCode);
