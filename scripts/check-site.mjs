@@ -56,4 +56,27 @@ else fail('robots.txt sitemap reference is missing');
 if (css.includes('prefers-reduced-motion') && js.includes('prefers-reduced-motion')) pass('Reduced-motion support is present');
 else fail('Reduced-motion support is missing');
 
+
+
+const idList = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+if (new Set(idList).size === idList.length) pass('HTML IDs are unique');
+else fail('Duplicate HTML IDs found');
+
+const blankLinks = [...html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g)].map(match => match[0]);
+if (blankLinks.every(link => /rel="[^"]*noreferrer/.test(link))) pass('All new-tab links include noreferrer');
+else fail('A new-tab link is missing rel=noreferrer');
+
+const countLabels = [...html.matchAll(/data-filter="([^"]+)"[^>]*>[^<]*<span>(\d+)<\/span>/g)];
+for (const [, category, declared] of countLabels) {
+  const actual = category === 'all' ? categories.length : categories.filter(value => value === category).length;
+  if (Number(declared) === actual) pass('Filter count ' + category + ' matches ' + actual);
+  else fail('Filter count ' + category + ' says ' + declared + ', expected ' + actual);
+}
+if (js.includes("event.key === 'Escape'") && js.includes('closeMenu(true)')) pass('Mobile menu supports Escape and restores focus');
+else fail('Mobile menu keyboard dismissal is incomplete');
+if (js.includes('!nav.contains(event.target)')) pass('Mobile menu closes on outside interaction');
+else fail('Mobile menu outside-close handling is missing');
+if (js.includes("window.addEventListener('resize', scheduleProgressUpdate")) pass('Scroll progress recalculates after resize');
+else fail('Scroll progress does not recalculate after resize');
+
 if (process.exitCode) process.exit(process.exitCode);
