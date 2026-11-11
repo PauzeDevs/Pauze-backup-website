@@ -3,224 +3,136 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#07090d">
-  <meta name="description" content="PAUZE — independent developer building software, tools, games, and experiments.">
+  <meta name="theme-color" content="#090b0e">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="PauzeDevs">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PAUZE — Independent by design">
+  <meta name="twitter:description" content="Software, interfaces and experiments by PauzeDevs.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Pauze is an independent software and creative technology label by PauzeDevs.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PAUZE — Independent by design">
+  <meta property="og:description" content="Software, interfaces and experiments by PauzeDevs.">
+  <meta property="og:url" content="https://pauze.is-a.dev/">
   <link rel="canonical" href="https://pauze.is-a.dev/">
-  <title>PAUZE — Independent Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap"></noscript>
-  <link rel="stylesheet" href="apple-style.css?v=20261031-support-payment">
+  <title>PAUZE — Independent by design</title>
+  <link rel="stylesheet" href="/pauze-2.css?v=2">
+  <script src="/pauze-2.js?v=2" defer></script>
 </head>
-<body class="pauze-world">
-  <a class="skip-link" href="#top">Skip to content</a>
-  <div class="noise" aria-hidden="true"></div>
-  <canvas id="pauze-world" aria-hidden="true"></canvas>
-  <div class="world-grain" aria-hidden="true"></div>
-  <header class="site-header">
-    <a class="wordmark" href="#top" aria-label="PAUZE home">PAUZE</a>
-    <nav class="desktop-nav" id="primary-navigation" aria-label="Main navigation">
-      <a href="/projects/">Projects <span>01</span></a><a href="/about/">About <span>02</span></a><a href="/arcade/">Arcade <span>03</span></a><a href="/build/">Build log <span>04</span></a><a href="/activity/">Live <span>05</span></a><a href="/websites/">Websites <span>06</span></a><a href="/support/">Support <span>07</span></a><a href="/contact/">Contact <span>08</span></a>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Pauze home">pauze<span>.</span></a>
+    <button class="menu" type="button" aria-expanded="false" aria-controls="site-nav">MENU</button>
+    <nav class="nav" id="site-nav" aria-label="Main navigation">
+      <a href="#work">Work <span class="nav-meta">01</span></a>
+      <a href="#about">About <span class="nav-meta">02</span></a>
+      <a href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">GitHub <span class="nav-meta">↗</span></a>
+      <a class="nav-cta" href="mailto:githubpauze@gmail.com">Start a conversation ↗</a>
     </nav>
-    <button class="command-trigger" type="button" aria-haspopup="dialog" aria-controls="command-palette"><span class="command-trigger-label">Quick actions</span><kbd>⌘ K</kbd></button>
-    <a class="availability" href="/contact/"><i class="status-dot"></i> OPEN TO IDEAS</a>
-    <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-navigation" aria-expanded="false"><span></span><span></span></button>
   </header>
 
-  <dialog class="command-palette" id="command-palette" aria-labelledby="command-palette-title">
-    <div class="command-palette-head"><div><p class="section-index">PAUZE / QUICK NAVIGATION</p><h2 id="command-palette-title">Where to?</h2></div><button type="button" class="command-close" data-command-close aria-label="Close command palette">×</button></div>
-    <label class="command-search-wrap"><span aria-hidden="true">⌕</span><input id="command-search" type="search" placeholder="Search pages and links…" autocomplete="off" aria-label="Search pages and links"><kbd>ESC</kbd></label>
-    <p class="command-group-label">NAVIGATE</p>
-    <div class="command-items" role="list">
-      <a class="command-item" role="listitem" data-command-item href="/projects/"><span class="command-item-icon" aria-hidden="true">↗</span><span><strong>Selected work</strong><small>Projects and experiments</small></span><kbd>01</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="/about/"><span class="command-item-icon" aria-hidden="true">◉</span><span><strong>About</strong><small>Background and toolkit</small></span><kbd>02</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="/arcade/"><span class="command-item-icon" aria-hidden="true">▶</span><span><strong>Arcade</strong><small>Play the mini-games</small></span><kbd>03</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="/build/"><span class="command-item-icon" aria-hidden="true">⌁</span><span><strong>Build log</strong><small>Development notes and project updates</small></span><kbd>04</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="/activity/"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Live activity</strong><small>GitHub and presence</small></span><kbd>05</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="/websites/"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Website development</strong><small>Explore services and estimate a budget</small></span><kbd>06</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="/support/"><span class="command-item-icon" aria-hidden="true">♡</span><span><strong>Support Pauze</strong><small>Contribute through UPI</small></span><kbd>07</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="/contact/"><span class="command-item-icon" aria-hidden="true">✉</span><span><strong>Contact</strong><small>Get in touch</small></span><kbd>07</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="command-item-icon" aria-hidden="true">⌘</span><span><strong>Personal GitHub</strong><small>Profile and contributions</small></span><kbd>↗</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer"><span class="command-item-icon" aria-hidden="true">◇</span><span><strong>PauzeDevs on GitHub</strong><small>Projects and tools</small></span><kbd>↗</kbd></a>
-      <a class="command-item" role="listitem" data-command-item href="mailto:githubpauze@gmail.com"><span class="command-item-icon" aria-hidden="true">@</span><span><strong>Email Pauze</strong><small>githubpauze@gmail.com</small></span><kbd>↗</kbd></a>
+  <main id="main-content" tabindex="-1">
+    <section class="hero wrap" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">PAUZEDEVS / INDEPENDENT SOFTWARE</p>
+        <h1>Made to<br><span class="line-two">work.</span></h1>
+        <p class="hero-desc">I’m Pauze. I build <strong>software, interfaces and tools</strong>, then keep pulling at the details until they feel right. This is the workbench, not a pitch deck.</p>
+        <div class="hero-actions">
+          <a class="button" href="#work">Explore selected work <span>↘</span></a>
+          <a class="quiet-link" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+        </div>
+      </div>
+      <div class="hero-mark" role="img" aria-label="Original Pauze PZ monogram artwork">
+        <div class="mark-frame">
+          <i class="mark-cross x"></i><i class="mark-cross y"></i>
+          <span class="mark-label top">P / D — 001</span>
+          <div class="mark-core">PZ</div>
+          <span class="mark-label bottom">INDEPENDENT / 2026</span>
+        </div>
+        <span class="mark-coordinate">26°50' N<br>80°56' E</span>
+      </div>
+    </section>
+
+    <div class="ticker wrap" aria-label="Pauze disciplines">
+      <span>WEB ENGINEERING</span><span>ANDROID</span><span>DEVELOPER TOOLS</span><span>INTERACTION DESIGN</span><span>LUCKNOW, IN <b data-ist>--:--</b></span>
     </div>
-    <p class="command-empty" id="command-empty" hidden>No matching actions. Try another search.</p>
-    <div class="command-palette-foot"><span>OPEN WITH <kbd>⌘ K</kbd> / <kbd>CTRL K</kbd></span><span>ESC TO CLOSE</span></div>
-  </dialog>
-  <main id="top" tabindex="-1">
-    <section class="hero section-wrap" data-reveal>
-      <div class="hero-topline"><span>INDEPENDENT DEVELOPER</span><span>INDIA <b>↗</b> <time id="india-time">--:--:--</time> <small id="india-date">Loading date…</small></span></div>
-      <div class="hero-layout">
-        <div class="hero-copy">
-          <p class="eyebrow"><i></i> WEB DEVELOPMENT / ANDROID / DISCORD TOOLS</p>
-          <h1>hey, i’m<br><span>Pauze<span class="hero-period">.</span></span></h1>
-          <p class="hero-description">I build websites, Android apps, Discord bots, and developer tools under PauzeDevs.</p>
-          <nav class="hero-actions hero-links" aria-label="Explore the site"><a href="/projects/"><span>01</span> PROJECTS <b>▶</b></a><a href="/about/"><span>02</span> ABOUT <b>▶</b></a><a href="/arcade/"><span>03</span> ARCADE <b>▶</b></a><a href="/build/"><span>04</span> BUILD LOG <b>▶</b></a><a href="/activity/"><span>05</span> LIVE STATUS <b>▶</b></a><a href="/websites/"><span>06</span> WEBSITES <b>▶</b></a><a href="/contact/"><span>07</span> CONTACT <b>▶</b></a></nav>
-        </div>
-        <div class="hero-art" aria-label="PAUZE design mark">
-          <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="art-cross cross-one"></div><div class="art-cross cross-two"></div>
-          <div class="art-core"><span>P</span><i>/</i><span>Z</span></div>
-          <div class="art-tag tag-top">PAUZEDEVS / INDEPENDENT DEVELOPMENT</div><div class="art-tag tag-bottom">PAUZE <span>© 2026</span></div>
-          <span class="art-coordinate">26°51' N<br>80°56' E</span>
-        </div>
-      </div>
-      <div class="hero-bottomline"><span>WEB · ANDROID · AUTOMATION</span><span>SCROLL TO EXPLORE <b>↓</b></span><span>CONTACT / githubpauze@gmail.com <i></i></span></div>
-    </section>
 
-    <section class="work section-wrap" id="work">
-      <div class="section-heading" data-reveal><div><p class="section-index">01 / SELECTED WORK</p><h2>My<br>projects<span class="accent-dot">.</span></h2></div><p class="section-note">Projects from PauzeDevs, including Pauze Weather, Pauze Pulse, Pauze Control, and open-source experiments.</p></div>
-      <div class="project-grid">
-        <article class="project project-featured" id="project-weather" data-world-project="weather" data-reveal>
-          <div class="project-copy"><div class="project-meta"><span>01 — WEB APP</span><span class="project-state"><i></i> IN DEVELOPMENT</span></div><h3>Pauze Weather</h3><p>A weather experience focused on live conditions, radar, precipitation layers, and clear information without the clutter.</p><div class="project-tags"><span>WEATHER DATA</span><span>RADAR</span><span>WEB APP</span></div><a class="text-link" href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer">EXPLORE REPOSITORIES <b>↗</b></a></div>
+    <section class="section wrap" id="work">
+      <div class="section-head reveal">
+        <div><p class="index">01 / SELECTED WORK</p><h2>Built things<span>.</span></h2></div>
+        <p class="section-intro">A snapshot of active builds and experiments. Private projects are labelled honestly; public links lead to the source, releases or build history.</p>
+      </div>
+      <div class="work-tools reveal">
+        <div class="filters" role="group" aria-label="Filter projects">
+          <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">ALL <span>05</span></button>
+          <button class="filter" type="button" data-filter="web" aria-pressed="false">WEB <span>01</span></button>
+          <button class="filter" type="button" data-filter="android" aria-pressed="false">ANDROID <span>02</span></button>
+          <button class="filter" type="button" data-filter="tools" aria-pressed="false">TOOLS <span>01</span></button>
+          <button class="filter" type="button" data-filter="ai" aria-pressed="false">AI <span>01</span></button>
+        </div>
+        <p class="filter-status" aria-live="polite">Showing all 5 projects</p>
+      </div>
+      <div class="project-list" data-project-list>
+        <article class="project reveal" data-category="web">
+          <span class="project-no">01</span>
+          <div class="project-main"><h3>PauzeWeather</h3><p>A weather project focused on current conditions, air quality and precipitation data. This repository is currently private.</p><div class="project-tags"><span class="tag">WEB</span><span class="tag">WEATHER DATA</span><span class="tag">RADAR</span></div></div>
+          <span class="project-link project-private">PRIVATE REPOSITORY</span>
         </article>
-        <article class="project" id="project-pulse" data-world-project="pulse" data-reveal>
-          <div class="project-copy"><div class="project-meta"><span>02 — ANDROID GAME</span><span class="project-state"><i></i> ACTIVE BUILD</span></div><h3>Pauze Pulse</h3><p>An offline-first collection of mini-games for solo play and local multiplayer on one phone, built with Kotlin and Jetpack Compose.</p><div class="project-tags"><span>ANDROID</span><span>KOTLIN</span><span>JETPACK COMPOSE</span></div><a class="text-link" href="#pauzepulse-build">READ BUILD NOTES <b>↘</b></a></div>
+        <article class="project reveal" data-category="android">
+          <span class="project-no">02</span>
+          <div class="project-main"><h3>PauzeNews</h3><p>A Python and Kivy Android news reader with topic feeds, local search, SQLite bookmarks and an offline-friendly headline cache.</p><div class="project-tags"><span class="tag">ANDROID</span><span class="tag">APP DEVELOPMENT</span><span class="tag">RELEASES</span></div></div>
+          <div class="project-actions"><a class="project-link" href="https://github.com/PauzeDevs/PauzeNews" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a><a class="project-link" href="https://github.com/PauzeDevs/PauzeNews/releases" target="_blank" rel="noreferrer">RELEASES <span>↗</span></a></div>
         </article>
-        <article class="project" id="project-control" data-world-project="control" data-reveal>
-          <div class="project-copy"><div class="project-meta"><span>03 — DEVELOPER TOOLS</span><span class="project-state"><i></i> PROJECT</span></div><h3>Pauze Control</h3><p>A growing set of tools and utilities designed to make digital workflows feel more deliberate and less complicated.</p><div class="project-tags"><span>TYPESCRIPT</span><span>TOOLS</span><span>UTILITY</span></div><a class="text-link" href="https://github.com/PauzeDevs/PauzeControl" target="_blank" rel="noreferrer">VIEW PROJECT <b>↗</b></a></div>
+        <article class="project reveal" data-category="android">
+          <span class="project-no">03</span>
+          <div class="project-main"><h3>PauzeDynamic</h3><p>An early Android overlay prototype for media sessions, notification actions, timers and compact live activities. Still a prototype, not a stable release.</p><div class="project-tags"><span class="tag">ANDROID</span><span class="tag">UI</span><span class="tag">INTERACTION</span></div></div>
+          <div class="project-actions"><a class="project-link" href="https://github.com/PauzeDevs/PauzeDynamic" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a><a class="project-link" href="https://github.com/PauzeDevs/PauzeDynamic/actions" target="_blank" rel="noreferrer">BUILDS <span>↗</span></a></div>
         </article>
-        <article class="project project-simple" id="project-experiments" data-world-project="experiments" data-reveal><div class="simple-number">04</div><div class="project-copy"><div class="project-meta"><span>EXPERIMENTS / OPEN SOURCE</span><span class="project-state"><i></i> ALWAYS EVOLVING</span></div><h3>Other experiments<span class="accent-dot">.</span></h3><p>Discord bots, community tools, automation, prototypes, and ideas that start small and become useful.</p><div class="project-tags"><span>OPEN SOURCE</span><span>DISCORD</span><span>PROTOTYPES</span></div><a class="text-link" href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer">BROWSE PROJECTS <b>↗</b></a></div></article>
+        <article class="project reveal" data-category="tools">
+          <span class="project-no">04</span>
+          <div class="project-main"><h3>PauzeControl</h3><p>An Android controller and native macOS agent for remote Mac access over Tailscale, including live screen streaming and system controls.</p><div class="project-tags"><span class="tag">DEVELOPER TOOLS</span><span class="tag">PAUZEDEVS</span></div></div>
+          <div class="project-actions"><a class="project-link" href="https://github.com/PauzeDevs/PauzeControl" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a><a class="project-link" href="https://pauzedevs.github.io/PauzeControl-Website/" target="_blank" rel="noreferrer">WEBSITE <span>↗</span></a></div>
+        </article>
+        <article class="project reveal" data-category="ai">
+          <span class="project-no">05</span>
+          <div class="project-main"><h3>AurexAI</h3><p>An AI assistant project exploring connected workflows across conversations, Gmail and calendar actions. The code repository is private.</p><div class="project-tags"><span class="tag">AI</span><span class="tag">AUTOMATION</span><span class="tag">WEB APP</span></div></div>
+          <span class="project-link project-private">PRIVATE REPOSITORY</span>
+        </article>
       </div>
     </section>
 
-    <section class="about-section section-wrap" id="about">
-      <div class="about-heading" data-reveal><p class="section-index">02 / THE PERSON BEHIND THE PIXELS</p><h2>Web, Android<br>& <span>developer tools.</span></h2></div>
-      <div class="about-content" data-reveal><p class="about-lead">I’m Pauze, an independent developer working across web, Android, and Discord projects.</p><p>My work includes websites, Android apps, Discord bots, automation, and developer utilities. I build and maintain projects through PauzeDevs.</p><div class="about-facts"><div><span>01 / FOCUS</span><strong>Software & tools</strong></div><div><span>02 / APPROACH</span><strong>Build, test, improve</strong></div><div><span>03 / CURRENTLY</span><strong>Learning in public</strong></div></div></div>
-      <div class="skills-strip" data-reveal><span>THE TOOLKIT</span><div class="skill-list">
-        <div class="skill-item"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="" loading="lazy"><span>JavaScript</span></div>
-        <div class="skill-item"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="" loading="lazy"><span>TypeScript</span></div>
-        <div class="skill-item"><img src="https://cdn.simpleicons.org/python/3776AB" alt="" loading="lazy"><span>Python</span></div>
-        <div class="skill-item"><img src="https://cdn.simpleicons.org/kotlin/7F52FF" alt="" loading="lazy"><span>Kotlin</span></div>
-        <div class="skill-item"><img src="https://cdn.simpleicons.org/nodedotjs/5FA04E" alt="" loading="lazy"><span>Node.js</span></div>
-        <div class="skill-item"><img src="https://cdn.simpleicons.org/discord/5865F2" alt="" loading="lazy"><span>Discord.js</span></div>
-        <div class="skill-item"><img src="https://cdn.simpleicons.org/github/E8EDF3" alt="" loading="lazy"><span>GitHub</span></div>
-        <div class="skill-item"><span class="skill-generic-icon" aria-hidden="true">⌘</span><span>Web APIs</span></div>
-      </div></div>
-    </section>
-
-    <section class="arcade-section section-wrap" id="arcade" data-reveal>
-      <div class="section-heading"><div><p class="section-index">03 / TAKE A BREAK</p><h2>Press play<span class="accent-dot">.</span></h2></div><p class="section-note">Six playable browser games. Choose one, start a run, and your personal best is saved on this device.</p></div>
-      <div class="arcade-shell">
-        <div class="arcade-header"><div class="arcade-brand"><span class="arcade-led"></span> <span id="arcade-game-title">DINO RUN / ENDLESS MODE</span> <span class="arcade-build">BUILD 001</span></div><span id="dino-state">READY?</span></div>
-        <div class="arcade-game-picker" role="group" aria-label="Choose an arcade game">
-          <button type="button" class="arcade-game-option is-active" data-arcade-game="dino" aria-pressed="true">01 <span>Dino Run</span></button><button type="button" class="arcade-game-option" data-arcade-game="snake" aria-pressed="false">02 <span>Snake.exe</span></button><button type="button" class="arcade-game-option" data-arcade-game="space" aria-pressed="false">03 <span>Space Protocol</span></button><button type="button" class="arcade-game-option" data-arcade-game="breakout" aria-pressed="false">04 <span>Breakpoint</span></button><button type="button" class="arcade-game-option" data-arcade-game="memory" aria-pressed="false">05 <span>Memory Leak</span></button><button type="button" class="arcade-game-option" data-arcade-game="pong" aria-pressed="false">06 <span>Ping.exe</span></button>
-        </div>
-        <div class="arcade-stats"><div><span>SCORE</span><strong id="dino-score">00000</strong></div><div><span>PERSONAL BEST</span><strong id="dino-best">00000</strong></div><div><span id="arcade-mode-label">SPEED</span><strong id="arcade-mode-value">1.0×</strong></div></div>
-        <div class="dino-stage" id="dino-stage" tabindex="0" role="application" aria-label="Arcade game area. Select a game, then start."><canvas id="dino-canvas" width="900" height="260" aria-label="Arcade game canvas"></canvas><div class="dino-overlay" id="dino-overlay"><span class="dino-overlay-label">READY PLAYER ONE</span><h3 id="dino-overlay-title">LET’S PLAY.</h3><p id="dino-overlay-copy">Jump in, dodge the obstacles, and beat your best.</p><button type="button" class="dino-start" id="dino-start">START GAME <span>↗</span></button></div></div>
-        <div class="arcade-controls"><p id="arcade-instructions">SPACE / ↑ JUMP · ↓ DUCK · P PAUSE</p><div class="arcade-touch-controls" id="arcade-touch-controls" aria-label="Touch controls"></div><button type="button" class="arcade-reset" id="dino-restart">RESTART ↻</button></div>
-      </div>
-    </section>
-
-    <section class="build-log section-wrap" id="build-log">
-      <div class="section-heading" data-reveal><div><p class="section-index">04 / BUILD LOG</p><h2>Notes from<br>the process<span class="accent-dot">.</span></h2></div><p class="section-note">Development notes for Pauze projects, starting with Pauze Pulse.</p></div>
-      <article class="build-note" id="pauzepulse-build" data-reveal><div class="build-note-heading"><span>BUILD NOTE / 001</span><span>PAUZE PULSE</span></div><h3>One phone. Multiple players. No internet required.</h3><p>Pauze Pulse is being developed as an offline-first Android arcade. The focus is on responsive touch controls, clear player modes, locally saved results, and mini-games that feel distinct rather than reskinned copies.</p><div class="build-note-tags"><span>KOTLIN</span><span>JETPACK COMPOSE</span><span>LOCAL STATE</span><span>GAMEPLAY SYSTEMS</span></div><a class="text-link" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">FOLLOW DEVELOPMENT <b>↗</b></a></article>
-    </section>
-
-    <section class="activity-section section-wrap" id="activity">
-      <div class="section-heading" data-reveal><div><p class="section-index">05 / CURRENTLY ONLINE</p><h2>Live status<span class="accent-dot">.</span></h2></div><p class="section-note">Live GitHub activity and Discord presence, including the current Spotify track when Discord shares it.</p></div>
-      <div class="activity-grid">
-        <article class="presence-card github-presence" data-reveal><div class="presence-card-top"><span>GITHUB / ACTIVITY</span><a href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">PROFILE ↗</a></div><div class="github-card-title"><span class="github-symbol">⌘</span><div><h3>Code in progress</h3><p id="github-feed-state">Connecting to GitHub activity…</p></div></div><ul id="github-event-list"><li>Loading recent public activity…</li></ul><a class="contribution-graph-link" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer" aria-label="View personal GitHub contribution activity"><span class="contribution-graph-caption"><span>PERSONAL GITHUB / CONTRIBUTIONS</span><span id="contribution-graph-total">LAST YEAR</span></span><div class="contribution-graph-image" id="contribution-graph-display" role="img" aria-label="Loading GitHub contribution calendar" hidden></div><span class="contribution-graph-fallback contribution-graph-link-label" role="status" aria-live="polite">Loading live contribution calendar…</span><span class="contribution-graph-profile-link">OPEN FULL PROFILE <b aria-hidden="true">↗</b></span></a></article>
-        <article class="presence-card discord-presence" data-reveal><div class="presence-card-top"><span>DISCORD / PRESENCE</span><span id="discord-status-label">CHECKING STATUS</span></div><div class="discord-profile"><div class="discord-avatar-wrap"><span class="discord-avatar-fallback" aria-hidden="true">P</span><img id="discord-avatar" alt="Pauze Discord avatar" loading="lazy" decoding="async"><i id="discord-avatar-status" class="avatar-status-indicator"></i></div><div class="discord-profile-copy"><h3 id="discord-display-name">Pauze</h3><p id="discord-activity-text">Looking for live Discord presence…</p><span class="discord-user-id">ID / 1547264515182432398</span></div><i class="presence-dot discord-dot" id="discord-status-dot"></i></div><div class="discord-account-markers" id="discord-profile-markers" aria-label="Discord profile badges and server identity"><span class="discord-nitro-status" id="discord-nitro-status" aria-live="polite"><img class="discord-nitro-icon" src="https://support.discord.com/hc/article_attachments/23085036411415" alt="" width="18" height="18" loading="lazy" decoding="async"><span class="discord-nitro-label">Checking Nitro status…</span></span><div class="discord-badges" id="discord-badges"><span class="discord-marker-empty">Loading Discord badges…</span></div></div><div class="discord-activity-box"><span>CURRENT ACTIVITY</span><p id="discord-current-activity">Waiting for Discord status…</p></div><div class="discord-music-card" id="discord-music-card" hidden><div class="discord-music-heading"><span id="discord-music-heading">Listening to Spotify</span><span class="music-badge">♪</span></div><div class="discord-music-track"><div class="music-art-fallback" id="discord-music-art-fallback" hidden>♪</div><img id="discord-music-art" src="" alt="Album artwork" loading="lazy" decoding="async" hidden><div class="discord-music-copy"><h4 id="discord-music-title">Track title</h4><p id="discord-music-artist">Artist</p><span id="discord-music-album">Album</span></div></div><div class="discord-music-progress"><span id="discord-music-progress"></span></div><div class="discord-music-times"><span id="discord-music-elapsed">0:00</span><span id="discord-music-duration">0:00</span></div><p id="discord-music-timing-note" hidden></p></div><a class="discord-cta" href="https://discord.com/users/1547264515182432398" target="_blank" rel="noreferrer">OPEN DISCORD PROFILE ↗</a><p class="discord-footnote" id="discord-status-note">Live status requires your Discord presence to be available through Lanyard.</p></article>
-      </div>
-    </section>
-
-    
-    <section class="webdev-section section-wrap" id="web-development" aria-labelledby="webdev-title">
-      <div class="section-heading" data-reveal>
-        <div><p class="section-index">06 / WEBSITE DEVELOPMENT</p><h2 id="webdev-title">Websites<br>by Pauze<span class="accent-dot">.</span></h2></div>
-        <p class="section-note">Website design and development for businesses, creators, and personal projects. Configure pages and features below to get an indicative estimate.</p>
-      </div>
-      <div class="webdev-intro-grid" data-reveal>
-        <article class="webdev-service-card"><span class="webdev-card-index">01 / START SIMPLE</span><div class="webdev-service-symbol" aria-hidden="true">↗</div><h3>Landing pages</h3><p>A focused, responsive page for a launch, personal brand, event, or one clear call to action.</p><strong>₹3,500–₹6,000 <small>indicative</small></strong></article>
-        <article class="webdev-service-card"><span class="webdev-card-index">02 / SHOW YOUR WORK</span><div class="webdev-service-symbol" aria-hidden="true">◫</div><h3>Portfolio websites</h3><p>A clean online home for your work, services, projects, and contact details.</p><strong>₹4,500–₹8,000 <small>indicative</small></strong></article>
-        <article class="webdev-service-card"><span class="webdev-card-index">03 / GROW ONLINE</span><div class="webdev-service-symbol" aria-hidden="true">⌘</div><h3>Business websites</h3><p>Multi-page websites for cafés, shops, creators, and local businesses that need a stronger web presence.</p><strong>₹6,500–₹12,000 <small>indicative</small></strong></article>
-        <article class="webdev-service-card"><span class="webdev-card-index">04 / SELL ONLINE</span><div class="webdev-service-symbol" aria-hidden="true">◇</div><h3>Online stores</h3><p>Product pages and a shopping flow, with payment and catalogue requirements scoped to your project.</p><strong>₹15,000–₹30,000+ <small>indicative</small></strong></article>
-      </div>
-      <div class="webdev-estimator" data-reveal>
-        <div class="webdev-estimator-copy">
-          <p class="section-index">PROJECT PLANNER / 001</p>
-          <h3>What might your website cost?</h3>
-          <p>Choose what you need. The estimate updates as you customise your project—no sign-up required.</p>
-          <div class="webdev-estimate-output" aria-live="polite" aria-atomic="true">
-            <span class="webdev-estimate-label">YOUR ESTIMATED PROJECT RANGE</span>
-            <output id="webdev-estimate">₹3,500 – ₹6,000</output>
-            <span id="webdev-estimate-summary">Landing page · 1 page · core responsive design</span>
+    <section class="section wrap" id="about">
+      <div class="about-grid">
+        <div class="reveal"><p class="index">02 / ABOUT PAUZE</p><h2>Small team<br>of one.<br><span>Big on details.</span></h2></div>
+        <div class="about-copy reveal">
+          <p class="lead">I’m an independent developer building under the Pauze name.</p>
+          <p>My work moves between web development, Android apps, Discord tools and small experiments. I like understanding the whole thing: the interface, the implementation, the rough edges and the release that finally works.</p>
+          <p>PauzeDevs is where those projects live. Some are active, some are experiments, and some are still being figured out. I’d rather show the actual work than dress it up with invented numbers or big claims.</p>
+          <div class="principles">
+            <div class="principle"><b>01 / BUILD</b><span>Make the thing real.</span></div>
+            <div class="principle"><b>02 / TEST</b><span>Find what breaks.</span></div>
+            <div class="principle"><b>03 / REFINE</b><span>Fix the details.</span></div>
           </div>
-          <p class="webdev-estimate-note">Planning estimate only, not a fixed quote. Final pricing depends on the brief and agreed scope. Domain, hosting, paid themes, and third-party subscriptions are not included.</p>
+          <div class="stack" aria-label="Technologies used"><span>JavaScript</span><span>TypeScript</span><span>Python</span><span>Kotlin</span><span>Node.js</span><span>GitHub</span></div>
         </div>
-        <form class="webdev-estimator-form" id="webdev-estimator-form">
-          <div class="webdev-form-field">
-            <label for="webdev-type">What kind of website?</label>
-            <select id="webdev-type" name="websiteType">
-              <option value="landing">Landing page</option>
-              <option value="portfolio">Portfolio / personal brand</option>
-              <option value="business">Business website</option>
-              <option value="store">Online store / e-commerce</option>
-            </select>
-          </div>
-          <div class="webdev-form-field">
-            <label for="webdev-pages">How many pages do you need?</label>
-            <select id="webdev-pages" name="pages">
-              <option value="1">1 page</option><option value="3">2–3 pages</option><option value="5">4–5 pages</option><option value="8">6–8 pages</option><option value="10">9–10 pages</option>
-            </select>
-          </div>
-          <fieldset class="webdev-features">
-            <legend>Any extra features?</legend>
-            <label class="webdev-check"><input type="checkbox" name="feature" value="contact"><span><strong>Contact form</strong><small>Let visitors send enquiries</small></span><b>+₹800–₹1,800</b></label>
-            <label class="webdev-check"><input type="checkbox" name="feature" value="booking"><span><strong>Booking / appointment requests</strong><small>For services, cafés, or consultations</small></span><b>+₹1,500–₹3,500</b></label>
-            <label class="webdev-check"><input type="checkbox" name="feature" value="cms"><span><strong>Editable content</strong><small>Update text, posts, or products yourself</small></span><b>+₹2,500–₹5,000</b></label>
-            <label class="webdev-check"><input type="checkbox" name="feature" value="motion"><span><strong>Custom animations</strong><small>Motion and polished interactions</small></span><b>+₹800–₹2,000</b></label>
-            <label class="webdev-check"><input type="checkbox" name="feature" value="seo"><span><strong>SEO basics</strong><small>Metadata, structure, and indexing setup</small></span><b>+₹1,000–₹2,500</b></label>
-            <label class="webdev-check"><input type="checkbox" name="feature" value="payments"><span><strong>Online payments</strong><small>Payment gateway integration, where suitable</small></span><b>+₹2,000–₹4,500</b></label>
-          </fieldset>
-          <button class="button button-primary webdev-quote-button" id="webdev-quote-button" type="submit">Request a tailored quote <span aria-hidden="true">↗</span></button>
-          <p class="webdev-form-footnote">This opens an email draft with your selections and estimate. You can review it before sending.</p>
-        </form>
-      </div>
-      <div class="webdev-process" data-reveal>
-        <div><span>01</span><strong>Tell me the goal</strong><p>What the website is for, who it serves, and what it needs to do.</p></div>
-        <div><span>02</span><strong>Agree on the scope</strong><p>We confirm pages, features, timeline, and a final quote before work begins.</p></div>
-        <div><span>03</span><strong>Build and refine</strong><p>I develop the site, share progress, and make the agreed revisions.</p></div>
       </div>
     </section>
 
-
-    <section class="support-section section-wrap" id="support" data-reveal>
-      <div class="support-copy">
-        <p class="section-index">08 / SUPPORT PAUZE</p>
-        <h2>Fuel the<br><span>next build.</span></h2>
-        <p>If you enjoy what I make, you can chip in towards the tools, time, and experiments behind Pauze.</p>
-        <div class="support-note"><span aria-hidden="true">☕</span><span>Every contribution is optional and appreciated.</span></div>
-      </div>
-      <div class="support-panel">
-        <div class="support-panel-top"><span>COFFEE FUND / INR</span><span>DIRECT UPI</span></div>
-        <p class="support-prompt">Choose an amount</p>
-        <div class="support-presets" role="group" aria-label="Choose a contribution amount">
-          <button type="button" class="support-amount" data-support-amount="49">₹49</button>
-          <button type="button" class="support-amount" data-support-amount="99">₹99</button>
-          <button type="button" class="support-amount" data-support-amount="199">₹199</button>
-          <button type="button" class="support-amount" data-support-amount="499">₹499</button>
-        </div>
-        <label class="support-custom-label" for="support-custom">Or enter a custom amount (₹)</label>
-        <input id="support-custom" class="support-custom" type="number" inputmode="numeric" min="1" max="100000" step="1" placeholder="e.g. 150">
-        <button type="button" class="button button-primary support-generate" id="support-generate">Generate payment QR <span aria-hidden="true">↗</span></button>
-        <p class="support-redirect-note">Your amount and payment QR will open on a dedicated page.</p>
-        <p class="support-footnote">UPI ID: <strong>prodbyaarav@fam</strong> · Payments are made directly through your UPI app. This website cannot verify whether a payment was completed.</p>
-      </div>
-    </section>
-<section class="contact section-wrap" id="contact" data-reveal><p class="section-index">07 / CONTACT PAUZE</p><h2>Website, app,<br><span>or Discord tool?</span></h2><div class="contact-bottom"><p>For website, Android, Discord bot, and automation enquiries, send me an email.</p><a class="button button-primary contact-button" href="mailto:githubpauze@gmail.com">Get in touch <span>↗</span></a></div>
-      <div class="contact-hub" aria-label="Contact and social links">
-        <a class="contact-link-card" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="contact-link-kicker">PERSONAL PROFILE</span><strong>GitHub <span aria-hidden="true">↗</span></strong><span class="contact-link-detail">Personal projects and contributions</span></a>
-        <a class="contact-link-card" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer"><span class="contact-link-kicker">DEVELOPER SPACE</span><strong>PauzeDevs <span aria-hidden="true">↗</span></strong><span class="contact-link-detail">Projects and experiments</span></a>
-        
-        <div class="contact-link-card contact-email-card"><span class="contact-link-kicker">EMAIL</span><strong>githubpauze@gmail.com</strong><span class="contact-link-detail">For project enquiries and collaboration</span><button type="button" class="copy-email-button" data-copy-email="githubpauze@gmail.com">Copy email</button><span class="copy-email-status" aria-live="polite"></span></div>
+    <section class="section wrap" id="contact">
+      <div class="contact-panel reveal">
+        <div><p class="index">03 / HAVE SOMETHING IN MIND?</p><h2>Let's make<br><span>it work.</span></h2><p>For a website, Android project, Discord tool or a collaboration, send the details. No sales funnel, just a direct conversation.</p></div>
+        <div class="contact-actions"><a class="button" href="mailto:githubpauze@gmail.com?subject=Pauze%20project%20enquiry">Email Pauze <span>↗</span></a><button class="copy-email" type="button" data-copy-email="githubpauze@gmail.com">COPY EMAIL</button><span class="copy-status" role="status" aria-live="polite"></span></div>
       </div>
     </section>
   </main>
-  <footer class="site-footer section-wrap"><a class="wordmark" href="#top">PAUZE</a><span>WEB / ANDROID / DISCORD</span><div class="footer-links"><a href="https://github.com/PauzeDevs?tab=repositories" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div><small>© <span id="year"></span> PAUZE / PAUZEDEVS.</small></footer>
-  <script type="module" src="world.js?v=4"></script>
-  <script src="script.js?v=20261031-performance-2" defer></script>
+
+  <footer class="footer wrap">
+    <a class="brand" href="#top">pauze<span>.</span></a>
+    <span class="footer-meta">INDEPENDENT / PAUZEDEVS / <span data-year>2026</span></span>
+    <div class="footer-links"><a href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">GITHUB ↗</a><a href="#top">BACK TO TOP ↑</a></div>
+  </footer>
 </body>
 </html>

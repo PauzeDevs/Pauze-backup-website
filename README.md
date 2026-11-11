@@ -1,57 +1,51 @@
-# PAUZE | Independent Developer
+# PAUZE
 
-**Live website:** https://pauze.is-a.dev  
-**Repository:** https://github.com/PauzeDevs/Pauze-backup-website
+**Website:** https://pauze.is-a.dev  
+**Repository:** https://github.com/PauzeDevs/Pauze-backup-website  
+**Developer profile:** https://github.com/PauzeDevs
 
-A personal website for Pauze, built around existing PauzeDevs projects and a custom procedural 3D environment. The 3D scene is an overlay behind the real page content: it follows the site's sections and maps its project installations to the actual project cards.
+A deliberately lean, one-page home for PauzeDevs. The site presents selected software projects, a short introduction and direct contact links. Its visual identity is built from typography, CSS geometry and interaction rather than stock photography or generated filler.
 
-## What's on the site
+## What is wired up
 
-- Custom Three.js environment with a P/Z-inspired central sculpture, architectural forms, particles, and section gateways.
-- Scroll-linked camera movement and a route navigator connected to the page's real sections.
-- Four interactive 3D project installations mapped to Pauze Weather, Pauze Pulse, Pauze Control, and Other experiments.
-- Existing project cards, About section, build notes, and contact links.
-- Six playable browser games.
-- GitHub public activity and contribution calendar.
-- Discord presence, account details, and currently shared music activity when available.
-- Website development services and an interactive INR estimate calculator.
-- Responsive navigation, keyboard quick navigation, and reduced-motion support.
+- Responsive navigation with mobile menu, Escape-to-close and active-section indication.
+- Project filters for Web, Android, Tools and AI, with accessible pressed states and live result counts.
+- Project links to public source repositories, release pages, build history and the PauzeControl project website.
+- Honest private-repository labels where the source is not public.
+- Pointer-aware project lighting and a restrained monogram movement on desktop.
+- Scroll progress, reveal transitions and a live Lucknow/IST clock.
+- Reduced-motion handling and keyboard-visible focus states.
+- Email launch and copy-to-clipboard actions with success/failure feedback.
+- Search metadata, Open Graph/Twitter metadata, a custom SVG favicon, `robots.txt`, `sitemap.xml` and a custom 404 page.
 
-## Source files
+## Files
 
 | File | Purpose |
-|---|---|
-| `index.html` | Page structure, project content, navigation, and section anchors |
-| `apple-style.css` | Active site styling, responsive layouts, and 3D overlay presentation |
-| `world.js` | Three.js scene, camera movement, section gateways, project installations, and route HUD |
-| `script.js` | Page interactions, arcade games, GitHub/Discord integrations, and website estimator |
-| `CNAME` | Custom domain for GitHub Pages |
-| `sitemap.xml`, `robots.txt` | Search engine discovery and crawling |
+| --- | --- |
+| `index.html` | Page structure, metadata, project cards and navigation |
+| `pauze-2.css` | Responsive visual system and interaction states |
+| `pauze-2.js` | Navigation, filters, clock, motion and contact actions |
+| `favicon.svg` | Original PZ browser mark |
+| `404.html` | Branded not-found page |
+| `CNAME` | Custom GitHub Pages domain |
+| `robots.txt`, `sitemap.xml` | Search crawler guidance |
 
-`styles.css` and `refresh.css` remain as legacy stylesheets; the current page loads `apple-style.css`.
+## Run locally
 
-## Technology
-
-- HTML5, CSS3, and vanilla JavaScript
-- Three.js 0.161.0, loaded as an ES module from jsDelivr
-- GitHub Pages and the custom domain `pauze.is-a.dev`
-
-The 3D layer requires WebGL and an internet connection for the Three.js module. If WebGL is unavailable, the page content remains usable with the CSS background fallback. Reduced-motion preferences disable continuous scene animation.
-
-## Preview locally
-
-No build step or package manager is required. From the repository root:
+No build step or package manager is required:
 
 ```bash
 python3 -m http.server 4173
 ```
 
-Then open http://localhost:4173.
+Open http://localhost:4173.
 
 ## Deployment
 
-This is a static GitHub Pages site with its custom domain configured through `CNAME`. Updates committed to the configured publishing branch are published by GitHub Pages.
+This is a static GitHub Pages site. The custom domain is configured in `CNAME`. Changes on the configured publishing branch are deployed by GitHub Pages. The redesign work is being developed on `redesign/pauze-2.0`; it does not change `main` until merged.
 
-## Usage
+## Notes
 
-**Proprietary project. All rights reserved.** See [LICENSE](./LICENSE) for usage restrictions. Do not commit API keys, passwords, tokens, or other secrets.
+- Some projects are private and are labelled accordingly. Private source links are intentionally not presented as public downloads.
+- Third-party font delivery requires an internet connection. System font fallbacks remain available.
+- Browser and device testing should be completed before merging to the production branch.
