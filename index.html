@@ -57,7 +57,17 @@
         <div><p class="index">01 / SELECTED WORK</p><h2>Built things<span>.</span></h2></div>
         <p class="section-intro">A selection from the PauzeDevs workspace. Each entry points to its actual project repository, not a pretend product demo.</p>
       </div>
-      <div class="project-list">
+      <div class="work-tools reveal">
+        <div class="filters" role="group" aria-label="Filter projects">
+          <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">ALL <span>05</span></button>
+          <button class="filter" type="button" data-filter="web" aria-pressed="false">WEB <span>01</span></button>
+          <button class="filter" type="button" data-filter="android" aria-pressed="false">ANDROID <span>02</span></button>
+          <button class="filter" type="button" data-filter="tools" aria-pressed="false">TOOLS <span>01</span></button>
+          <button class="filter" type="button" data-filter="ai" aria-pressed="false">AI <span>01</span></button>
+        </div>
+        <p class="filter-status" aria-live="polite">Showing all 5 projects</p>
+      </div>
+      <div class="project-list" data-project-list>
         <article class="project reveal">
           <span class="project-no">01</span>
           <div class="project-main"><h3>PauzeWeather</h3><p>A weather web app focused on useful conditions and precipitation views. The project has been through multiple rounds of API and radar integration work.</p><div class="project-tags"><span class="tag">WEB</span><span class="tag">WEATHER DATA</span><span class="tag">RADAR</span></div></div>
