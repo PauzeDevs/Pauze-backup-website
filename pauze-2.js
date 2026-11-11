@@ -56,7 +56,7 @@
     projects.forEach(project => {
       const show = selected === 'all' || project.dataset.category === selected;
       project.hidden = !show;
-      if (show) visible++;
+      if (show) { project.classList.add('visible'); visible++; }
     });
     if (filterStatus) {
       const label = selected === 'all' ? 'all' : selected;
