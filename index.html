@@ -4,6 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#090b0e">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="PauzeDevs">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PAUZE — Independent by design">
+  <meta name="twitter:description" content="Software, interfaces and experiments by PauzeDevs.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta name="description" content="Pauze is an independent software and creative technology label by PauzeDevs.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="PAUZE — Independent by design">
@@ -11,10 +18,11 @@
   <meta property="og:url" content="https://pauze.is-a.dev/">
   <link rel="canonical" href="https://pauze.is-a.dev/">
   <title>PAUZE — Independent by design</title>
-  <link rel="stylesheet" href="/pauze-2.css?v=1">
-  <script src="/pauze-2.js?v=1" defer></script>
+  <link rel="stylesheet" href="/pauze-2.css?v=2">
+  <script src="/pauze-2.js?v=2" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Pauze home">pauze<span>.</span></a>
     <button class="menu" type="button" aria-expanded="false" aria-controls="site-nav">MENU</button>
@@ -27,6 +35,7 @@
   </header>
 
   <main id="top">
+    <span id="main-content" class="main-anchor" tabindex="-1"></span>
     <section class="hero wrap">
       <div class="hero-copy">
         <p class="eyebrow">PAUZEDEVS / INDEPENDENT SOFTWARE</p>
@@ -55,7 +64,7 @@
     <section class="section wrap" id="work">
       <div class="section-head reveal">
         <div><p class="index">01 / SELECTED WORK</p><h2>Built things<span>.</span></h2></div>
-        <p class="section-intro">A selection from the PauzeDevs workspace. Each entry points to its actual project repository, not a pretend product demo.</p>
+        <p class="section-intro">A snapshot of active builds and experiments. Private projects are labelled honestly; public links lead to the source, releases or build history.</p>
       </div>
       <div class="work-tools reveal">
         <div class="filters" role="group" aria-label="Filter projects">
@@ -70,28 +79,28 @@
       <div class="project-list" data-project-list>
         <article class="project reveal" data-category="web">
           <span class="project-no">01</span>
-          <div class="project-main"><h3>PauzeWeather</h3><p>A weather web app focused on useful conditions and precipitation views. The project has been through multiple rounds of API and radar integration work.</p><div class="project-tags"><span class="tag">WEB</span><span class="tag">WEATHER DATA</span><span class="tag">RADAR</span></div></div>
-          <a class="project-link" href="https://github.com/PauzeDevs/PauzeWeatherDeveloped" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a>
+          <div class="project-main"><h3>PauzeWeather</h3><p>A weather project focused on current conditions, air quality and precipitation data. This repository is currently private.</p><div class="project-tags"><span class="tag">WEB</span><span class="tag">WEATHER DATA</span><span class="tag">RADAR</span></div></div>
+          <span class="project-link project-private">PRIVATE REPOSITORY</span>
         </article>
         <article class="project reveal" data-category="android">
           <span class="project-no">02</span>
-          <div class="project-main"><h3>PauzeNews</h3><p>An Android news app project. Current work has focused on stabilising the app, fixing its navigation behaviour and making release builds dependable.</p><div class="project-tags"><span class="tag">ANDROID</span><span class="tag">APP DEVELOPMENT</span><span class="tag">RELEASES</span></div></div>
-          <a class="project-link" href="https://github.com/PauzeDevs/PauzeNews" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a>
+          <div class="project-main"><h3>PauzeNews</h3><p>A Python and Kivy Android news reader with topic feeds, local search, SQLite bookmarks and an offline-friendly headline cache.</p><div class="project-tags"><span class="tag">ANDROID</span><span class="tag">APP DEVELOPMENT</span><span class="tag">RELEASES</span></div></div>
+          <div class="project-actions"><a class="project-link" href="https://github.com/PauzeDevs/PauzeNews" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a><a class="project-link" href="https://github.com/PauzeDevs/PauzeNews/releases" target="_blank" rel="noreferrer">RELEASES <span>↗</span></a></div>
         </article>
         <article class="project reveal" data-category="android">
           <span class="project-no">03</span>
-          <div class="project-main"><h3>PauzeDynamic</h3><p>An Android Dynamic Island experiment, exploring live notifications, compact interactions and a more expressive system-level interface.</p><div class="project-tags"><span class="tag">ANDROID</span><span class="tag">UI</span><span class="tag">INTERACTION</span></div></div>
-          <a class="project-link" href="https://github.com/PauzeDevs/PauzeDynamic" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a>
+          <div class="project-main"><h3>PauzeDynamic</h3><p>An early Android overlay prototype for media sessions, notification actions, timers and compact live activities. Still a prototype, not a stable release.</p><div class="project-tags"><span class="tag">ANDROID</span><span class="tag">UI</span><span class="tag">INTERACTION</span></div></div>
+          <div class="project-actions"><a class="project-link" href="https://github.com/PauzeDevs/PauzeDynamic" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a><a class="project-link" href="https://github.com/PauzeDevs/PauzeDynamic/actions" target="_blank" rel="noreferrer">BUILDS <span>↗</span></a></div>
         </article>
         <article class="project reveal" data-category="tools">
           <span class="project-no">04</span>
-          <div class="project-main"><h3>PauzeControl</h3><p>A developer-side project in the Pauze ecosystem. Built around the idea that useful controls should be clear, quick and dependable.</p><div class="project-tags"><span class="tag">DEVELOPER TOOLS</span><span class="tag">PAUZEDEVS</span></div></div>
-          <a class="project-link" href="https://github.com/PauzeDevs/PauzeControl" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a>
+          <div class="project-main"><h3>PauzeControl</h3><p>An Android controller and native macOS agent for remote Mac access over Tailscale, including live screen streaming and system controls.</p><div class="project-tags"><span class="tag">DEVELOPER TOOLS</span><span class="tag">PAUZEDEVS</span></div></div>
+          <div class="project-actions"><a class="project-link" href="https://github.com/PauzeDevs/PauzeControl" target="_blank" rel="noreferrer">SOURCE <span>↗</span></a><a class="project-link" href="https://pauzedevs.github.io/PauzeControl-Website/" target="_blank" rel="noreferrer">WEBSITE <span>↗</span></a></div>
         </article>
         <article class="project reveal" data-category="ai">
           <span class="project-no">05</span>
-          <div class="project-main"><h3>AurexAI</h3><p>An assistant project exploring practical workflows across conversations, Gmail and calendar actions, with the goal of making the interface useful beyond a chat box.</p><div class="project-tags"><span class="tag">AI</span><span class="tag">AUTOMATION</span><span class="tag">WEB APP</span></div></div>
-          <a class="project-link" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">DEVELOPER PROFILE <span>↗</span></a>
+          <div class="project-main"><h3>AurexAI</h3><p>An AI assistant project exploring connected workflows across conversations, Gmail and calendar actions. The code repository is private.</p><div class="project-tags"><span class="tag">AI</span><span class="tag">AUTOMATION</span><span class="tag">WEB APP</span></div></div>
+          <span class="project-link project-private">PRIVATE REPOSITORY</span>
         </article>
       </div>
     </section>
@@ -116,7 +125,7 @@
     <section class="section wrap" id="contact">
       <div class="contact-panel reveal">
         <div><p class="index">03 / HAVE SOMETHING IN MIND?</p><h2>Let's make<br><span>it work.</span></h2><p>For a website, Android project, Discord tool or a collaboration, send the details. No sales funnel, just a direct conversation.</p></div>
-        <a class="button" href="mailto:githubpauze@gmail.com?subject=Pauze%20project%20enquiry">Email Pauze <span>↗</span></a>
+        <div class="contact-actions"><a class="button" href="mailto:githubpauze@gmail.com?subject=Pauze%20project%20enquiry">Email Pauze <span>↗</span></a><button class="copy-email" type="button" data-copy-email="githubpauze@gmail.com">COPY EMAIL</button><span class="copy-status" role="status" aria-live="polite"></span></div>
       </div>
     </section>
   </main>
