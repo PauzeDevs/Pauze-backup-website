@@ -47,4 +47,4 @@ body:before{content:"";position:fixed;z-index:30;top:0;left:0;width:100%;height:
 .copy-email:hover,.copy-email:focus-visible{border-color:var(--blue);color:var(--blue);outline:none}
 .copy-status{min-height:16px;color:var(--blue);font:10px var(--mono)}
 .filter:focus-visible,.button:focus-visible,.project-link:focus-visible,.nav a:focus-visible,.footer a:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
-@media(max-width:700px){.project-actions{gap:14px;flex-wrap:wrap}.contact-actions{align-items:stretch}.copy-email{width:max-content}}
+@media(max-width:700px){.project-actions{grid-column:2;gap:14px;flex-wrap:wrap}.contact-actions{align-items:stretch}.copy-email{width:max-content}}
