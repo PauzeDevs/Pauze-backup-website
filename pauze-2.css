@@ -35,3 +35,17 @@ body:before{content:"";position:fixed;z-index:30;top:0;left:0;width:100%;height:
 .nav a[aria-current="location"]{color:var(--blue)}
 @media(max-width:700px){.work-tools{display:block}.filter-status{margin-top:12px}.filters{gap:5px}.filter{padding:8px 9px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){body:before{display:none}.project,.hero-mark .mark-frame{transition:none}}
+
+
+/* Accessibility, project actions and contact utilities */
+.skip-link{position:fixed;top:10px;left:12px;z-index:100;padding:10px 14px;background:var(--blue);color:#071018;font-weight:800;transform:translateY(-160%);transition:transform .2s}
+.skip-link:focus{transform:translateY(0)}
+.main-anchor{display:block;position:relative;top:-90px;visibility:hidden}
+.project-actions{display:flex;gap:18px;align-items:center;white-space:nowrap}
+.project-private{color:#7f8c96;letter-spacing:.06em}
+.contact-actions{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.copy-email{appearance:none;background:transparent;border:1px solid #46515b;color:#b9c5cd;padding:10px 14px;font:10px var(--mono);letter-spacing:.08em;cursor:pointer;transition:border-color .2s,color .2s}
+.copy-email:hover,.copy-email:focus-visible{border-color:var(--blue);color:var(--blue);outline:none}
+.copy-status{min-height:16px;color:var(--blue);font:10px var(--mono)}
+.filter:focus-visible,.button:focus-visible,.project-link:focus-visible,.nav a:focus-visible,.footer a:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+@media(max-width:700px){.project-actions{gap:14px;flex-wrap:wrap}.contact-actions{align-items:stretch}.copy-email{width:max-content}.main-anchor{top:-70px}}
