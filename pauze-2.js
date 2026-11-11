@@ -1,4 +1,6 @@
 (() => {
+  document.documentElement.classList.add('js');
+
   const menuButton = document.querySelector('.menu');
   const nav = document.querySelector('.nav');
   if (menuButton && nav) {
