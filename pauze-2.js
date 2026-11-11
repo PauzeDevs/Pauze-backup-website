@@ -2,18 +2,30 @@
   const menuButton = document.querySelector('.menu');
   const nav = document.querySelector('.nav');
   if (menuButton && nav) {
-    const closeMenu = () => {
+    const closeMenu = (restoreFocus = false) => {
+      if (!nav.classList.contains('open')) return;
       nav.classList.remove('open');
       menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.setAttribute('aria-label', 'Open navigation menu');
       menuButton.textContent = 'MENU';
+      if (restoreFocus) menuButton.focus();
     };
     menuButton.addEventListener('click', () => {
       const open = nav.classList.toggle('open');
       menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
       menuButton.textContent = open ? 'CLOSE' : 'MENU';
     });
-    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
-    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu()));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeMenu(true);
+    });
+    document.addEventListener('pointerdown', event => {
+      if (nav.classList.contains('open') && !nav.contains(event.target) && !menuButton.contains(event.target)) closeMenu();
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 700) closeMenu();
+    }, { passive: true });
   }
 
   const clock = document.querySelector('[data-ist]');
@@ -135,8 +147,13 @@
     document.documentElement.style.setProperty('--scroll-progress', String(Math.min(1, Math.max(0, progress))));
     ticking = false;
   };
-  window.addEventListener('scroll', () => {
-    if (!ticking) { window.requestAnimationFrame(updateProgress); ticking = true; }
-  }, { passive: true });
+  const scheduleProgressUpdate = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateProgress);
+      ticking = true;
+    }
+  };
+  window.addEventListener('scroll', scheduleProgressUpdate, { passive: true });
+  window.addEventListener('resize', scheduleProgressUpdate, { passive: true });
   updateProgress();
 })();
