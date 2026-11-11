@@ -84,6 +84,35 @@
     }
   }
 
+  // Copy the public contact address with a clear success/failure state.
+  const copyButton = document.querySelector('[data-copy-email]');
+  const copyStatus = document.querySelector('.copy-status');
+  if (copyButton) {
+    copyButton.addEventListener('click', async () => {
+      const address = copyButton.dataset.copyEmail;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(address);
+        } else {
+          const field = document.createElement('textarea');
+          field.value = address;
+          field.setAttribute('readonly', '');
+          field.style.position = 'fixed';
+          field.style.opacity = '0';
+          document.body.appendChild(field);
+          field.select();
+          const copied = document.execCommand('copy');
+          field.remove();
+          if (!copied) throw new Error('Clipboard unavailable');
+        }
+        if (copyStatus) copyStatus.textContent = 'EMAIL COPIED';
+        copyButton.textContent = 'COPIED ✓';
+      } catch {
+        if (copyStatus) copyStatus.textContent = 'Copy unavailable. Use the email button.';
+      }
+    });
+  }
+
   // Active section marker and a slim page-progress indicator.
   const sectionLinks = [...document.querySelectorAll('.nav a[href^="#"]')];
   const sections = sectionLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
