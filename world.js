@@ -16,7 +16,7 @@ const bootWorld = () => import("https://cdn.jsdelivr.net/npm/three@0.161.0/build
     return;
   }
 
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, coarse || lowMemory ? 1 : 1.35));
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, coarse || lowMemory ? 0.9 : 1.15));
   renderer.setSize(innerWidth, innerHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -179,7 +179,7 @@ const bootWorld = () => import("https://cdn.jsdelivr.net/npm/three@0.161.0/build
     projectInstallations.push({ ...spec, group, halo });
   });
 
-  const particleCount = coarse ? 120 : 260;
+  const particleCount = coarse || lowMemory ? 72 : 150;
   const positions = new Float32Array(particleCount * 3);
   for (let i = 0; i < particleCount; i++) {
     positions[i * 3] = (Math.random() - .5) * 34;
@@ -274,7 +274,7 @@ const bootWorld = () => import("https://cdn.jsdelivr.net/npm/three@0.161.0/build
   const resize = () => {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, coarse || lowMemory ? 1.2 : 1.65));
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, coarse || lowMemory ? 0.9 : 1.15));
     renderer.setSize(innerWidth, innerHeight, false);
     placeGateways();
     onScroll();
@@ -354,9 +354,13 @@ const bootWorld = () => import("https://cdn.jsdelivr.net/npm/three@0.161.0/build
     renderer.render(scene, camera);
   }
 
-  function frame() {
+  let lastFrameAt = 0;
+  function frame(now) {
     if (!running || document.hidden) return;
-    draw(clock.getElapsedTime());
+    if (now - lastFrameAt >= 33) {
+      draw(clock.getElapsedTime());
+      lastFrameAt = now;
+    }
     raf = requestAnimationFrame(frame);
   }
   function start() {
@@ -393,5 +397,5 @@ const bootWorld = () => import("https://cdn.jsdelivr.net/npm/three@0.161.0/build
 });
 
 // Let the browser paint the page before loading the decorative 3D scene.
-if ("requestIdleCallback" in window) requestIdleCallback(bootWorld, { timeout: 1800 });
-else setTimeout(bootWorld, 350);
+if ("requestIdleCallback" in window) requestIdleCallback(bootWorld, { timeout: 650 });
+else setTimeout(bootWorld, 180);
